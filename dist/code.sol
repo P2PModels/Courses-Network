@@ -1,4 +1,4 @@
-// Sources flattened with buidler v1.4.8 https://buidler.dev
+// Sources flattened with buidler v1.3.8 https://buidler.dev
 
 // File @aragon/os/contracts/common/UnstructuredStorage.sol@v4.4.0
 
@@ -90,6 +90,8 @@ interface IVaultRecoverable {
 pragma solidity ^0.4.24;
 
 
+
+
 interface IKernelEvents {
     event SetApp(bytes32 indexed namespace, bytes32 indexed appId, address app);
 }
@@ -112,6 +114,8 @@ contract IKernel is IKernelEvents, IVaultRecoverable {
  */
 
 pragma solidity ^0.4.24;
+
+
 
 
 contract AppStorage {
@@ -275,6 +279,8 @@ library Uint256Helpers {
 
 pragma solidity ^0.4.24;
 
+
+
 contract TimeHelpers {
     using Uint256Helpers for uint256;
 
@@ -323,6 +329,8 @@ contract TimeHelpers {
  */
 
 pragma solidity ^0.4.24;
+
+
 
 
 contract Initializable is TimeHelpers {
@@ -384,6 +392,8 @@ contract Initializable is TimeHelpers {
 
 pragma solidity ^0.4.24;
 
+
+
 contract Petrifiable is Initializable {
     // Use block UINT256_MAX (which should be never) as the initializable date
     uint256 internal constant PETRIFIED_BLOCK = uint256(-1);
@@ -409,6 +419,8 @@ contract Petrifiable is Initializable {
  */
 
 pragma solidity ^0.4.24;
+
+
 
 contract Autopetrified is Petrifiable {
     constructor() public {
@@ -460,6 +472,8 @@ library ConversionHelpers {
  */
 
 pragma solidity ^0.4.24;
+
+
 
 contract ReentrancyGuard {
     using UnstructuredStorage for bytes32;
@@ -579,6 +593,8 @@ contract IsContract {
 // and 0x (https://github.com/0xProject/0x-monorepo/blob/737d1dc54d72872e24abce5a1dbe1b66d35fa21a/contracts/protocol/contracts/protocol/AssetProxy/ERC20Proxy.sol#L143)
 
 pragma solidity ^0.4.24;
+
+
 
 library SafeERC20 {
     // Before 0.5, solidity has a mismatch between `address.transfer()` and `token.transfer()`:
@@ -755,6 +771,8 @@ pragma solidity ^0.4.24;
 
 
 
+
+
 contract VaultRecoverable is IVaultRecoverable, EtherTokenConstant, IsContract {
     using SafeERC20 for ERC20;
 
@@ -822,6 +840,8 @@ interface IEVMScriptExecutor {
 
 pragma solidity ^0.4.24;
 
+
+
 contract EVMScriptRegistryConstants {
     /* Hardcoded constants to save gas
     bytes32 internal constant EVMSCRIPT_REGISTRY_APP_ID = apmNamehash("evmreg");
@@ -880,6 +900,9 @@ contract KernelNamespaceConstants {
  */
 
 pragma solidity ^0.4.24;
+
+
+
 
 
 
@@ -988,6 +1011,8 @@ contract EVMScriptRunner is AppStorage, Initializable, EVMScriptRegistryConstant
  */
 
 pragma solidity ^0.4.24;
+
+
 
 
 
@@ -1132,6 +1157,7 @@ library SafeMath {
 pragma solidity ^0.4.24;
 
 
+
 contract Courses is AragonApp {
     //EVENTS
     event CreateUser(address indexed entity, string name, string email);
@@ -1222,8 +1248,8 @@ contract Courses is AragonApp {
     //    keccak256("GETCOURSESCOMPLETED_ROLE");
 
     function initialize() public onlyInit {
-        uint256[] storage a;
-        uint256[] storage b;
+        uint256[] memory a;
+        uint256[] memory b;
         users[usersLength] = User(0, msg.sender, "", "", 0, a, b); //usuario en la pos 0, no existe en realidad
         usersLength = 1;
         coursesLength = 0;
@@ -1242,8 +1268,8 @@ contract Courses is AragonApp {
         auth(CREATEUSER_ROLE)
     {
         require(ownerToUser[msg.sender] == 0);
-        uint256[] storage a;
-        uint256[] storage b;
+        uint256[] memory a;
+        uint256[] memory b;
         users[usersLength] = User(
             usersLength,
             msg.sender,

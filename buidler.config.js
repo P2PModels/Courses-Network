@@ -28,7 +28,7 @@ module.exports = {
     clientServePort: 3000,
     appSrcPath: 'app/',
     appBuildOutputPath: 'dist/',
-    appName: 'coursesNetwork',
+    appName: 'app',
     hooks, // Path to script hooks
   },
 }
