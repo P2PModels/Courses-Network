@@ -107729,7 +107729,7 @@ function App() {
     GHprimary: "P2P Models:",
     secondary: /*#__PURE__*/_react.default.createElement(_StyledSpan, {
       _css: (0, _ui.textStyle)('title2')
-    }, "sknda Total tasks: ", numTasks)
+    }, "Total tasks: ", numTasks)
   }));
 }
 /*function renderTable(tasks, priorities, isDone) {
@@ -107819,7 +107819,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51291" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59787" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
