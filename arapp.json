@@ -1,0 +1,73 @@
+{
+  "roles": [
+    {
+      "name": "Create a new user",
+      "id": "CREATEUSER_ROLE",
+      "params": []
+    },
+    {
+      "name": "Delete user",
+      "id": "DELETEUSER_ROLE",
+      "params": []
+    },
+    {
+      "name": "Update user",
+      "id": "UPDATEUSER_ROLE",
+      "params": []
+    },
+    {
+      "name": "Update user reputation",
+      "id": "SETUSERREPUTATION_ROLE",
+      "params": []
+    },
+    {
+      "name": "Add a new completed course",
+      "id": "SETCOURSECOMPLETED_ROLE",
+      "params": []
+    },
+    {
+      "name": "Create a new course",
+      "id": "CREATECOURSE_ROLE",
+      "params": []
+    },
+    {
+      "name": "Enable/disable course",
+      "id": "UPDATECOURSESTATE_ROLE",
+      "params": []
+    },
+    {
+      "name": "Update course",
+      "id": "UPDATECOURSE_ROLE",
+      "params": []
+    },
+    {
+      "name": "Update course reputation",
+      "id": "SETCOURSEREPUTATION_ROLE",
+      "params": []
+    }
+
+  ],
+  "environments": {
+    "default": {
+      "appName": "coursesNetwork.aragonpm.eth",
+      "network": "rpc"
+    },
+    "rinkeby": {
+      "registry": "0x98df287b6c145399aaa709692c8d308357bc085d",
+      "appName": "coursesNetwork.aragonpm.eth",
+      "network": "rinkeby"
+    },
+    "staging": {
+      "registry": "0xfe03625ea880a8cba336f9b5ad6e15b0a3b5a939",
+      "appName": "coursesNetwork.aragonpm.eth",
+      "network": "rinkeby"
+    },
+    "mainnet": {
+      "registry": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+      "appName": "coursesNetwork.aragonpm.eth",
+      "network": "mainnet"
+    }
+  },
+  "appName": "coursesNetwork.aragonpm.eth",
+  "path": "contracts/Courses.sol"
+}

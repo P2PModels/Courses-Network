@@ -1,0 +1,1 @@
+{"version":3,"file":"utils.js","sourceRoot":"","sources":["../../../../src/utils/ast/utils.ts"],"names":[],"mappings":";;;AAAA,mCAA+B;AAE/B;;;GAGG;AACH,SAAgB,uBAAuB,CAAC,GAAW;IACjD,MAAM,GAAG,GAAG,IAAI,eAAM,CAAC,KAAK,CAAC,SAAS,CAAC,CAAC,GAAG,CAAC,CAAC,CAAA;IAC7C,OAAO,eAAM,CAAC,KAAK,CAAC,eAAe,CAAC,GAAG,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC,CAAA;AACjD,CAAC;AAHD,0DAGC"}

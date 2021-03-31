@@ -1,0 +1,2 @@
+1. Las transacciones a veces no me funcionan, si cambio de cuenta o añado otra nueva se arregla.
+	Se soluciona si cambias de red en metamask y vuelves a entrar a la red local.

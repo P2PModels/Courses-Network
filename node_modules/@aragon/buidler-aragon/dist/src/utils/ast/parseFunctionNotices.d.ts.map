@@ -1,0 +1,1 @@
+{"version":3,"file":"parseFunctionNotices.d.ts","sourceRoot":"","sources":["../../../../src/utils/ast/parseFunctionNotices.ts"],"names":[],"mappings":"AAiGA;;;;;;;;GAQG;AACH,wBAAgB,qBAAqB,CACnC,UAAU,EAAE,MAAM,GACjB;IACD;;OAEG;IACH,SAAS,EAAE,MAAM,CAAA;IACjB;;OAEG;IACH,MAAM,EAAE,MAAM,CAAA;CACf,EAAE,CAaF"}

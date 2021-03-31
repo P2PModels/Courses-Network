@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "commonjs",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "noEmitOnError": true,
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "allowJs": true,
+    "typeRoots": ["node_modules/@types", "../../node_modules/@types", "./@types"],
+    "outDir": "dist",
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["./*"]
+    }
+  },
+  "include": ["./src", "./test", "./bootstrap-paths.js", "./tsconfig.json"],
+  "exclude": ["./test/projects"],
+  "files": [
+    "./src/type-extensions.d.ts",
+    "./node_modules/@nomiclabs/buidler-etherscan/src/type-extensions.d.ts",
+    "./node_modules/@nomiclabs/buidler-web3/src/type-extensions.d.ts",
+    "./node_modules/@nomiclabs/buidler-truffle5/src/type-extensions.d.ts"    
+  ]
+}

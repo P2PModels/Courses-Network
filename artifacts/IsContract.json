@@ -1,0 +1,8 @@
+{
+  "contractName": "IsContract",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a723058209a23c5faa8006c5aa43bcb9b48663c92b94a0a06efcc63b9bfbcfb018fc3b29f0029",
+  "deployedBytecode": "0x6080604052600080fd00a165627a7a723058209a23c5faa8006c5aa43bcb9b48663c92b94a0a06efcc63b9bfbcfb018fc3b29f0029",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
