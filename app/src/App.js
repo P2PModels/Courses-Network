@@ -35,7 +35,6 @@ function App() {
               ${textStyle('title2')}
             `}
           >
-            sknda
             Total tasks: {numTasks}
           </span>
         }
