@@ -35,7 +35,7 @@ function App() {
               ${textStyle('title2')}
             `}
           >
-            Total tasks: {numTasks}
+            Total tasks: {usersLength}
           </span>
         }
       />

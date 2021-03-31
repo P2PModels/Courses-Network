@@ -93,8 +93,8 @@ contract Courses is AragonApp {
     //    keccak256("GETCOURSESCOMPLETED_ROLE");
 
     function initialize() public onlyInit {
-        uint256[] storage a;
-        uint256[] storage b;
+        uint256[] memory a;
+        uint256[] memory b;
         users[usersLength] = User(0, msg.sender, "", "", 0, a, b); //usuario en la pos 0, no existe en realidad
         usersLength = 1;
         coursesLength = 0;
@@ -113,8 +113,8 @@ contract Courses is AragonApp {
         auth(CREATEUSER_ROLE)
     {
         require(ownerToUser[msg.sender] == 0);
-        uint256[] storage a;
-        uint256[] storage b;
+        uint256[] memory a;
+        uint256[] memory b;
         users[usersLength] = User(
             usersLength,
             msg.sender,

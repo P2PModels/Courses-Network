@@ -107699,7 +107699,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var _StyledSpan = (0, _styledComponents.default)("span").withConfig({
   displayName: "App___StyledSpan",
-  componentId: "sc-4odlhd-0"
+  componentId: "r7tekp-0"
 })(["", ""], function (p) {
   return p._css;
 });
@@ -107729,7 +107729,7 @@ function App() {
     GHprimary: "P2P Models:",
     secondary: /*#__PURE__*/_react.default.createElement(_StyledSpan, {
       _css: (0, _ui.textStyle)('title2')
-    }, "Total tasks: ", numTasks)
+    }, "Total tasks: ", usersLength)
   }));
 }
 /*function renderTable(tasks, priorities, isDone) {
@@ -107754,7 +107754,7 @@ function App() {
 
 var Buttons = _styledComponents.default.div.withConfig({
   displayName: "App__Buttons",
-  componentId: "sc-4odlhd-1"
+  componentId: "r7tekp-1"
 })(["display:grid;grid-auto-flow:column;grid-gap:40px;margin-top:20px;"]);
 
 var _default = App;
@@ -107819,7 +107819,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59787" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54701" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

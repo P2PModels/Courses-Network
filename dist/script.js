@@ -29032,7 +29032,7 @@ function _getValue() {
           case 0:
             _context3.t0 = parseInt;
             _context3.next = 3;
-            return app.call('numTasks').toPromise();
+            return app.call('usersLength').toPromise();
 
           case 3:
             _context3.t1 = _context3.sent;

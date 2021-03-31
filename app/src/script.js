@@ -55,7 +55,7 @@ function initializeState() {
 
  
 async function getValue() {
-  return parseInt(await app.call('numTasks').toPromise(), 10)
+  return parseInt(await app.call('usersLength').toPromise(), 10)
 }
 
 async function getTasks(id) {
