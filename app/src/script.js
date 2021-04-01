@@ -59,9 +59,9 @@ async function getTasks(id) {
 
 async function getNames() {
   let names = [];
-  for(let i = 0; i < await getValue(); i++) {
+  for(let i = 1; i < await getValue(); i++) {
     let n = await getTasks(i);
-    names[i] = n[1];
+    names[i] = n[2];
   }
   return names;
 }

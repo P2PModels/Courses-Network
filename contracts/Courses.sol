@@ -66,10 +66,10 @@ contract Courses is AragonApp {
     }
 
     mapping(uint256 => Course) public courses;
-    uint256 coursesLength;
+    uint256 public coursesLength;
 
     mapping(uint256 => User) public users;
-    uint256 usersLength;
+    uint256 public usersLength;
 
     mapping(uint256 => address) public userToOwner;
     mapping(address => uint256) public ownerToUser;

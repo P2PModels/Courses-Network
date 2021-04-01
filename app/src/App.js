@@ -1,13 +1,12 @@
 import React from 'react'
 import { useAragonApi } from '@aragon/api-react'
 import {
-  Box, Button, GU, Header, IconMinus, IconPlus,
+  Box, Button, GU, Header, IconAddUser, IconPlus,
   Main, SyncIndicator, Tabs, Text, textStyle,
   TextInput,Card, DropDown,
   Field,Table, TableHeader, TableRow, TableCell,
 } from '@aragon/ui'
 import styled from 'styled-components'
-
 function App() {
   const { api, appState, path, requestPath } = useAragonApi()
   const { usersLength,users, isSyncing } = appState
@@ -32,36 +31,62 @@ function App() {
           </span>
         }
       />
+      
       <Tabs
-        items={['Tab 1', 'Tab 2']}
+      //podemos usar estas tabs para cambiar de users a courses
+        items={['Users', 'Courses']}
         selected={pageIndex}
         onChange={index => requestPath(`/tab/${index + 1}`)}
       />
       <Box
         css={`
           display: flex;
-          align-items: center;
-          justify-content: center;
           text-align: center;
           height: ${50 * GU}px;
           ${textStyle('title3')};
         `}
       >
-        Count: {usersLength}
-        <Buttons>
+        <div
+        css={`
+          display: flex;
+          flex-direction:row;
+          align-items: center;
+          width: 272%;
+          justify-content: space-between;
+
+        `}>
+       <Text css={`
+       ${textStyle('label1')};
+       font-size: 15pt;
+        `}> 
+      Registered Users : {usersLength}</Text>
+        
           <Button
+          
             display="icon"
-            icon={<IconMinus />}
+            icon={<IconAddUser />}
             label="Create User"
-            onClick={() => api.createUser("Noelia", "ncalde01@ucm.es").toPromise()}
+            onClick={() => api.createUser("Marta", "mranz02@ucm.es").toPromise()}
           />
           
-        </Buttons>
-
+       
+        </div>
+        {renderUsers(users)}
         
       </Box>
     </Main>
   )
+}
+
+function renderUsers(users) {
+  const zipped = users.map((t,i) => [t]);
+  return zipped.map((user) => {
+    const [name] = user
+    return (<Card width="100px" height="50px">
+        <Text css={`${textStyle('body2')};`}>{name}</Text>
+        </Card>
+    )
+  })
 }
 
 const Buttons = styled.div`

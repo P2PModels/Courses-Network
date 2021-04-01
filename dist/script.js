@@ -29001,7 +29001,7 @@ function _getNames() {
         switch (_context5.prev = _context5.next) {
           case 0:
             names = [];
-            i = 0;
+            i = 1;
 
           case 2:
             _context5.t0 = i;
@@ -29021,7 +29021,7 @@ function _getNames() {
 
           case 9:
             n = _context5.sent;
-            names[i] = n[1];
+            names[i] = n[2];
 
           case 11:
             i++;
