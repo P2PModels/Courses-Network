@@ -28823,7 +28823,7 @@ app.store( /*#__PURE__*/function () {
           case 11:
             _context.t4 = _context.sent;
             _context.next = 14;
-            return getNames();
+            return getUsers();
 
           case 14:
             _context.t5 = _context.sent;
@@ -28843,7 +28843,7 @@ app.store( /*#__PURE__*/function () {
           case 22:
             _context.t10 = _context.sent;
             _context.next = 25;
-            return getNames();
+            return getUsers();
 
           case 25:
             _context.t11 = _context.sent;
@@ -28911,7 +28911,7 @@ function initializeState() {
             case 5:
               _context2.t3 = _context2.sent;
               _context2.next = 8;
-              return getNames();
+              return getUsers();
 
             case 8:
               _context2.t4 = _context2.sent;
@@ -28963,12 +28963,21 @@ function _getValue() {
   return _getValue.apply(this, arguments);
 }
 
-function getTasks(_x4) {
-  return _getTasks.apply(this, arguments);
+function getUser(_x4) {
+  return _getUser.apply(this, arguments);
 }
+/*async function getNames() {
+  let names = [];
+  for(let i = 1; i < await getValue(); i++) {
+    let n = await getUsers(i);
+    names[i] = n[2];
+  }
+  return names;
+}*/
 
-function _getTasks() {
-  _getTasks = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(id) {
+
+function _getUser() {
+  _getUser = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(id) {
     return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
@@ -28986,21 +28995,21 @@ function _getTasks() {
       }
     }, _callee4);
   }));
-  return _getTasks.apply(this, arguments);
+  return _getUser.apply(this, arguments);
 }
 
-function getNames() {
-  return _getNames.apply(this, arguments);
+function getUsers() {
+  return _getUsers.apply(this, arguments);
 }
 
-function _getNames() {
-  _getNames = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
-    var names, i, n;
+function _getUsers() {
+  _getUsers = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+    var object, i, user, u;
     return regeneratorRuntime.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
-            names = [];
+            object = [];
             i = 1;
 
           case 2:
@@ -29012,33 +29021,41 @@ function _getNames() {
             _context5.t1 = _context5.sent;
 
             if (!(_context5.t0 < _context5.t1)) {
-              _context5.next = 14;
+              _context5.next = 22;
               break;
             }
 
-            _context5.next = 9;
-            return getTasks(i);
+            user = {};
+            _context5.next = 10;
+            return getUser(i);
 
-          case 9:
-            n = _context5.sent;
-            names[i] = n[2];
+          case 10:
+            u = _context5.sent;
+            user["id"] = u[0];
+            user["_address"] = u[1];
+            user["name"] = u[2];
+            user["email"] = u[3];
+            user["reputation"] = u[4];
+            user["coursesOffered"] = u[5] == null ? [] : u[5];
+            user["coursesCompleted"] = u[6] == null ? [] : u[6];
+            object.push(user);
 
-          case 11:
+          case 19:
             i++;
             _context5.next = 2;
             break;
 
-          case 14:
-            return _context5.abrupt("return", names);
+          case 22:
+            return _context5.abrupt("return", object);
 
-          case 15:
+          case 23:
           case "end":
             return _context5.stop();
         }
       }
     }, _callee5);
   }));
-  return _getNames.apply(this, arguments);
+  return _getUsers.apply(this, arguments);
 }
 },{"core-js/stable":"../node_modules/core-js/stable/index.js","regenerator-runtime/runtime":"../node_modules/regenerator-runtime/runtime.js","@aragon/api":"../node_modules/@aragon/api/dist/index.js"}]},{},["script.js"], null)
 //# sourceMappingURL=/script.js.map

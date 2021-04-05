@@ -9,6 +9,7 @@ module.exports = {
   networks: {
     localhost: {
       url: 'http://localhost:8545',
+      network_id: "*",
     },
   },
   solc: {

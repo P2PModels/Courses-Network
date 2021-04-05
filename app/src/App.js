@@ -3,7 +3,7 @@ import { useAragonApi } from '@aragon/api-react'
 import {
   Box, Button, GU, Header, IconAddUser, IconPlus,
   Main, SyncIndicator, Tabs, Text, textStyle,
-  TextInput, Card, DropDown,
+  TextInput, Card, IconUser,
   Field, Table, TableHeader, TableRow, TableCell,
   Modal
 } from '@aragon/ui'
@@ -23,6 +23,7 @@ function App() {
   const closeCreateUser = () => setOpenedCreateUser(false)
   const [nameNewUser, setNameNewUser] = useState('')
   const [emailNewUser, setEmailNewUser] = useState('')
+  const [pageSelected, setPageSelected] = useState(0)
 
   return (
     <Main>
@@ -43,95 +44,119 @@ function App() {
       <Tabs
         //podemos usar estas tabs para cambiar de users a courses
         items={['Users', 'Courses']}
-        selected={pageIndex}
-        onChange={index => requestPath(`/tab/${index + 1}`)}
+        selected={pageSelected}
+        onChange={setPageSelected}
       />
-      <Box
-        css={`
-          display: flex;
-          text-align: center;
-          height: ${50 * GU}px;
-          ${textStyle('title3')};
-        `}
-      >
-        <div
+
+      {/*pageSelected Users */}
+      {pageSelected == 0 ? (
+        <Box
           css={`
           display: flex;
-          flex-direction:row;
-          align-items: center;
-          width: 272%;
-          justify-content: space-between;
+          text-align: center;
+          
+          ${textStyle('title3')};
+        `}
+        >
+          <div
+            css={`
+              display: flex;
+              flex-direction:row;
+              align-items: center;
+              justify-content: space-between;
+              width: 155%;
+            `}>
+            <Text css={`
+              ${textStyle('label1')};
+              font-size: 15pt;
+            `}>
+              Registered Users : {usersLength - 1/*Restamos 1 por el User del constructor que no sirve*/}</Text>
 
-        `}>
-          <Text css={`
-       ${textStyle('label1')};
-       font-size: 15pt;
-        `}>
-            Registered Users : {usersLength - 1/*Restamos 1 por el User del constructor que no sirve*/}</Text>
+            <Button
 
-          <Button
-
-            display="icon"
-            icon={<IconAddUser />}
-            label="Create User"
-            onClick={openCreateUser/**/}
-          />
-
-
-        </div>
-        {renderUsers(users)}
-
-        {/* Modal Create User */}
-        <Modal visible={openedCreateUser} onClose={closeCreateUser} >
+              display="icon"
+              icon={<IconAddUser />}
+              label="Create User"
+              onClick={openCreateUser/**/}
+            />
+          </div>
           <div css={`
+            display:flex; 
+            flex-direction:row;
+            flex-wrap:wrap; 
+            width: 155%;
+            `}>
+              {renderUsers(users)}
+            </div>
+          
+
+
+
+          {/* Modal Create User */}
+          <Modal visible={openedCreateUser} onClose={closeCreateUser} >
+            <div css={`
             display: flex;
             flex-direction: column;
             align-items:center;
           `}>
-            <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Create a new user</Text>
+              <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Create a new user</Text>
 
-            <div css={`margin-top:5%;`}>
-              <Text css={`${textStyle('label1')}; color: #47444F`}>Name: </Text>
-              <TextInput
-                autofocus
-                value={nameNewUser}
-                onChange={event => {
-                  setNameNewUser(event.target.value)
-                }}
-              />
-            </div>
-            <div css={`margin-top:2%;`}>
-              <Text css={`${textStyle('label1')}; color: #47444F`}>Email: </Text>
-              <TextInput
-                value={emailNewUser}
-                onChange={event => {
-                  setEmailNewUser(event.target.value)
-                }}
-              />
-            </div>
-            <Button
-              css={`
+              <div css={`margin-top:5%;`}>
+                <Text css={`${textStyle('label1')}; color: #47444F`}>Name: </Text>
+                <TextInput
+                  autofocus
+                  value={nameNewUser}
+                  onChange={event => {
+                    setNameNewUser(event.target.value)
+                  }}
+                />
+              </div>
+              <div css={`margin-top:2%;`}>
+                <Text css={`${textStyle('label1')}; color: #47444F`}>Email: </Text>
+                <TextInput
+                  value={emailNewUser}
+                  onChange={event => {
+                    setEmailNewUser(event.target.value)
+                  }}
+                />
+              </div>
+              <Button
+                css={`
                 margin-top:5%;
                 background-color:#210963;
                 color: white;
               `}
-              label="Create"
-              onClick={() => api.createUser(nameNewUser, emailNewUser).toPromise()}
-            />
+                label="Create"
+                onClick={() => api.createUser(nameNewUser, emailNewUser).toPromise()}
+              />
 
-          </div>
-        </Modal>
-      </Box>
+            </div>
+          </Modal>
+        </Box>) : ""}
+
+
     </Main>
   )
 }
 
 function renderUsers(users) {
-  const zipped = users.map((t, i) => [t]);
-  return zipped.map((user) => {
-    const [name] = user
-    return (<Card width="100px" height="50px">
-      <Text css={`${textStyle('body2')};`}>{name}</Text>
+  //const zipped = users.map((t, i) => [t]);
+  return users.map((user) => {
+    let s = JSON.stringify(user);
+    let obj = JSON.parse(s);
+    return (<Card width="200px" height="200px" css={`margin-right: 5%;`}>
+     <div css={`display:flex; flex-direction:row; align-items:center;margin-bottom:15%;`}>
+       <IconUser size="large"></IconUser>
+       <Text css={`${textStyle('title4')};`}>{obj.name}</Text>
+      </div> 
+      <div css={`display:flex; flex-direction:row; align-items:center;`}>
+      <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Email: </Text>
+      <Text css={`${textStyle('body3')};`}> {obj.email}</Text>
+      </div>
+      <div css={`display:flex; flex-direction:row; align-items:center;`}>
+      <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Reputation: </Text>
+      <Text css={`${textStyle('body3')};`}> {obj.reputation}</Text>
+      </div>
     </Card>
     )
   })
