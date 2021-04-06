@@ -6,73 +6,73 @@ import "@aragon/os/contracts/lib/math/SafeMath.sol";
 contract Courses is AragonApp {
     //EVENTS
     event CreateUser(address indexed entity, string name, string email);
-    event DeleteUser(address indexed entity, uint256 id);
+    event DeleteUser(address indexed entity, uint id);
     event UpdateUser(address indexed entity, string name, string email);
     event SetUserReputation(
         address indexed entity,
-        uint256 id,
-        uint256 reputation
+        uint id,
+        uint reputation
     );
    // event GetUser(address indexed entity);
-    event SetCourseCompleted(address indexed entity, uint256 id);
+    event SetCourseCompleted(address indexed entity, uint id);
     event CreateCourse(
         address indexed entity,
         string name,
         string desc,
-        uint256 price
+        uint price
     );
     event UpdateCourse(
         address indexed entity,
-        uint256 id,
+        uint id,
         string name,
         string desc,
-        uint256 price
+        uint price
     );
-    event UpdateCourseState(address indexed entity, uint256 id);
-   // event GetCourse(address indexed entity, uint256 id);
+    event UpdateCourseState(address indexed entity, uint id);
+   // event GetCourse(address indexed entity, uint id);
     event SetCourseReputation(
         address indexed entity,
-        uint256 id,
-        uint256 reputation
+        uint id,
+        uint reputation
     );
    // event GetCoursesCompleted(address indexed entity);
 
     struct Course {
-        uint256 id; //id del curso
+        uint id; //id del curso
         string name; // nombre del curso
         string desc; // descripción
-        uint256 idSpeaker; // ponente del curso
+        uint idSpeaker; // ponente del curso
         bool isActive;
         //mapping (uint => Valoracion) valoraciones; // valoraciones de los usuarios
-        uint256 reputation; //reputación actual
-        uint256 price; //precio del curso
+        uint reputation; //reputación actual
+        uint price; //precio del curso
     }
     struct User {
-        uint256 id; // id del usuario
+        uint id; // id del usuario
         address _address; // dirección pública del usuario
         string name; // nombre del usuario
         string email; // email
-        uint256 reputation; // reputación actual
-        uint256[] coursesOffered; // id de los cursos que ofrece el usuario
-        uint256[] coursesCompleted; // id de los cursos que ha recibido el usuario
+        uint reputation; // reputación actual
+        uint[] coursesOffered; // id de los cursos que ofrece el usuario
+        uint[] coursesCompleted; // id de los cursos que ha recibido el usuario
     }
     struct Valoracion {
-        uint256 id; // id de valoración
-        uint256 idUser; // id del usuario que realiza la valoración
-        uint256 idCourse; // id del curso sobre el que se valora Creo que sobra
+        uint id; // id de valoración
+        uint idUser; // id del usuario que realiza la valoración
+        uint idCourse; // id del curso sobre el que se valora Creo que sobra
         string title; // título descriptivo del comentario
         string commentary; //comentario del usuario sobre el curso
-        uint256 valoracion; //valoración numérica
+        uint valoracion; //valoración numérica
     }
 
-    mapping(uint256 => Course) public courses;
-    uint256 public coursesLength;
+    mapping(uint => Course) public courses;
+    uint public coursesLength;
 
-    mapping(uint256 => User) public users;
-    uint256 public usersLength;
+    mapping(uint => User) public users;
+    uint public usersLength;
 
-    mapping(uint256 => address) public userToOwner;
-    mapping(address => uint256) public ownerToUser;
+    mapping(uint => address) public userToOwner;
+    mapping(address => uint) public ownerToUser;
 
     bytes32 public constant CREATEUSER_ROLE = keccak256("CREATEUSER_ROLE");
     bytes32 public constant DELETEUSER_ROLE = keccak256("DELETEUSER_ROLE");
@@ -93,11 +93,16 @@ contract Courses is AragonApp {
     //    keccak256("GETCOURSESCOMPLETED_ROLE");
 
     function initialize() public onlyInit {
-        uint256[] memory a;
-        uint256[] memory b;
-        users[usersLength] = User(0, msg.sender, "", "", 0, a, b); //usuario en la pos 0, no existe en realidad
-        usersLength = 1;
-        coursesLength = 0;
+        uint[] memory a  = new uint [] (500);
+        uint[] memory b = new uint [] (500);
+        uint[]  memory c = new uint [](500);
+        c[0] = 0;
+        users[0] = User(0, msg.sender, "", "", 0, a, b); //usuario en la pos 0, no existe en realidad
+        users[1] = User(1, 0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7, "Noelia", "ncalde01@ucm.es", 9, c, b);
+        usersLength = 2;
+        courses[0] = Course(0, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 1, true, 8, 75 );
+        courses[1] = Course(1, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 1, true, 8, 75 );
+        coursesLength = 2;
 
 
         initialized();
@@ -113,8 +118,8 @@ contract Courses is AragonApp {
         auth(CREATEUSER_ROLE)
     {
         require(ownerToUser[msg.sender] == 0);
-        uint256[] memory a;
-        uint256[] memory b;
+        uint[] memory a;
+        uint[] memory b;
         users[usersLength] = User(
             usersLength,
             msg.sender,
@@ -142,7 +147,7 @@ contract Courses is AragonApp {
         require(ownerToUser[msg.sender] != 0);
         require(msg.sender == users[ownerToUser[msg.sender]]._address);
 
-        uint256 id = ownerToUser[msg.sender];
+        uint id = ownerToUser[msg.sender];
 
         users[id].name = name;
         users[id].email = email;
@@ -153,9 +158,9 @@ contract Courses is AragonApp {
      * @notice delete an existing user
      * @param id user id to delete
      */
-    function deleteUser(uint256 id) external auth(DELETEUSER_ROLE) {
+    function deleteUser(uint id) external auth(DELETEUSER_ROLE) {
         require(msg.sender == users[id]._address);
-        for (uint256 j = id; j < usersLength - 1; j++) {
+        for (uint j = id; j < usersLength - 1; j++) {
             users[j] = users[j + 1];
         }
         delete users[usersLength - 1];
@@ -180,7 +185,7 @@ contract Courses is AragonApp {
      * @param id user id to change
      * @param reputation  new reputation
      */
-    function setUserReputation(uint256 id, uint256 reputation)
+    function setUserReputation(uint id, uint reputation)
         external
         auth(SETUSERREPUTATION_ROLE)
     {
@@ -193,7 +198,7 @@ contract Courses is AragonApp {
      * @notice add a new  completed course to user
      * @param idCourse course id
      */
-    function setCourseCompleted(uint256 idCourse)
+    function setCourseCompleted(uint idCourse)
         external
         auth(SETCOURSECOMPLETED_ROLE)
     {
@@ -210,7 +215,7 @@ contract Courses is AragonApp {
     function createCourse(
         string name,
         string desc,
-        uint256 price
+        uint price
     ) external auth(CREATECOURSE_ROLE) {
         courses[coursesLength] = Course(
             coursesLength,
@@ -234,10 +239,10 @@ contract Courses is AragonApp {
      * @param price  new price
      */
     function updateCourse(
-        uint256 id,
+        uint id,
         string name,
         string desc,
-        uint256 price
+        uint price
     ) external auth(UPDATECOURSE_ROLE) {
         require(courses[id].idSpeaker == ownerToUser[msg.sender]);
         courses[id].name = name;
@@ -250,7 +255,7 @@ contract Courses is AragonApp {
      * @notice enable/disable a course
      * @param id course id to modify
      */
-    function updateCourseState(uint256 id)
+    function updateCourseState(uint id)
         external
         auth(UPDATECOURSESTATE_ROLE)
     {
@@ -263,7 +268,7 @@ contract Courses is AragonApp {
      * @notice return a specific course by id
      * @param id course id 
      
-    function getCourse(uint256 id)
+    function getCourse(uint id)
         external
         auth(GETCOURSE_ROLE)
         returns (Course memory)
@@ -276,7 +281,7 @@ contract Courses is AragonApp {
      * @param id course id to change
      * @param reputation  new reputation
      */
-    function setCourseReputation(uint256 id, uint256 reputation)
+    function setCourseReputation(uint id, uint reputation)
         external
         auth(SETCOURSEREPUTATION_ROLE)
     {
@@ -290,7 +295,7 @@ contract Courses is AragonApp {
     function getCoursesCompleted()
         external
         auth(GETCOURSESCOMPLETED_ROLE)
-        returns (uint256[] memory)
+        returns (uint[] memory)
     {
         return users[ownerToUser[msg.sender]].coursesCompleted;
     }*/

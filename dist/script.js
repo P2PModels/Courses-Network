@@ -28775,7 +28775,61 @@ function AragonApp() {
 
 
 exports.default = AragonApp;
-},{"@babel/runtime/helpers/interopRequireWildcard":"../node_modules/@babel/runtime/helpers/interopRequireWildcard.js","@babel/runtime/helpers/interopRequireDefault":"../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/defineProperty":"../node_modules/@babel/runtime/helpers/defineProperty.js","@babel/runtime/helpers/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","rxjs":"../node_modules/rxjs/_esm5/index.js","rxjs/operators":"../node_modules/rxjs/_esm5/operators/index.js","@aragon/rpc-messenger":"../node_modules/@aragon/rpc-messenger/dist/index.js","./utils":"../node_modules/@aragon/api/dist/utils.js"}],"script.js":[function(require,module,exports) {
+},{"@babel/runtime/helpers/interopRequireWildcard":"../node_modules/@babel/runtime/helpers/interopRequireWildcard.js","@babel/runtime/helpers/interopRequireDefault":"../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/defineProperty":"../node_modules/@babel/runtime/helpers/defineProperty.js","@babel/runtime/helpers/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","rxjs":"../node_modules/rxjs/_esm5/index.js","rxjs/operators":"../node_modules/rxjs/_esm5/operators/index.js","@aragon/rpc-messenger":"../node_modules/@aragon/rpc-messenger/dist/index.js","./utils":"../node_modules/@aragon/api/dist/utils.js"}],"../node_modules/@aragon/ui/dist/objectWithoutPropertiesLoose-1af20ad0.js":[function(require,module,exports) {
+'use strict';
+
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+exports._assertThisInitialized = _assertThisInitialized;
+exports._extends = _extends;
+exports._inheritsLoose = _inheritsLoose;
+exports._objectWithoutPropertiesLoose = _objectWithoutPropertiesLoose;
+},{}],"script.js":[function(require,module,exports) {
 "use strict";
 
 require("core-js/stable");
@@ -28783,6 +28837,8 @@ require("core-js/stable");
 require("regenerator-runtime/runtime");
 
 var _api = _interopRequireWildcard(require("@aragon/api"));
+
+var _objectWithoutPropertiesLoose1af20ad = require("@aragon/ui/dist/objectWithoutPropertiesLoose-1af20ad0");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
@@ -28810,7 +28866,7 @@ app.store( /*#__PURE__*/function () {
             nextState = _objectSpread({}, state);
             _context.prev = 2;
             _context.t0 = event;
-            _context.next = _context.t0 === 'CreateUser' ? 6 : _context.t0 === 'DeleteUser' ? 17 : _context.t0 === _api.events.SYNC_STATUS_SYNCING ? 28 : _context.t0 === _api.events.SYNC_STATUS_SYNCED ? 29 : 30;
+            _context.next = _context.t0 === 'CreateUser' ? 6 : _context.t0 === 'DeleteUser' ? 23 : _context.t0 === 'CreateCourse' ? 40 : _context.t0 === _api.events.SYNC_STATUS_SYNCING ? 57 : _context.t0 === _api.events.SYNC_STATUS_SYNCED ? 58 : 59;
             break;
 
           case 6:
@@ -28818,7 +28874,7 @@ app.store( /*#__PURE__*/function () {
             _context.t2 = _objectSpread({}, nextState);
             _context.t3 = {};
             _context.next = 11;
-            return getValue();
+            return getUsersLength();
 
           case 11:
             _context.t4 = _context.sent;
@@ -28827,60 +28883,116 @@ app.store( /*#__PURE__*/function () {
 
           case 14:
             _context.t5 = _context.sent;
-            _context.t6 = {
-              usersLength: _context.t4,
-              users: _context.t5
-            };
-            return _context.abrupt("return", (0, _context.t1)(_context.t2, _context.t3, _context.t6));
+            _context.next = 17;
+            return getCoursesLength();
 
           case 17:
-            _context.t7 = _objectSpread;
-            _context.t8 = _objectSpread({}, nextState);
-            _context.t9 = {};
-            _context.next = 22;
-            return getValue();
+            _context.t6 = _context.sent;
+            _context.next = 20;
+            return getCourses();
 
-          case 22:
-            _context.t10 = _context.sent;
-            _context.next = 25;
-            return getUsers();
-
-          case 25:
-            _context.t11 = _context.sent;
-            _context.t12 = {
-              usersLength: _context.t10,
-              users: _context.t11
+          case 20:
+            _context.t7 = _context.sent;
+            _context.t8 = {
+              usersLength: _context.t4,
+              users: _context.t5,
+              coursesLength: _context.t6,
+              courses: _context.t7
             };
-            return _context.abrupt("return", (0, _context.t7)(_context.t8, _context.t9, _context.t12));
+            return _context.abrupt("return", (0, _context.t1)(_context.t2, _context.t3, _context.t8));
+
+          case 23:
+            _context.t9 = _objectSpread;
+            _context.t10 = _objectSpread({}, nextState);
+            _context.t11 = {};
+            _context.next = 28;
+            return getUsersLength();
 
           case 28:
+            _context.t12 = _context.sent;
+            _context.next = 31;
+            return getUsers();
+
+          case 31:
+            _context.t13 = _context.sent;
+            _context.next = 34;
+            return getCoursesLength();
+
+          case 34:
+            _context.t14 = _context.sent;
+            _context.next = 37;
+            return getCourses();
+
+          case 37:
+            _context.t15 = _context.sent;
+            _context.t16 = {
+              usersLength: _context.t12,
+              users: _context.t13,
+              coursesLength: _context.t14,
+              courses: _context.t15
+            };
+            return _context.abrupt("return", (0, _context.t9)(_context.t10, _context.t11, _context.t16));
+
+          case 40:
+            _context.t17 = _objectSpread;
+            _context.t18 = _objectSpread({}, nextState);
+            _context.t19 = {};
+            _context.next = 45;
+            return getUsersLength();
+
+          case 45:
+            _context.t20 = _context.sent;
+            _context.next = 48;
+            return getUsers();
+
+          case 48:
+            _context.t21 = _context.sent;
+            _context.next = 51;
+            return getCoursesLength();
+
+          case 51:
+            _context.t22 = _context.sent;
+            _context.next = 54;
+            return getCourses();
+
+          case 54:
+            _context.t23 = _context.sent;
+            _context.t24 = {
+              usersLength: _context.t20,
+              users: _context.t21,
+              coursesLength: _context.t22,
+              courses: _context.t23
+            };
+            return _context.abrupt("return", (0, _context.t17)(_context.t18, _context.t19, _context.t24));
+
+          case 57:
             return _context.abrupt("return", _objectSpread(_objectSpread({}, nextState), {}, {
               isSyncing: true
             }));
 
-          case 29:
+          case 58:
             return _context.abrupt("return", _objectSpread(_objectSpread({}, nextState), {}, {
               isSyncing: false
             }));
 
-          case 30:
+          case 59:
             return _context.abrupt("return", state);
 
-          case 31:
-            _context.next = 36;
+          case 60:
+            _context.next = 65;
             break;
 
-          case 33:
-            _context.prev = 33;
-            _context.t13 = _context["catch"](2);
-            console.log(_context.t13);
+          case 62:
+            _context.prev = 62;
+            _context.t25 = _context["catch"](2);
+            console.log(_context.t25);
 
-          case 36:
+          case 65:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[2, 33]]);
+    }, _callee, null, [[2, 62]]);
   }));
 
   return function (_x, _x2) {
@@ -28906,7 +29018,7 @@ function initializeState() {
               _context2.t1 = _objectSpread({}, cachedState);
               _context2.t2 = {};
               _context2.next = 5;
-              return getValue();
+              return getUsersLength();
 
             case 5:
               _context2.t3 = _context2.sent;
@@ -28915,13 +29027,25 @@ function initializeState() {
 
             case 8:
               _context2.t4 = _context2.sent;
-              _context2.t5 = {
-                usersLength: _context2.t3,
-                users: _context2.t4
-              };
-              return _context2.abrupt("return", (0, _context2.t0)(_context2.t1, _context2.t2, _context2.t5));
+              _context2.next = 11;
+              return getCoursesLength();
 
             case 11:
+              _context2.t5 = _context2.sent;
+              _context2.next = 14;
+              return getCourses();
+
+            case 14:
+              _context2.t6 = _context2.sent;
+              _context2.t7 = {
+                usersLength: _context2.t3,
+                users: _context2.t4,
+                coursesLength: _context2.t5,
+                courses: _context2.t6
+              };
+              return _context2.abrupt("return", (0, _context2.t0)(_context2.t1, _context2.t2, _context2.t7));
+
+            case 17:
             case "end":
               return _context2.stop();
           }
@@ -28935,12 +29059,12 @@ function initializeState() {
   }();
 }
 
-function getValue() {
-  return _getValue.apply(this, arguments);
+function getUsersLength() {
+  return _getUsersLength.apply(this, arguments);
 }
 
-function _getValue() {
-  _getValue = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+function _getUsersLength() {
+  _getUsersLength = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
@@ -28960,11 +29084,65 @@ function _getValue() {
       }
     }, _callee3);
   }));
-  return _getValue.apply(this, arguments);
+  return _getUsersLength.apply(this, arguments);
+}
+
+function getCoursesLength() {
+  return _getCoursesLength.apply(this, arguments);
+}
+
+function _getCoursesLength() {
+  _getCoursesLength = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.t0 = parseInt;
+            _context4.next = 3;
+            return app.call('coursesLength').toPromise();
+
+          case 3:
+            _context4.t1 = _context4.sent;
+            return _context4.abrupt("return", (0, _context4.t0)(_context4.t1, 10));
+
+          case 5:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4);
+  }));
+  return _getCoursesLength.apply(this, arguments);
 }
 
 function getUser(_x4) {
   return _getUser.apply(this, arguments);
+}
+
+function _getUser() {
+  _getUser = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(id) {
+    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.next = 2;
+            return app.call('users', id).toPromise();
+
+          case 2:
+            return _context5.abrupt("return", _context5.sent);
+
+          case 3:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5);
+  }));
+  return _getUser.apply(this, arguments);
+}
+
+function getCourse(_x5) {
+  return _getCourse.apply(this, arguments);
 }
 /*async function getNames() {
   let names = [];
@@ -28976,26 +29154,26 @@ function getUser(_x4) {
 }*/
 
 
-function _getUser() {
-  _getUser = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(id) {
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+function _getCourse() {
+  _getCourse = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(id) {
+    return regeneratorRuntime.wrap(function _callee6$(_context6) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context6.prev = _context6.next) {
           case 0:
-            _context4.next = 2;
-            return app.call('users', id).toPromise();
+            _context6.next = 2;
+            return app.call('courses', id).toPromise();
 
           case 2:
-            return _context4.abrupt("return", _context4.sent);
+            return _context6.abrupt("return", _context6.sent);
 
           case 3:
           case "end":
-            return _context4.stop();
+            return _context6.stop();
         }
       }
-    }, _callee4);
+    }, _callee6);
   }));
-  return _getUser.apply(this, arguments);
+  return _getCourse.apply(this, arguments);
 }
 
 function getUsers() {
@@ -29003,34 +29181,34 @@ function getUsers() {
 }
 
 function _getUsers() {
-  _getUsers = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+  _getUsers = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
     var object, i, user, u;
-    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+    return regeneratorRuntime.wrap(function _callee7$(_context7) {
       while (1) {
-        switch (_context5.prev = _context5.next) {
+        switch (_context7.prev = _context7.next) {
           case 0:
             object = [];
             i = 1;
 
           case 2:
-            _context5.t0 = i;
-            _context5.next = 5;
-            return getValue();
+            _context7.t0 = i;
+            _context7.next = 5;
+            return getUsersLength();
 
           case 5:
-            _context5.t1 = _context5.sent;
+            _context7.t1 = _context7.sent;
 
-            if (!(_context5.t0 < _context5.t1)) {
-              _context5.next = 22;
+            if (!(_context7.t0 < _context7.t1)) {
+              _context7.next = 22;
               break;
             }
 
             user = {};
-            _context5.next = 10;
+            _context7.next = 10;
             return getUser(i);
 
           case 10:
-            u = _context5.sent;
+            u = _context7.sent;
             user["id"] = u[0];
             user["_address"] = u[1];
             user["name"] = u[2];
@@ -29042,20 +29220,80 @@ function _getUsers() {
 
           case 19:
             i++;
-            _context5.next = 2;
+            _context7.next = 2;
             break;
 
           case 22:
-            return _context5.abrupt("return", object);
+            return _context7.abrupt("return", object);
 
           case 23:
           case "end":
-            return _context5.stop();
+            return _context7.stop();
         }
       }
-    }, _callee5);
+    }, _callee7);
   }));
   return _getUsers.apply(this, arguments);
 }
-},{"core-js/stable":"../node_modules/core-js/stable/index.js","regenerator-runtime/runtime":"../node_modules/regenerator-runtime/runtime.js","@aragon/api":"../node_modules/@aragon/api/dist/index.js"}]},{},["script.js"], null)
+
+function getCourses() {
+  return _getCourses.apply(this, arguments);
+}
+
+function _getCourses() {
+  _getCourses = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+    var object, i, course, c;
+    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            object = [];
+            i = 0;
+
+          case 2:
+            _context8.t0 = i;
+            _context8.next = 5;
+            return getCoursesLength();
+
+          case 5:
+            _context8.t1 = _context8.sent;
+
+            if (!(_context8.t0 < _context8.t1)) {
+              _context8.next = 22;
+              break;
+            }
+
+            course = {};
+            _context8.next = 10;
+            return getCourse(i);
+
+          case 10:
+            c = _context8.sent;
+            course["id"] = c[0];
+            course["name"] = c[1];
+            course["desc"] = c[2];
+            course["idSpeaker"] = c[3];
+            course["isActive"] = c[4];
+            course["reputation"] = c[5];
+            course["price"] = c[6];
+            object.push(course);
+
+          case 19:
+            i++;
+            _context8.next = 2;
+            break;
+
+          case 22:
+            return _context8.abrupt("return", object);
+
+          case 23:
+          case "end":
+            return _context8.stop();
+        }
+      }
+    }, _callee8);
+  }));
+  return _getCourses.apply(this, arguments);
+}
+},{"core-js/stable":"../node_modules/core-js/stable/index.js","regenerator-runtime/runtime":"../node_modules/regenerator-runtime/runtime.js","@aragon/api":"../node_modules/@aragon/api/dist/index.js","@aragon/ui/dist/objectWithoutPropertiesLoose-1af20ad0":"../node_modules/@aragon/ui/dist/objectWithoutPropertiesLoose-1af20ad0.js"}]},{},["script.js"], null)
 //# sourceMappingURL=/script.js.map

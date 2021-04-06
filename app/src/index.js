@@ -8,7 +8,7 @@ import App from './App'
 
 const reducer = state => {
   if (state === null) {
-    return { usersLength: 1, users:[], isSyncing: true }
+    return { usersLength: 2, users:[], coursesLength: 2, courses:[], isSyncing: true }
   }
   return state
 }
