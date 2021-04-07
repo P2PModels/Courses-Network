@@ -101,7 +101,7 @@ contract Courses is AragonApp {
         users[1] = User(1, 0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7, "Noelia", "ncalde01@ucm.es", 9, c, b);
         usersLength = 2;
         courses[0] = Course(0, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 1, true, 8, 75 );
-        courses[1] = Course(1, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 1, true, 8, 75 );
+        courses[1] = Course(1, "Solidity", "Learn to create Smart Contracts with Solidity. Estimated 5 hours.", 1, true, 8, 30 );
         coursesLength = 2;
 
 

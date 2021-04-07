@@ -4,7 +4,7 @@ import {
   Box, Button, GU, Header, IconAddUser, IconPlus,
   Main, SyncIndicator, Tabs, Text, textStyle,
   TextInput, Card, IconUser,
-  IconSquarePlus, Table, TableHeader, TableRow, TableCell,
+  IconSquarePlus, IconEdit, IconTrash, TableRow, TableCell,
   Modal
 } from '@aragon/ui'
 import styled from 'styled-components'
@@ -98,13 +98,13 @@ function App() {
             flex-wrap:wrap; 
             width: 155%;
             `}>
-              {console.log(users)}
-              {renderUsers(users)}
-            </div>
-          
-          
+            {console.log(users)}
+            {renderUsers(users, api)}
+          </div>
+
+
         </Box>) : ""}
-      
+
       {/*pageSelected Courses */}
       {pageSelected == 1 ? (
         <Box
@@ -143,123 +143,138 @@ function App() {
             flex-wrap:wrap; 
             width: 155%;
             `}>
-              {console.log(courses)}
-              {renderCourses(courses)}
-            </div>
+            {console.log(courses)}
+            {renderCourses(courses)}
+          </div>
         </Box>) : ""}
 
       {/* Modal Create User */}
       <Modal visible={openedCreateUser} onClose={closeCreateUser} >
-            <div css={`
+        <div css={`
             display: flex;
             flex-direction: column;
             align-items:center;
           `}>
-              <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Create a new user</Text>
+          <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Create a new user</Text>
 
-              <div css={`margin-top:5%;`}>
-                <Text css={`${textStyle('label1')}; color: #47444F`}>Name: </Text>
-                <TextInput
-                  autofocus
-                  value={nameNewUser}
-                  onChange={event => {
-                    setNameNewUser(event.target.value)
-                  }}
-                />
-              </div>
-              <div css={`margin-top:2%;`}>
-                <Text css={`${textStyle('label1')}; color: #47444F`}>Email: </Text>
-                <TextInput
-                  value={emailNewUser}
-                  onChange={event => {
-                    setEmailNewUser(event.target.value)
-                  }}
-                />
-              </div>
-              <Button
-                css={`
+          <div css={`margin-top:5%;`}>
+            <Text css={`${textStyle('label1')}; color: #47444F`}>Name: </Text>
+            <TextInput
+              autofocus
+              value={nameNewUser}
+              onChange={event => {
+                setNameNewUser(event.target.value)
+              }}
+            />
+          </div>
+          <div css={`margin-top:2%;`}>
+            <Text css={`${textStyle('label1')}; color: #47444F`}>Email: </Text>
+            <TextInput
+              value={emailNewUser}
+              onChange={event => {
+                setEmailNewUser(event.target.value)
+              }}
+            />
+          </div>
+          <Button
+            css={`
                 margin-top:5%;
                 background-color:#210963;
                 color: white;
               `}
-                label="Create"
-                onClick={() => api.createUser(nameNewUser, emailNewUser).toPromise()}
-              />
+            label="Create"
+            onClick={() => api.createUser(nameNewUser, emailNewUser).toPromise()}
+          />
 
-            </div>
-          </Modal>
-          {/* Modal Create Course */}
-          <Modal visible={openedCreateCourse} onClose={closeCreateCourse} >
-            <div css={`
+        </div>
+      </Modal>
+      {/* Modal Create Course */}
+      <Modal visible={openedCreateCourse} onClose={closeCreateCourse} >
+        <div css={`
             display: flex;
             flex-direction: column;
             align-items:center;
           `}>
-              <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Add a new course</Text>
+          <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Add a new course</Text>
 
-              <div css={`margin-top:5%;`}>
-                <Text css={`${textStyle('label1')}; color: #47444F`}>Name: </Text>
-                <TextInput
-                  autofocus
-                  value={nameNewCourse}
-                  onChange={event => {
-                    setNameNewCourse(event.target.value)
-                  }}
-                />
-              </div>
-              <div css={`margin-top:2%;`}>
-                <Text css={`${textStyle('label1')}; color: #47444F`}>Description: </Text>
-                <TextInput
-                  value={descNewCourse}
-                  onChange={event => {
-                    setDescNewCourse(event.target.value)
-                  }}
-                />
-              </div>
-              <div css={`margin-top:2%;`}>
-                <Text css={`${textStyle('label1')}; color: #47444F`}>Price: </Text>
-                <TextInput
-                  value={priceNewCourse}
-                  type="number"
-                  onChange={event => {
-                    setPriceNewCourse(event.target.value)
-                  }}
-                />
-              </div>
-              <Button
-                css={`
+          <div css={`margin-top:5%;`}>
+            <Text css={`${textStyle('label1')}; color: #47444F`}>Name: </Text>
+            <TextInput
+              autofocus
+              value={nameNewCourse}
+              onChange={event => {
+                setNameNewCourse(event.target.value)
+              }}
+            />
+          </div>
+          <div css={`margin-top:2%;`}>
+            <Text css={`${textStyle('label1')}; color: #47444F`}>Description: </Text>
+            <TextInput
+              value={descNewCourse}
+              onChange={event => {
+                setDescNewCourse(event.target.value)
+              }}
+            />
+          </div>
+          <div css={`margin-top:2%;`}>
+            <Text css={`${textStyle('label1')}; color: #47444F`}>Price: </Text>
+            <TextInput
+              value={priceNewCourse}
+              type="number"
+              onChange={event => {
+                setPriceNewCourse(event.target.value)
+              }}
+            />
+          </div>
+          <Button
+            css={`
                 margin-top:5%;
                 background-color:#210963;
                 color: white;
               `}
-                label="Create"
-                onClick={() => api.createCourse(nameNewCourse, descNewCourse, priceNewCourse).toPromise()}
-              />
+            label="Create"
+            onClick={() => api.createCourse(nameNewCourse, descNewCourse, priceNewCourse).toPromise()}
+          />
 
-            </div>
-          </Modal>
+        </div>
+      </Modal>
     </Main>
   )
 }
 
-function renderUsers(users) {
+function renderUsers(users, api) {
   //const zipped = users.map((t, i) => [t]);
   return users.map((user) => {
     console.log(user);
     let s = JSON.stringify(user);
     let obj = JSON.parse(s);
     return (<Card width="200px" height="200px" css={`margin-right: 5%;`}>
-     <div css={`display:flex; flex-direction:row; align-items:center;margin-bottom:15%;`}>
-       <IconUser size="large"></IconUser>
-       <Text css={`${textStyle('title4')};`}>{obj.name}</Text>
-      </div> 
-      <div css={`display:flex; flex-direction:row; align-items:center;`}>
-      <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Email: </Text>
-      <Text css={`${textStyle('body3')};`}> {obj.email}</Text>
+      <div css={`display:flex; flex-direction:row; align-items:center;margin-bottom:15%;`}>
+
+        <div className='icons'>
+          <Button
+            display="icon"
+            icon={<IconEdit/>}
+            label="Edit user"
+            /*onClick={TODO}*/
+          />
+          <Button 
+            display="icon"
+            icon={<IconTrash/>}
+            label="Delete user"
+            onClick={() => api.deleteUser(obj.id).toPromise()}
+          />
+        </div>
+        <IconUser size="large"></IconUser>
+        <Text css={`${textStyle('title4')};`}>{obj.name}</Text>
       </div>
       <div css={`display:flex; flex-direction:row; align-items:center;`}>
-      <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Reputation: </Text>
-      <Text css={`${textStyle('body3')};`}> {obj.reputation}</Text>
+        <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Email: </Text>
+        <Text css={`${textStyle('body3')};`}> {obj.email}</Text>
+      </div>
+      <div css={`display:flex; flex-direction:row; align-items:center;`}>
+        <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Reputation: </Text>
+        <Text css={`${textStyle('body3')};`}> {obj.reputation}</Text>
       </div>
     </Card>
     )
@@ -271,17 +286,17 @@ function renderCourses(courses) {
     let s = JSON.stringify(course);
     let obj = JSON.parse(s);
     return (<Card width="200px" height="200px" css={`margin-right: 5%;`}>
-     <div css={`display:flex; flex-direction:row; align-items:center;margin-bottom:15%;`}>
-       <IconUser size="large"></IconUser>
-       <Text css={`${textStyle('title4')};`}>{obj.name}</Text>
-      </div> 
-      <div css={`display:flex; flex-direction:row; align-items:center;`}>
-      <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Description: </Text>
-      <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
+      <div css={`display:flex; flex-direction:row; align-items:center;margin-bottom:15%;`}>
+        <IconUser size="large"></IconUser>
+        <Text css={`${textStyle('title4')};`}>{obj.name}</Text>
       </div>
       <div css={`display:flex; flex-direction:row; align-items:center;`}>
-      <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Price: </Text>
-      <Text css={`${textStyle('body3')};`}> {obj.price}$</Text>
+        <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Description: </Text>
+        <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
+      </div>
+      <div css={`display:flex; flex-direction:row; align-items:center;`}>
+        <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Price: </Text>
+        <Text css={`${textStyle('body3')};`}> {obj.price}$</Text>
       </div>
     </Card>
     )
