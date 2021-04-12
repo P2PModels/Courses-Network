@@ -1162,7 +1162,7 @@ contract Courses is AragonApp {
     //EVENTS
     event CreateUser(address indexed entity, string name, string email);
     event DeleteUser(address indexed entity, uint id);
-    event UpdateUser(address indexed entity, string name, string email);
+    event UpdateUser(address indexed entity, uint id, string name, string email);
     event SetUserReputation(
         address indexed entity,
         uint id,
@@ -1295,18 +1295,17 @@ contract Courses is AragonApp {
      * @param name user name
      * @param email  user email
      */
-    function updateUser(string name, string email)
+    function updateUser(uint id, string name, string email)
         external
         auth(UPDATEUSER_ROLE)
     {
-        require(ownerToUser[msg.sender] != 0);
-        require(msg.sender == users[ownerToUser[msg.sender]]._address);
+        //require(ownerToUser[msg.sender] != 0);
+        require(msg.sender == users[id]._address);
 
-        uint id = ownerToUser[msg.sender];
 
         users[id].name = name;
         users[id].email = email;
-        emit UpdateUser(msg.sender, name, email);
+        emit UpdateUser(msg.sender,id, name, email);
     }
 
     /**

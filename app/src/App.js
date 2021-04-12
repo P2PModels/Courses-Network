@@ -8,6 +8,9 @@ import {
   Modal
 } from '@aragon/ui'
 import styled from 'styled-components'
+window.id;
+window.name = 'prueba';
+window.email = 'prueba1';
 function App() {
   const { api, appState, path, requestPath } = useAragonApi()
   const { usersLength, users, coursesLength, courses, isSyncing } = appState
@@ -22,6 +25,10 @@ function App() {
   const openCreateUser = () => setOpenedCreateUser(true)
   const closeCreateUser = () => setOpenedCreateUser(false)
 
+  const [openedEditUser, setOpenedEditUser] = useState(false)
+  const openEditUser = () => setOpenedEditUser(true)
+  const closeEditUser = () => setOpenedEditUser(false)
+
   const [openedCreateCourse, setOpenedCreateCourse] = useState(false)
   const openCreateCourse = () => setOpenedCreateCourse(true)
   const closeCreateCourse = () => setOpenedCreateCourse(false)
@@ -29,6 +36,9 @@ function App() {
   //Para datos de entrada
   const [nameNewUser, setNameNewUser] = useState('')
   const [emailNewUser, setEmailNewUser] = useState('')
+
+  const [nameUpdateUser, setNameUpdateUser] = useState(window.name)
+  const [emailUpdateUser, setEmailUpdateUser] = useState(window.email)
 
   const [nameNewCourse, setNameNewCourse] = useState('')
   const [descNewCourse, setDescNewCourse] = useState('')
@@ -99,7 +109,7 @@ function App() {
             width: 155%;
             `}>
             {console.log(users)}
-            {renderUsers(users, api)}
+            {renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdateUser)}
           </div>
 
 
@@ -238,43 +248,103 @@ function App() {
 
         </div>
       </Modal>
+
+      {/* Modal update User */}
+      <Modal visible={openedEditUser} onClose={closeEditUser} >
+        <div css={`
+            display: flex;
+            flex-direction: column;
+            align-items:center;
+          `}>
+          <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Update User</Text>
+
+          <div css={`margin-top:5%;`}>
+            <Text css={`${textStyle('label1')}; color: #47444F`}>Name: </Text>
+            <TextInput
+              autofocus
+              value={nameUpdateUser}
+              onChange={event => {
+                setNameUpdateUser(event.target.value)
+              }}
+            />
+          </div>
+          <div css={`margin-top:2%;`}>
+            <Text css={`${textStyle('label1')}; color: #47444F`}>Email: </Text>
+            <TextInput
+              value={emailUpdateUser}
+              onChange={event => {
+                setEmailUpdateUser(event.target.value)
+              }}
+            />
+          </div>
+             {console.log(window.id)}
+          <Button
+            css={`
+                margin-top:5%;
+                background-color:#210963;
+                color: white;
+              `}
+            label="Update"
+            onClick={() => api.updateUser(window.id, nameUpdateUser, emailUpdateUser).toPromise()}
+          />
+
+        </div>
+      </Modal>
     </Main>
   )
 }
 
-function renderUsers(users, api) {
+function prueba(id, name, email) {
+  window.id = id;
+  window.name = name;
+  window.email = email; 
+  {console.log("AAAAAA")}
+  {console.log(window.id)}
+  {console.log(window.name)}
+  {console.log(window.email)}
+  {console.log("AAAAAA")}
+}
+function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdateUser) {
   //const zipped = users.map((t, i) => [t]);
+
   return users.map((user) => {
     console.log(user);
     let s = JSON.stringify(user);
     let obj = JSON.parse(s);
     return (<Card width="200px" height="200px" css={`margin-right: 5%;`}>
-      <div css={`display:flex; flex-direction:row; align-items:center;margin-bottom:15%;`}>
 
-        <div className='icons'>
-          <Button
-            display="icon"
-            icon={<IconEdit/>}
-            label="Edit user"
-            /*onClick={TODO}*/
-          />
-          <Button 
-            display="icon"
-            icon={<IconTrash/>}
-            label="Delete user"
-            onClick={() => api.deleteUser(obj.id).toPromise()}
-          />
-        </div>
+      <div css={`position: absolute; top:0;right: 0; margin-left:auto; margin-right: 5%;`}>
+        {window.id}
+        <Button
+          display="icon"
+          icon={<IconEdit size="small" />}
+          label="Edit user"
+          size="mini"
+          onClick={() => {openEditUser(); prueba(obj.id, obj.name, obj.email); setNameUpdateUser(window.name);setEmailUpdateUser(window.email);}}
+          //onClick: abre el modal, actualiza variables globales, actualiza los campos del modal
+        />
+        <Button
+          display="icon"
+          icon={<IconTrash size="small" />}
+          label="Delete user"
+          size="mini"
+          onClick={() => api.deleteUser(obj.id).toPromise()}
+        />
+      </div>
+      <div css={`display:flex; flex-direction:row; align-items:center; margin-bottom: 5%;`}>
         <IconUser size="large"></IconUser>
         <Text css={`${textStyle('title4')};`}>{obj.name}</Text>
+
       </div>
-      <div css={`display:flex; flex-direction:row; align-items:center;`}>
-        <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Email: </Text>
-        <Text css={`${textStyle('body3')};`}> {obj.email}</Text>
-      </div>
-      <div css={`display:flex; flex-direction:row; align-items:center;`}>
-        <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Reputation: </Text>
-        <Text css={`${textStyle('body3')};`}> {obj.reputation}</Text>
+      <div css={``}>
+        <div css={`display:flex; flex-direction:row; align-items:center;`}>
+          <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Email: </Text>
+          <Text css={`${textStyle('body3')};`}> {obj.email}</Text>
+        </div>
+        <div css={`display:flex; flex-direction:row; align-items:center;`}>
+          <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Reputation: </Text>
+          <Text css={`${textStyle('body3')};`}> {obj.reputation}</Text>
+        </div>
       </div>
     </Card>
     )
