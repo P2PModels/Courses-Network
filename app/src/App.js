@@ -4,13 +4,19 @@ import {
   Box, Button, GU, Header, IconAddUser, IconPlus,
   Main, SyncIndicator, Tabs, Text, textStyle,
   TextInput, Card, IconUser,
-  IconSquarePlus, IconEdit, IconTrash, TableRow, TableCell,
+  IconSquarePlus, IconEdit, IconTrash, IconSwap, TableCell,
   Modal
 } from '@aragon/ui'
 import styled from 'styled-components'
+
 window.id;
-window.name = 'prueba';
-window.email = 'prueba1';
+window.name = '';
+window.email = '';
+window.idCourse;
+window.nameCourse = '';
+window.desc = '';
+window.price;
+
 function App() {
   const { api, appState, path, requestPath } = useAragonApi()
   const { usersLength, users, coursesLength, courses, isSyncing } = appState
@@ -29,6 +35,10 @@ function App() {
   const openEditUser = () => setOpenedEditUser(true)
   const closeEditUser = () => setOpenedEditUser(false)
 
+  const [openedEditCourse, setOpenedEditCourse] = useState(false)
+  const openEditCourse = () => setOpenedEditCourse(true)
+  const closeEditCourse = () => setOpenedEditCourse(false)
+
   const [openedCreateCourse, setOpenedCreateCourse] = useState(false)
   const openCreateCourse = () => setOpenedCreateCourse(true)
   const closeCreateCourse = () => setOpenedCreateCourse(false)
@@ -39,6 +49,10 @@ function App() {
 
   const [nameUpdateUser, setNameUpdateUser] = useState(window.name)
   const [emailUpdateUser, setEmailUpdateUser] = useState(window.email)
+
+  const [nameUpdateCourse, setNameUpdateCourse] = useState(window.nameCourse)
+  const [descUpdateCourse, setDescUpdateCourse] = useState(window.desc)
+  const [priceUpdateCourse, setPriceUpdateCourse] = useState(window.price)
 
   const [nameNewCourse, setNameNewCourse] = useState('')
   const [descNewCourse, setDescNewCourse] = useState('')
@@ -154,7 +168,7 @@ function App() {
             width: 155%;
             `}>
             {console.log(courses)}
-            {renderCourses(courses)}
+            {renderCourses(courses,openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse)}
           </div>
         </Box>) : ""}
 
@@ -220,6 +234,7 @@ function App() {
           <div css={`margin-top:2%;`}>
             <Text css={`${textStyle('label1')}; color: #47444F`}>Description: </Text>
             <TextInput
+              multiline="true"
               value={descNewCourse}
               onChange={event => {
                 setDescNewCourse(event.target.value)
@@ -290,6 +305,59 @@ function App() {
 
         </div>
       </Modal>
+
+      {/* Modal update Course */}
+      <Modal visible={openedEditCourse} onClose={closeEditCourse} >
+        <div css={`
+            display: flex;
+            flex-direction: column;
+            align-items:center;
+          `}>
+          <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Update Course</Text>
+
+          <div css={`margin-top:5%;`}>
+            <Text css={`${textStyle('label1')}; color: #47444F`}>Name: </Text>
+            <TextInput
+              autofocus
+              value={nameUpdateCourse}
+              onChange={event => {
+                setNameUpdateCourse(event.target.value)
+              }}
+            />
+          </div>
+          <div css={`margin-top:2%;`}>
+            <Text css={`${textStyle('label1')}; color: #47444F`}>Description: </Text>
+            <TextInput
+              multiline="true"
+              value={descUpdateCourse}
+              onChange={event => {
+                setDescUpdateCourse(event.target.value)
+              }}
+            />
+          </div>
+          <div css={`margin-top:2%;`}>
+            <Text css={`${textStyle('label1')}; color: #47444F`}>Price: </Text>
+            <TextInput
+              type="Number"
+              value={priceUpdateCourse}
+              onChange={event => {
+                setPriceUpdateCourse(event.target.value)
+              }}
+            />
+          </div>
+             {console.log(window.idCourse)}
+          <Button
+            css={`
+                margin-top:5%;
+                background-color:#210963;
+                color: white;
+              `}
+            label="Update"
+            onClick={() => api.updateCourse(window.idCourse, nameUpdateCourse, descUpdateCourse, priceUpdateCourse).toPromise()}
+          />
+
+        </div>
+      </Modal>
     </Main>
   )
 }
@@ -298,11 +366,6 @@ function prueba(id, name, email) {
   window.id = id;
   window.name = name;
   window.email = email; 
-  {console.log("AAAAAA")}
-  {console.log(window.id)}
-  {console.log(window.name)}
-  {console.log(window.email)}
-  {console.log("AAAAAA")}
 }
 function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdateUser) {
   //const zipped = users.map((t, i) => [t]);
@@ -314,7 +377,6 @@ function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdate
     return (<Card width="200px" height="200px" css={`margin-right: 5%;`}>
 
       <div css={`position: absolute; top:0;right: 0; margin-left:auto; margin-right: 5%;`}>
-        {window.id}
         <Button
           display="icon"
           icon={<IconEdit size="small" />}
@@ -350,24 +412,55 @@ function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdate
     )
   })
 }
-
-function renderCourses(courses) {
+function setGlobalCourses(id, nameC, desc, price) {
+  window.idCourse = id;
+  window.nameCourse = nameC;
+  window.desc = desc;
+  window.price = price;
+}
+function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse) {
   return courses.map((course) => {
     let s = JSON.stringify(course);
     let obj = JSON.parse(s);
-    return (<Card width="200px" height="200px" css={`margin-right: 5%;`}>
-      <div css={`display:flex; flex-direction:row; align-items:center;margin-bottom:15%;`}>
-        <IconUser size="large"></IconUser>
-        <Text css={`${textStyle('title4')};`}>{obj.name}</Text>
+    let act = obj.isActive ? "Available" : "Unavailable";
+    let color= obj.isActive ? "green" : "red";
+
+    return (<Card width="300px" height="200px" css={`margin-right: 5%;`}>
+      <div css={`display:flex; flex-direction:row;align-items:center;justify-content: space-between; position:absolute; top:5px; padding-left: 5%; padding-right: 2%;width: 100%;`}>
+        <Text css={`${textStyle('body3')}; color: ${color}; margin-right: 10%;`}> {act}</Text>
+        <div css={`display:flex; flex-direction:row; `}>
+          <Button
+            display="icon"
+            icon={<IconEdit size="small" />}
+            label="Edit user"
+            size="mini"
+            onClick={() => {openEditCourse(); setGlobalCourses(obj.id, obj.name, obj.desc, obj.price); setNameUpdateCourse(window.nameCourse);setDescUpdateCourse(window.desc);setPriceUpdateCourse(window.price);}}
+            //onClick: abre el modal, actualiza variables globales, actualiza los campos del modal
+          />
+          <Button
+            css={`margin-left: 10%;`}
+            display="icon"
+            icon={<IconSwap size="small" />}
+            label="Delete user"
+            size="mini"
+            onClick={() => api.updateCourseState(obj.id).toPromise()}
+          />
+        </div>
       </div>
-      <div css={`display:flex; flex-direction:row; align-items:center;`}>
+      {console.log(obj.isActive)}
+      {console.log(obj.idSpeaker)}
+      <div css={`display:flex; flex-direction:row; align-items:center;margin-bottom: 5%;`}>
+        <IconUser size="large"></IconUser>
+        <Text css={`${textStyle('title4')};`}>{obj.name}, {obj.price}$</Text>
+      </div>
+      <div css={`display:flex; flex-direction:column; align-items:center;`}>
         <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Description: </Text>
         <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
       </div>
-      <div css={`display:flex; flex-direction:row; align-items:center;`}>
+      {/*<div css={`display:flex; flex-direction:row; align-items:center;`}>
         <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Price: </Text>
-        <Text css={`${textStyle('body3')};`}> {obj.price}$</Text>
-      </div>
+        <Text css={`${textStyle('body3')};`}> </Text>
+  </div>*/}
     </Card>
     )
   })
