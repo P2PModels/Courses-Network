@@ -29199,7 +29199,7 @@ function _getUsers() {
             _context7.t1 = _context7.sent;
 
             if (!(_context7.t0 < _context7.t1)) {
-              _context7.next = 22;
+              _context7.next = 24;
               break;
             }
 
@@ -29214,19 +29214,21 @@ function _getUsers() {
             user["name"] = u[2];
             user["email"] = u[3];
             user["reputation"] = u[4];
-            user["coursesOffered"] = u[5] == null ? [] : u[5];
-            user["coursesCompleted"] = u[6] == null ? [] : u[6];
+            user["coursesOfferedLength"] = u[5];
+            user["coursesCompletedLength"] = u[6];
+            user["coursesOffered"] = u[7];
+            user["coursesCompleted"] = u[8];
             object.push(user);
 
-          case 19:
+          case 21:
             i++;
             _context7.next = 2;
             break;
 
-          case 22:
+          case 24:
             return _context7.abrupt("return", object);
 
-          case 23:
+          case 25:
           case "end":
             return _context7.stop();
         }

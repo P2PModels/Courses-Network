@@ -100,7 +100,7 @@ function App() {
               flex-direction:row;
               align-items: center;
               justify-content: space-between;
-              width: 155%;
+              width: 675px;
             `}>
             <Text css={`
               ${textStyle('label1')};
@@ -120,7 +120,7 @@ function App() {
             display:flex; 
             flex-direction:row;
             flex-wrap:wrap; 
-            width: 155%;
+            width: 675px;
             `}>
             {console.log(users)}
             {renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdateUser)}
@@ -145,7 +145,7 @@ function App() {
               flex-direction:row;
               align-items: center;
               justify-content: space-between;
-              width: 155%;
+              width: 675px;
             `}>
             <Text css={`
               ${textStyle('label1')};
@@ -165,7 +165,7 @@ function App() {
             display:flex; 
             flex-direction:row;
             flex-wrap:wrap; 
-            width: 155%;
+            width: 675px;
             `}>
             {console.log(courses)}
             {renderCourses(courses,openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse)}
@@ -374,7 +374,7 @@ function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdate
     console.log(user);
     let s = JSON.stringify(user);
     let obj = JSON.parse(s);
-    return (<Card width="200px" height="200px" css={`margin-right: 5%;`}>
+    return (<Card width="250px" height="200px" css={`margin: 3%;`}>
 
       <div css={`position: absolute; top:0;right: 0; margin-left:auto; margin-right: 5%;`}>
         <Button
@@ -407,6 +407,14 @@ function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdate
           <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Reputation: </Text>
           <Text css={`${textStyle('body3')};`}> {obj.reputation}</Text>
         </div>
+        <div css={`display:flex; flex-direction:row; align-items:center;`}>
+          <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Offered courses: </Text>
+          <Text css={`${textStyle('body3')};`}> {obj.coursesOfferedLength}</Text>
+        </div>
+        <div css={`display:flex; flex-direction:row; align-items:center;`}>
+          <Text css={`${textStyle('label2')}; font-weight:bold;`}>Completed courses: </Text>
+          <Text css={`${textStyle('body3')}; `}> { obj.coursesCompletedLength}</Text>
+        </div>
       </div>
     </Card>
     )
@@ -425,7 +433,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
     let act = obj.isActive ? "Available" : "Unavailable";
     let color= obj.isActive ? "green" : "red";
 
-    return (<Card width="300px" height="200px" css={`margin-right: 5%;`}>
+    return (<Card width="280px" height="200px" css={`margin: 3%;`}>
       <div css={`display:flex; flex-direction:row;align-items:center;justify-content: space-between; position:absolute; top:5px; padding-left: 5%; padding-right: 2%;width: 100%;`}>
         <Text css={`${textStyle('body3')}; color: ${color}; margin-right: 10%;`}> {act}</Text>
         <div css={`display:flex; flex-direction:row; `}>

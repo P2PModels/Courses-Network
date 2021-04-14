@@ -86,8 +86,10 @@ async function getUsers() {
     user["name"] = u[2];
     user["email"] = u[3];
     user["reputation"] = u[4];
-    user["coursesOffered"] = u[5]== null ? [] : u[5] ;
-    user["coursesCompleted"] = u[6]== null ? [] : u[6] ;
+    user["coursesOfferedLength"] = u[5];
+    user["coursesCompletedLength"] = u[6];
+    user["coursesOffered"] = u[7];
+    user["coursesCompleted"] = u[8];
     object.push(user);
   }
   return object;

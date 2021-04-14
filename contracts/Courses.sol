@@ -53,8 +53,12 @@ contract Courses is AragonApp {
         string name; // nombre del usuario
         string email; // email
         uint reputation; // reputación actual
-        uint[] coursesOffered; // id de los cursos que ofrece el usuario
-        uint[] coursesCompleted; // id de los cursos que ha recibido el usuario
+        //uint[] coursesOffered; 
+        uint coursesOfferedLength;
+        uint coursesCompletedLength;
+        mapping(uint => uint) coursesOffered; // id de los cursos que ofrece el usuario
+       
+        mapping(uint => uint) coursesCompleted; // id de los cursos que ha recibido el usuario
     }
     struct Valoracion {
         uint id; // id de valoración
@@ -93,12 +97,12 @@ contract Courses is AragonApp {
     //    keccak256("GETCOURSESCOMPLETED_ROLE");
 
     function initialize() public onlyInit {
-        uint[] memory a  = new uint [] (500);
-        uint[] memory b = new uint [] (500);
-        uint[]  memory c = new uint [](500);
-        c[0] = 0;
-        users[0] = User(0, msg.sender, "", "", 0, a, b); //usuario en la pos 0, no existe en realidad
-        users[1] = User(1, 0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7, "Noelia", "ncalde01@ucm.es", 9, c, b);
+
+        users[0] = User(0, msg.sender, "", "", 0, 0,0); //usuario en la pos 0, no existe en realidad
+        users[1] = User(1, 0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7, "Noelia", "ncalde01@ucm.es", 9, 0, 0);
+        users[1].coursesOffered[0] = 0;
+        users[1].coursesOffered[1] = 1;
+        users[1].coursesOfferedLength = 2;
         usersLength = 2;
         courses[0] = Course(0, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 0, true, 8, 75 );
         courses[1] = Course(1, "Solidity", "Learn to create Smart Contracts with Solidity. Estimated 5 hours.", 0, true, 8, 30 );
@@ -118,16 +122,15 @@ contract Courses is AragonApp {
         auth(CREATEUSER_ROLE)
     {
         require(ownerToUser[msg.sender] == 0);
-        uint[] memory a;
-        uint[] memory b;
+       
         users[usersLength] = User(
             usersLength,
             msg.sender,
             name,
             email,
             0,
-            a,
-            b
+            0,
+            0
         );
         usersLength++;
         userToOwner[usersLength - 1] = msg.sender;
@@ -201,7 +204,8 @@ contract Courses is AragonApp {
         external
         auth(SETCOURSECOMPLETED_ROLE)
     {
-        users[ownerToUser[msg.sender]].coursesCompleted.push(idCourse);
+        users[ownerToUser[msg.sender]].coursesCompleted[users[ownerToUser[msg.sender]].coursesCompletedLength]=idCourse;
+        users[ownerToUser[msg.sender]].coursesCompletedLength++;
         emit SetCourseCompleted(msg.sender, idCourse);
     }
 
@@ -225,7 +229,8 @@ contract Courses is AragonApp {
             0,
             price
         );
-        users[ownerToUser[msg.sender]].coursesOffered.push(coursesLength);
+        users[ownerToUser[msg.sender]].coursesOffered[users[ownerToUser[msg.sender]].coursesOfferedLength] = coursesLength;
+        users[ownerToUser[msg.sender]].coursesOfferedLength++;
         coursesLength++;
         emit CreateCourse(msg.sender, name, desc, price);
     }
