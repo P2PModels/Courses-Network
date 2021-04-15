@@ -14,12 +14,26 @@ app.store(
     try {
       switch (event) {
         
-        case 'CreateUser':
+        /*case 'CreateUser':
+          return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
+        case 'UpdateUser':
           return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
         case 'DeleteUser':
           return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
         case 'CreateCourse':
+          return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
+        case 'UpdateCourse':
+          return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
+        case 'CreateAssessment':
+          return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
+          */
+          case 'CreateUser':
             return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
+          case 'DeleteUser':
+            return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
+          case 'CreateCourse':
+              return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
+          
         case events.SYNC_STATUS_SYNCING:
           return { ...nextState, isSyncing: true }
         case events.SYNC_STATUS_SYNCED:
@@ -107,6 +121,9 @@ async function getCourses() {
     course["isActive"] = c[4];
     course["reputation"] = c[5];
     course["price"] = c[6];
+    course["assessmentsLength"] = c[7];
+
+  
     object.push(course);
   }
   return object;

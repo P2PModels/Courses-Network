@@ -29261,7 +29261,7 @@ function _getCourses() {
             _context8.t1 = _context8.sent;
 
             if (!(_context8.t0 < _context8.t1)) {
-              _context8.next = 22;
+              _context8.next = 23;
               break;
             }
 
@@ -29278,17 +29278,18 @@ function _getCourses() {
             course["isActive"] = c[4];
             course["reputation"] = c[5];
             course["price"] = c[6];
+            course["assessmentsLength"] = c[7];
             object.push(course);
 
-          case 19:
+          case 20:
             i++;
             _context8.next = 2;
             break;
 
-          case 22:
+          case 23:
             return _context8.abrupt("return", object);
 
-          case 23:
+          case 24:
           case "end":
             return _context8.stop();
         }

@@ -44,6 +44,11 @@
       "name": "Update course reputation",
       "id": "SETCOURSEREPUTATION_ROLE",
       "params": []
+    },
+    {
+      "name": "Create a new assessment",
+      "id": "CREATEASSESSMENT_ROLE",
+      "params": []
     }
 
   ],

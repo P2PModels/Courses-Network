@@ -4,7 +4,7 @@ import {
   Box, Button, GU, Header, IconAddUser, IconPlus,
   Main, SyncIndicator, Tabs, Text, textStyle,
   TextInput, Card, IconUser,
-  IconSquarePlus, IconEdit, IconTrash, IconSwap, TableCell,
+  IconSquarePlus, IconEdit, IconTrash, IconSwap, IconVote,
   Modal
 } from '@aragon/ui'
 import styled from 'styled-components'
@@ -43,6 +43,10 @@ function App() {
   const openCreateCourse = () => setOpenedCreateCourse(true)
   const closeCreateCourse = () => setOpenedCreateCourse(false)
 
+  const [openedCreateAssessment, setOpenedCreateAssessment] = useState(false)
+  const openCreateAssessment = () => setOpenedCreateAssessment(true)
+  const closeCreateAssessment = () => setOpenedCreateAssessment(false)
+
   //Para datos de entrada
   const [nameNewUser, setNameNewUser] = useState('')
   const [emailNewUser, setEmailNewUser] = useState('')
@@ -58,6 +62,9 @@ function App() {
   const [descNewCourse, setDescNewCourse] = useState('')
   const [priceNewCourse, setPriceNewCourse] = useState('')
 
+  const [titleNewAssessment, setTitleNewAssessment] = useState('')
+  const [commentaryNewAssessment, setCommentaryNewAssessment] = useState('')
+  const [numericAssessment, setNumericAssessment] = useState('')
   //Para seleccionar la Tab
   const [pageSelected, setPageSelected] = useState(0)
 
@@ -168,7 +175,7 @@ function App() {
             width: 675px;
             `}>
             {console.log(courses)}
-            {renderCourses(courses,openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse)}
+            {renderCourses(courses,openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment)}
           </div>
         </Box>) : ""}
 
@@ -358,6 +365,58 @@ function App() {
 
         </div>
       </Modal>
+
+      {/* Modal Create Assessment */}
+      <Modal visible={openedCreateAssessment} onClose={closeCreateAssessment} >
+        <div css={`
+            display: flex;
+            flex-direction: column;
+            align-items:center;
+          `}>
+          <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Rate the course </Text>
+
+          <div css={`margin-top:5%;`}>
+            <Text css={`${textStyle('label1')}; color: #47444F`}>Tittle: </Text>
+            <TextInput
+              autofocus
+              value={titleNewAssessment}
+              onChange={event => {
+                setTitleNewAssessment(event.target.value)
+              }}
+            />
+          </div>
+          <div css={`margin-top:2%;`}>
+            <Text css={`${textStyle('label1')}; color: #47444F`}>Commentary: </Text>
+            <TextInput
+              value={commentaryNewAssessment}
+              onChange={event => {
+                setCommentaryNewAssessment(event.target.value)
+              }}
+            />
+          </div>
+          <div css={`margin-top:2%;`}>
+            <Text css={`${textStyle('label1')}; color: #47444F`}>Assessment (1-5): </Text>
+            <TextInput
+              value={numericAssessment}
+              type="Number"
+              onChange={event => {
+                setNumericAssessment(event.target.value)
+              }}
+            />
+          </div>
+          {window.idCourse}{titleNewAssessment}{commentaryNewAssessment}{numericAssessment}
+          <Button
+            css={`
+                margin-top:5%;
+                background-color:#210963;
+                color: white;
+              `}
+            label="Assess"
+            onClick={() => api.createAssessment(window.idCourse, titleNewAssessment, commentaryNewAssessment, numericAssessment).toPromise()}
+          />
+
+        </div>
+      </Modal>
     </Main>
   )
 }
@@ -426,7 +485,10 @@ function setGlobalCourses(id, nameC, desc, price) {
   window.desc = desc;
   window.price = price;
 }
-function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse) {
+function prueba2(id) {
+  window.idCourse = id;
+}
+function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment) {
   return courses.map((course) => {
     let s = JSON.stringify(course);
     let obj = JSON.parse(s);
@@ -465,6 +527,14 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
         <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Description: </Text>
         <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
       </div>
+      <Button
+            display="icon"
+            icon={<IconVote/>}
+            label="Rate the course"
+            size="small"
+            onClick={() => {openCreateAssessment(); prueba2(obj.id);}}
+            //onClick: abre el modal, actualiza variables globales, actualiza los campos del modal
+          />
       {/*<div css={`display:flex; flex-direction:row; align-items:center;`}>
         <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Price: </Text>
         <Text css={`${textStyle('body3')};`}> </Text>

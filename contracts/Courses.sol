@@ -36,16 +36,17 @@ contract Courses is AragonApp {
         uint reputation
     );
    // event GetCoursesCompleted(address indexed entity);
-
+    event CreateAssessment(address indexed entity, uint idCourse, string title, string commentary, uint assessment);
     struct Course {
         uint id; //id del curso
         string name; // nombre del curso
         string desc; // descripción
         uint idSpeaker; // ponente del curso
         bool isActive;
-        //mapping (uint => Valoracion) valoraciones; // valoraciones de los usuarios
         uint reputation; //reputación actual
         uint price; //precio del curso
+        uint assessmentsLength;
+        mapping (uint => Assessment) assessments; // valoraciones de los usuarios
     }
     struct User {
         uint id; // id del usuario
@@ -60,13 +61,13 @@ contract Courses is AragonApp {
        
         mapping(uint => uint) coursesCompleted; // id de los cursos que ha recibido el usuario
     }
-    struct Valoracion {
+    struct Assessment {
         uint id; // id de valoración
         uint idUser; // id del usuario que realiza la valoración
-        uint idCourse; // id del curso sobre el que se valora Creo que sobra
+        //uint idCourse; // id del curso sobre el que se valora Creo que sobra
         string title; // título descriptivo del comentario
         string commentary; //comentario del usuario sobre el curso
-        uint valoracion; //valoración numérica
+        uint assessment; //valoración numérica
     }
 
     mapping(uint => Course) public courses;
@@ -95,7 +96,7 @@ contract Courses is AragonApp {
         keccak256("SETCOURSEREPUTATION_ROLE");
     //bytes32 public constant GETCOURSESCOMPLETED_ROLE =
     //    keccak256("GETCOURSESCOMPLETED_ROLE");
-
+    bytes32 public constant CREATEASSESSMENT_ROLE = keccak256("CREATEASSESSMENT_ROLE");
     function initialize() public onlyInit {
 
         users[0] = User(0, msg.sender, "", "", 0, 0,0); //usuario en la pos 0, no existe en realidad
@@ -104,8 +105,8 @@ contract Courses is AragonApp {
         users[1].coursesOffered[1] = 1;
         users[1].coursesOfferedLength = 2;
         usersLength = 2;
-        courses[0] = Course(0, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 0, true, 8, 75 );
-        courses[1] = Course(1, "Solidity", "Learn to create Smart Contracts with Solidity. Estimated 5 hours.", 0, true, 8, 30 );
+        courses[0] = Course(0, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 0, true, 8, 75,0 );
+        courses[1] = Course(1, "Solidity", "Learn to create Smart Contracts with Solidity. Estimated 5 hours.", 0, true, 8, 30, 0 );
         coursesLength = 2;
 
 
@@ -227,7 +228,8 @@ contract Courses is AragonApp {
             ownerToUser[msg.sender],
             true,
             0,
-            price
+            price,
+            0
         );
         users[ownerToUser[msg.sender]].coursesOffered[users[ownerToUser[msg.sender]].coursesOfferedLength] = coursesLength;
         users[ownerToUser[msg.sender]].coursesOfferedLength++;
@@ -303,4 +305,20 @@ contract Courses is AragonApp {
     {
         return users[ownerToUser[msg.sender]].coursesCompleted;
     }*/
+    function createAssessment(
+        uint idCourse, 
+        string title,
+        string commentary,
+        uint assessment
+    ) external auth(CREATEASSESSMENT_ROLE) {
+        courses[idCourse].assessments[courses[idCourse].assessmentsLength] = Assessment(
+            courses[idCourse].assessmentsLength,
+            ownerToUser[msg.sender], 
+            title,
+            commentary,
+            assessment
+        );
+        courses[idCourse].assessmentsLength++;
+        emit CreateAssessment(msg.sender, idCourse, title, commentary, assessment);
+    }
 }
