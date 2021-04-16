@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "placeholder-app-description",
   "scripts": {
-    "postinstall": "yarn compile && yarn build-app",
+    "postinstall": "npm run compile && npm run build-app",
     "build-app": "cd app && npm install && cd ..",
     "compile": "buidler compile --force",
     "test": "buidler test --network buidlerevm",
