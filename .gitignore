@@ -3,7 +3,7 @@ app/node_modules/
 artifacts
 .cache
 cache
-dist
+dist/
 ipfs.cmd
 package-lock.json
 

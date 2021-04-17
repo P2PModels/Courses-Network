@@ -394,7 +394,7 @@ var store = require('../internals/shared-store');
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.10.0',
+  version: '3.10.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -5736,7 +5736,7 @@ module.exports = global.Promise;
 },{"../internals/global":"../node_modules/core-js/internals/global.js"}],"../node_modules/core-js/internals/engine-is-ios.js":[function(require,module,exports) {
 var userAgent = require('../internals/engine-user-agent');
 
-module.exports = /(iphone|ipod|ipad).*applewebkit/i.test(userAgent);
+module.exports = /(?:iphone|ipod|ipad).*applewebkit/i.test(userAgent);
 
 },{"../internals/engine-user-agent":"../node_modules/core-js/internals/engine-user-agent.js"}],"../node_modules/core-js/internals/task.js":[function(require,module,exports) {
 
@@ -6976,9 +6976,6 @@ var stickyHelpers = require('./regexp-sticky-helpers');
 var shared = require('./shared');
 
 var nativeExec = RegExp.prototype.exec;
-// This always refers to the native implementation, because the
-// String#replace polyfill uses ./fix-regexp-well-known-symbol-logic.js,
-// which loads this file before patching the method.
 var nativeReplace = shared('native-string-replace', String.prototype.replace);
 
 var patchedExec = nativeExec;
@@ -7373,7 +7370,6 @@ require('../modules/es.regexp.exec');
 var redefine = require('../internals/redefine');
 var fails = require('../internals/fails');
 var wellKnownSymbol = require('../internals/well-known-symbol');
-var regexpExec = require('../internals/regexp-exec');
 var createNonEnumerableProperty = require('../internals/create-non-enumerable-property');
 
 var SPECIES = wellKnownSymbol('species');
@@ -7464,7 +7460,7 @@ module.exports = function (KEY, length, exec, sham) {
   ) {
     var nativeRegExpMethod = /./[SYMBOL];
     var methods = exec(SYMBOL, ''[KEY], function (nativeMethod, regexp, str, arg2, forceStringMethod) {
-      if (regexp.exec === regexpExec) {
+      if (regexp.exec === RegExp.prototype.exec) {
         if (DELEGATES_TO_SYMBOL && !forceStringMethod) {
           // The native String method already delegates to @@method (this
           // polyfilled function), leasing to infinite recursion.
@@ -7495,7 +7491,7 @@ module.exports = function (KEY, length, exec, sham) {
   if (sham) createNonEnumerableProperty(RegExp.prototype[SYMBOL], 'sham', true);
 };
 
-},{"../modules/es.regexp.exec":"../node_modules/core-js/modules/es.regexp.exec.js","../internals/redefine":"../node_modules/core-js/internals/redefine.js","../internals/fails":"../node_modules/core-js/internals/fails.js","../internals/well-known-symbol":"../node_modules/core-js/internals/well-known-symbol.js","../internals/regexp-exec":"../node_modules/core-js/internals/regexp-exec.js","../internals/create-non-enumerable-property":"../node_modules/core-js/internals/create-non-enumerable-property.js"}],"../node_modules/core-js/internals/advance-string-index.js":[function(require,module,exports) {
+},{"../modules/es.regexp.exec":"../node_modules/core-js/modules/es.regexp.exec.js","../internals/redefine":"../node_modules/core-js/internals/redefine.js","../internals/fails":"../node_modules/core-js/internals/fails.js","../internals/well-known-symbol":"../node_modules/core-js/internals/well-known-symbol.js","../internals/create-non-enumerable-property":"../node_modules/core-js/internals/create-non-enumerable-property.js"}],"../node_modules/core-js/internals/advance-string-index.js":[function(require,module,exports) {
 'use strict';
 var charAt = require('../internals/string-multibyte').charAt;
 
@@ -7693,7 +7689,7 @@ IS_PURE || MATCH_ALL in RegExpPrototype || createNonEnumerableProperty(RegExpPro
 var userAgent = require('../internals/engine-user-agent');
 
 // eslint-disable-next-line unicorn/no-unsafe-regex -- safe
-module.exports = /Version\/10\.\d+(\.\d+)?( Mobile\/\w+)? Safari\//.test(userAgent);
+module.exports = /Version\/10(?:\.\d+){1,2}(?: [\w./]+)?(?: Mobile\/\w+)? Safari\//.test(userAgent);
 
 },{"../internals/engine-user-agent":"../node_modules/core-js/internals/engine-user-agent.js"}],"../node_modules/core-js/modules/es.string.pad-end.js":[function(require,module,exports) {
 'use strict';
@@ -8013,14 +8009,12 @@ var advanceStringIndex = require('../internals/advance-string-index');
 var toLength = require('../internals/to-length');
 var callRegExpExec = require('../internals/regexp-exec-abstract');
 var regexpExec = require('../internals/regexp-exec');
-var fails = require('../internals/fails');
+var stickyHelpers = require('../internals/regexp-sticky-helpers');
 
+var UNSUPPORTED_Y = stickyHelpers.UNSUPPORTED_Y;
 var arrayPush = [].push;
 var min = Math.min;
 var MAX_UINT32 = 0xFFFFFFFF;
-
-// babel-minify transpiles RegExp('x', 'y') -> /x/y and it causes SyntaxError
-var SUPPORTS_Y = !fails(function () { return !RegExp(MAX_UINT32, 'y'); });
 
 // @@split logic
 fixRegExpWellKnownSymbolLogic('split', 2, function (SPLIT, nativeSplit, maybeCallNative) {
@@ -8104,11 +8098,11 @@ fixRegExpWellKnownSymbolLogic('split', 2, function (SPLIT, nativeSplit, maybeCal
       var flags = (rx.ignoreCase ? 'i' : '') +
                   (rx.multiline ? 'm' : '') +
                   (rx.unicode ? 'u' : '') +
-                  (SUPPORTS_Y ? 'y' : 'g');
+                  (UNSUPPORTED_Y ? 'g' : 'y');
 
       // ^(? + rx + ) is needed, in combination with some S slicing, to
       // simulate the 'y' flag.
-      var splitter = new C(SUPPORTS_Y ? rx : '^(?:' + rx.source + ')', flags);
+      var splitter = new C(UNSUPPORTED_Y ? '^(?:' + rx.source + ')' : rx, flags);
       var lim = limit === undefined ? MAX_UINT32 : limit >>> 0;
       if (lim === 0) return [];
       if (S.length === 0) return callRegExpExec(splitter, S) === null ? [S] : [];
@@ -8116,12 +8110,12 @@ fixRegExpWellKnownSymbolLogic('split', 2, function (SPLIT, nativeSplit, maybeCal
       var q = 0;
       var A = [];
       while (q < S.length) {
-        splitter.lastIndex = SUPPORTS_Y ? q : 0;
-        var z = callRegExpExec(splitter, SUPPORTS_Y ? S : S.slice(q));
+        splitter.lastIndex = UNSUPPORTED_Y ? 0 : q;
+        var z = callRegExpExec(splitter, UNSUPPORTED_Y ? S.slice(q) : S);
         var e;
         if (
           z === null ||
-          (e = min(toLength(splitter.lastIndex + (SUPPORTS_Y ? 0 : q)), S.length)) === p
+          (e = min(toLength(splitter.lastIndex + (UNSUPPORTED_Y ? q : 0)), S.length)) === p
         ) {
           q = advanceStringIndex(S, q, unicodeMatching);
         } else {
@@ -8138,9 +8132,9 @@ fixRegExpWellKnownSymbolLogic('split', 2, function (SPLIT, nativeSplit, maybeCal
       return A;
     }
   ];
-}, !SUPPORTS_Y);
+}, UNSUPPORTED_Y);
 
-},{"../internals/fix-regexp-well-known-symbol-logic":"../node_modules/core-js/internals/fix-regexp-well-known-symbol-logic.js","../internals/is-regexp":"../node_modules/core-js/internals/is-regexp.js","../internals/an-object":"../node_modules/core-js/internals/an-object.js","../internals/require-object-coercible":"../node_modules/core-js/internals/require-object-coercible.js","../internals/species-constructor":"../node_modules/core-js/internals/species-constructor.js","../internals/advance-string-index":"../node_modules/core-js/internals/advance-string-index.js","../internals/to-length":"../node_modules/core-js/internals/to-length.js","../internals/regexp-exec-abstract":"../node_modules/core-js/internals/regexp-exec-abstract.js","../internals/regexp-exec":"../node_modules/core-js/internals/regexp-exec.js","../internals/fails":"../node_modules/core-js/internals/fails.js"}],"../node_modules/core-js/modules/es.string.starts-with.js":[function(require,module,exports) {
+},{"../internals/fix-regexp-well-known-symbol-logic":"../node_modules/core-js/internals/fix-regexp-well-known-symbol-logic.js","../internals/is-regexp":"../node_modules/core-js/internals/is-regexp.js","../internals/an-object":"../node_modules/core-js/internals/an-object.js","../internals/require-object-coercible":"../node_modules/core-js/internals/require-object-coercible.js","../internals/species-constructor":"../node_modules/core-js/internals/species-constructor.js","../internals/advance-string-index":"../node_modules/core-js/internals/advance-string-index.js","../internals/to-length":"../node_modules/core-js/internals/to-length.js","../internals/regexp-exec-abstract":"../node_modules/core-js/internals/regexp-exec-abstract.js","../internals/regexp-exec":"../node_modules/core-js/internals/regexp-exec.js","../internals/regexp-sticky-helpers":"../node_modules/core-js/internals/regexp-sticky-helpers.js"}],"../node_modules/core-js/modules/es.string.starts-with.js":[function(require,module,exports) {
 'use strict';
 var $ = require('../internals/export');
 var getOwnPropertyDescriptor = require('../internals/object-get-own-property-descriptor').f;
