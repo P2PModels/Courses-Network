@@ -1201,7 +1201,7 @@ contract Courses is AragonApp {
         uint reputation; //reputación actual
         uint price; //precio del curso
         uint assessmentsLength;
-        mapping (uint => Assessment) assessments; // valoraciones de los usuarios
+        
     }
     struct User {
         uint id; // id del usuario
@@ -1212,9 +1212,7 @@ contract Courses is AragonApp {
         //uint[] coursesOffered; 
         uint coursesOfferedLength;
         uint coursesCompletedLength;
-        mapping(uint => uint) coursesOffered; // id de los cursos que ofrece el usuario
-       
-        mapping(uint => uint) coursesCompleted; // id de los cursos que ha recibido el usuario
+        
     }
     struct Assessment {
         uint id; // id de valoración
@@ -1224,6 +1222,14 @@ contract Courses is AragonApp {
         string commentary; //comentario del usuario sobre el curso
         uint assessment; //valoración numérica
     }
+
+
+    mapping( uint => mapping (uint => Assessment)) public assessments; // [id Curso] [[id valoracion1], [id valoracion2],...]  valoraciones de los usuarios 
+
+
+    mapping( uint => mapping(uint => uint)) public coursesOffered; // [id usuario] [id cursos ofrecidos] id de los cursos que ofrece el usuario
+       
+    mapping( uint => mapping(uint => uint)) public coursesCompleted; // [id usuario] [id cursos completados] id de los cursos que ha recibido el usuario
 
     mapping(uint => Course) public courses;
     uint public coursesLength;
@@ -1256,8 +1262,8 @@ contract Courses is AragonApp {
 
         users[0] = User(0, msg.sender, "", "", 0, 0,0); //usuario en la pos 0, no existe en realidad
         users[1] = User(1, 0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7, "Noelia", "ncalde01@ucm.es", 9, 0, 0);
-        users[1].coursesOffered[0] = 0;
-        users[1].coursesOffered[1] = 1;
+        coursesOffered[1][0] = 0;
+        coursesOffered[1][1] = 1;
         users[1].coursesOfferedLength = 2;
         usersLength = 2;
         courses[0] = Course(0, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 0, true, 8, 75,0 );
@@ -1360,7 +1366,7 @@ contract Courses is AragonApp {
         external
         auth(SETCOURSECOMPLETED_ROLE)
     {
-        users[ownerToUser[msg.sender]].coursesCompleted[users[ownerToUser[msg.sender]].coursesCompletedLength]=idCourse;
+        coursesCompleted[ownerToUser[msg.sender]][users[ownerToUser[msg.sender]].coursesCompletedLength]=idCourse;
         users[ownerToUser[msg.sender]].coursesCompletedLength++;
         emit SetCourseCompleted(msg.sender, idCourse);
     }
@@ -1386,7 +1392,7 @@ contract Courses is AragonApp {
             price,
             0
         );
-        users[ownerToUser[msg.sender]].coursesOffered[users[ownerToUser[msg.sender]].coursesOfferedLength] = coursesLength;
+        coursesOffered[ownerToUser[msg.sender]][users[ownerToUser[msg.sender]].coursesOfferedLength] = coursesLength;
         users[ownerToUser[msg.sender]].coursesOfferedLength++;
         coursesLength++;
         emit CreateCourse(msg.sender, name, desc, price);
@@ -1453,12 +1459,10 @@ contract Courses is AragonApp {
      /**
      * @notice return completed courses
      
-    function getCoursesCompleted()
-        external
-        auth(GETCOURSESCOMPLETED_ROLE)
-        returns (uint[] memory)
+    function getCoursesOffered()
+        returns (mapping( uint => mapping (uint => uint)))
     {
-        return users[ownerToUser[msg.sender]].coursesCompleted;
+        return coursesOffered;
     }*/
     function createAssessment(
         uint idCourse, 
@@ -1466,7 +1470,7 @@ contract Courses is AragonApp {
         string commentary,
         uint assessment
     ) external auth(CREATEASSESSMENT_ROLE) {
-        courses[idCourse].assessments[courses[idCourse].assessmentsLength] = Assessment(
+        assessments[idCourse][courses[idCourse].assessmentsLength] = Assessment(
             courses[idCourse].assessmentsLength,
             ownerToUser[msg.sender], 
             title,
