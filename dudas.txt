@@ -1,0 +1,2 @@
+DANI:
+Porque usas variables globales? window.id
