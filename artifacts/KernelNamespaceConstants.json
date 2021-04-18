@@ -1,8 +1,0 @@
-{
-  "contractName": "KernelNamespaceConstants",
-  "abi": [],
-  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a723058208b6b6cc08efea0863c281325ffdba52ea416bac80af759a0e83ed37bd61a4fc60029",
-  "deployedBytecode": "0x6080604052600080fd00a165627a7a723058208b6b6cc08efea0863c281325ffdba52ea416bac80af759a0e83ed37bd61a4fc60029",
-  "linkReferences": {},
-  "deployedLinkReferences": {}
-}

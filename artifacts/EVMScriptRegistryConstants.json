@@ -1,8 +1,0 @@
-{
-  "contractName": "EVMScriptRegistryConstants",
-  "abi": [],
-  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a72305820373be203434504d4e17dae094c723a6b1cd2b2ee3a0df263ffbb415a9c08e74b0029",
-  "deployedBytecode": "0x6080604052600080fd00a165627a7a72305820373be203434504d4e17dae094c723a6b1cd2b2ee3a0df263ffbb415a9c08e74b0029",
-  "linkReferences": {},
-  "deployedLinkReferences": {}
-}
