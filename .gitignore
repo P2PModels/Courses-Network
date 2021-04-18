@@ -1,10 +1,24 @@
-node_modules/
-app/node_modules/
-artifacts
-.cache
-cache
-dist/
+#Dependencias
+node_modules
+**/node_modules
 ipfs.cmd
+
+# lerna
+lerna-debug.log
+
+# build artifacts
+# Ignore only for first level to select just the contract build directories
+abi
+dist
+cache
+artifacts
+
+# yarn
+yarn-error.log
+
+# Ignore package-lock files (only use yarn.lock)
 package-lock.json
 
+# Misc
 .DS_Store
+.cache
