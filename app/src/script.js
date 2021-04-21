@@ -87,6 +87,9 @@ async function getCoursesOffered(idUser, pos){
   return await app.call('coursesOffered',idUser,pos).toPromise()
 }//[  [user0[  [pos0, idcurso0][pos1, idcurso1]  ]]  [user1[  ...  ]]  ]
 
+async function getAssessments(idCourse, pos){
+  return await app.call('assessments',idCourse,pos).toPromise()
+}
 
 /*async function getNames() {
   let names = [];
@@ -140,7 +143,19 @@ async function getCourses() {
     course["price"] = c[6];
     course["assessmentsLength"] = c[7];
 
-  
+    let assessments = []; 
+    
+    for(let j = 0; j < c[7]; j++) {
+      let assessment = {};
+      let a = await getAssessments(i, j);
+      assessment["id"] = a[0];
+      assessment["idUser"] = a[1];
+      assessment["title"] = a[2];
+      assessment["commentary"] = a[3];
+      assessment["assessment"] = a[4];
+      assessments.push(assessment);
+    }
+    course["assessments"] = assessments;
     object.push(course);
   }
   return object;

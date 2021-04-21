@@ -50,7 +50,7 @@ function CreateAssessment(props){
               }}
             />
           </div>
-          {window.idCourse}{titleNewAssessment}{commentaryNewAssessment}{numericAssessment}
+          {props.idCourse}{titleNewAssessment}{commentaryNewAssessment}{numericAssessment}
           <Button
             css={`
                 margin-top:5%;
@@ -58,7 +58,7 @@ function CreateAssessment(props){
                 color: white;
               `}
             label="Assess"
-            onClick={() => api.createAssessment(window.idCourse, titleNewAssessment, commentaryNewAssessment, numericAssessment).toPromise()}
+            onClick={() => api.createAssessment(props.idCourse, titleNewAssessment, commentaryNewAssessment, numericAssessment).toPromise()}
           />
 
         </div>

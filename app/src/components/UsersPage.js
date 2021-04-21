@@ -69,11 +69,13 @@ function UsersPage() {
     <CreateUser openedCreateUser={openedCreateUser} closeCreateUser={closeCreateUser}/>
     <UpdateUser openedUpdateUser={openedUpdateUser} closeUpdateUser={closeUpdateUser} 
     nameUpdateUser={nameUpdateUser} setNameUpdateUser={setNameUpdateUser}
-    emailUpdateUser={emailUpdateUser} setEmailUpdateUser={setEmailUpdateUser}/>
+    emailUpdateUser={emailUpdateUser} setEmailUpdateUser={setEmailUpdateUser} id = {window.id}/>
     </div>
     );
 }
-
+function setId(id) {
+  window.id = id;
+}
 function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdateUser) {
     //const zipped = users.map((t, i) => [t]);
   
@@ -83,16 +85,17 @@ function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdate
       let obj = JSON.parse(s);
       return (<Card width="250px" height="200px" css={`margin: 3%;`}>
   
-        <div css={`position: absolute; top:0;right: 0; margin-left:auto; margin-right: 5%;`}>
+        <div css={`display:flex; flex-direction:row;position:absolute; top:5px; right: 0; margin-left:auto; margin-right: 5%;`}>
           <Button
             display="icon"
             icon={<IconEdit size="small" />}
             label="Edit user"
             size="mini"
-            onClick={() => {openEditUser(); setNameUpdateUser(obj.name); setEmailUpdateUser(obj.email);}}
+            onClick={() => {openEditUser(); setId(obj.id);setNameUpdateUser(obj.name); setEmailUpdateUser(obj.email);}}
             //onClick: abre el modal , actualiza los campos del modal y actualiza las variables globales
           />
           <Button
+            css={`margin-left: 10%;`}
             display="icon"
             icon={<IconTrash size="small" />}
             label="Delete user"

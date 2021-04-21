@@ -3,12 +3,13 @@ import {
     Box, Button, IconAddUser, 
     Text, textStyle,
     Card, IconUser, IconVote, IconSwap,
-    IconEdit, IconTrash, IconSquarePlus,
+    IconEdit, IconTrash, IconSquarePlus,IconGraph,
   } from '@aragon/ui'
 import { useAragonApi } from '@aragon/api-react'
 import CreateCourse from './modals/CreateCourse'
 import UpdateCourse from './modals/UpdateCourse'
 import CreateAssessment from './modals/CreateAssessment'
+import ViewAssessments from './modals/ViewAssessments'
 
 function CoursesPage() {
     const { api, appState } = useAragonApi()
@@ -25,6 +26,10 @@ function CoursesPage() {
     const [openedCreateAssessment, setOpenedCreateAssessment] = useState(false)
     const openCreateAssessment = () => setOpenedCreateAssessment(true)
     const closeCreateAssessment = () => setOpenedCreateAssessment(false)
+
+    const [openedViewAssessments, setOpenedViewAssessments] = useState(false)
+    const openViewAssessments = () => setOpenedViewAssessments(true)
+    const closeViewAssessments = () => setOpenedViewAssessments(false)
 
     const [nameUpdateCourse, setNameUpdateCourse] = useState(window.nameCourse)
     const [descUpdateCourse, setDescUpdateCourse] = useState(window.desc)
@@ -69,18 +74,27 @@ function CoursesPage() {
                 width: 675px;
                 `}>
                 {console.log(courses)}
-                {renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment)}
+                {renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment, openViewAssessments)}
             </div>
             </Box>
             <CreateCourse openedCreateCourse={openedCreateCourse} closeCreateCourse={closeCreateCourse}/>
             <UpdateCourse openedEditCourse={openedEditCourse} closeEditCourse={closeEditCourse} nameUpdateCourse={nameUpdateCourse} setNameUpdateCourse={setNameUpdateCourse}
             descUpdateCourse={descUpdateCourse} setDescUpdateCourse={setDescUpdateCourse} priceUpdateCourse={priceUpdateCourse} setPriceUpdateCourse={setPriceUpdateCourse}/>
-            <CreateAssessment openedCreateAssessment={openedCreateAssessment} closeCreateAssessment={closeCreateAssessment}/>
+            <CreateAssessment openedCreateAssessment={openedCreateAssessment} closeCreateAssessment={closeCreateAssessment} idCourse= {window.idCourse} />
+            <ViewAssessments openedViewAssessments={openedViewAssessments} closeViewAssessments={closeViewAssessments}assessments = {window.assessments}/>
         </div>
     )
 }
-
-function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment) {
+function setidCourse (id) {
+  window.idCourse = id;
+ 
+} 
+function setAssessments(assessments) {
+  window.assessments = assessments;
+  console.log("aqui");
+  console.log(window.assessments);
+}
+function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment, openViewAssessments) {
     return courses.map((course) => {
       let s = JSON.stringify(course);
       let obj = JSON.parse(s);
@@ -119,14 +133,26 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
           <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Description: </Text>
           <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
         </div>
+        <div css={`display:flex; flex-direction:row; margin-top:2%;`}>
         <Button
               display="icon"
               icon={<IconVote/>}
               label="Rate the course"
               size="small"
-                onClick={() => {openCreateAssessment()}}
+                onClick={() => {openCreateAssessment();setidCourse(obj.id);}}
                 //onClick: abre el modal, actualiza variables globales, actualiza los campos del modal
             />
+            {console.log(obj.assessments)}
+          <Button
+            css={`margin-left: 10%;`}
+            display="icon"
+            icon={<IconGraph/>}
+            label="View assessments"
+            size="small"
+              onClick={() => {openViewAssessments();setAssessments(obj.assessments)}}
+              //onClick: abre el modal, actualiza variables globales, actualiza los campos del modal
+          />
+          </div>
         {/*<div css={`display:flex; flex-direction:row; align-items:center;`}>
           <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Price: </Text>
           <Text css={`${textStyle('body3')};`}> </Text>
