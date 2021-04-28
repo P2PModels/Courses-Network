@@ -48,6 +48,7 @@ contract Courses is AragonApp {
         uint reputation; //reputación actual
         uint price; //precio del curso
         uint assessmentsLength;
+        uint assessmentsSum;
         
     }
     struct User {
@@ -108,6 +109,9 @@ contract Courses is AragonApp {
     //bytes32 public constant GETCOURSESCOMPLETED_ROLE =
     //    keccak256("GETCOURSESCOMPLETED_ROLE");
     bytes32 public constant CREATEASSESSMENT_ROLE = keccak256("CREATEASSESSMENT_ROLE");
+
+
+
     function initialize() public onlyInit {
         users[0] = User(0, msg.sender, "", "", 0, 0,0,0); //usuario en la pos 0, no existe en realidad
         users[1] = User(1, 0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7, "Noelia", "ncalde01@ucm.es", 9, 0, 0, 0);
@@ -115,14 +119,12 @@ contract Courses is AragonApp {
         coursesOffered[1][1] = 1;
         users[1].coursesOfferedLength = 2;
         usersLength = 2;
-        courses[0] = Course(0, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 0, true, 8, 75,0 );
-        courses[1] = Course(1, "Solidity", "Learn to create Smart Contracts with Solidity. Estimated 5 hours.", 0, true, 8, 30, 0 );
+        courses[0] = Course(0, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 0, true, 0, 75,0 , 0);
+        courses[1] = Course(1, "Solidity", "Learn to create Smart Contracts with Solidity. Estimated 5 hours.", 0, true, 0, 30, 0 , 0);
         coursesLength = 2;
         
         coursesTaking[1][0] = 0;
         users[1].coursesTakingLength = 1;
-
-
 
         initialized();
     }
@@ -244,6 +246,7 @@ contract Courses is AragonApp {
             true,
             0,
             price,
+            0,
             0
         );
         coursesOffered[ownerToUser[msg.sender]][users[ownerToUser[msg.sender]].coursesOfferedLength] = coursesLength;
@@ -330,26 +333,12 @@ contract Courses is AragonApp {
     }*/
 
     /**
-     * @notice update course reputation
-     * @param id course id to change
-     * @param reputation  new reputation
+     * @notice create an assessment for a course
+     * @param idCourse course id to assesst
+     * @param title Title of the assessment 
+     * @param commentary Commentary of the assessment 
+     * @param assessment Numerical value (1-5) of the assessment 
      */
-    function setCourseReputation(uint id, uint reputation)
-        external
-        auth(SETCOURSEREPUTATION_ROLE)
-    {
-        courses[id].reputation = reputation;
-        emit SetCourseReputation(msg.sender, id, reputation);
-    }
-
-     /**
-     * @notice return completed courses
-     
-    function getCoursesOffered()
-        returns (mapping( uint => mapping (uint => uint)))
-    {
-        return coursesOffered;
-    }*/
     function createAssessment(
         uint idCourse, 
         string title,
@@ -363,7 +352,9 @@ contract Courses is AragonApp {
             commentary,
             assessment
         );
+        courses[idCourse].assessmentsSum += assessment;
         courses[idCourse].assessmentsLength++;
+        courses[idCourse].reputation = courses[idCourse].assessmentsSum / courses[idCourse].assessmentsLength;
         emit CreateAssessment(msg.sender, idCourse, title, commentary, assessment);
     }
 }

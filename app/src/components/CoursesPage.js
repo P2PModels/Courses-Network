@@ -141,7 +141,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
           <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Description: </Text>
           <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
         </div>
-        <ProgressBar value={0.3}/>
+        <ProgressBar value={obj.reputation/5}/>
         <div css={`display:flex; flex-direction:row; margin-top:2%;`}>
         <Button
               display="icon"
