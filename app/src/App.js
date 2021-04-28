@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { useAragonApi } from '@aragon/api-react'
 import {
   Header, 
-  Main, SyncIndicator, Tabs, textStyle,
+  Main, SyncIndicator, Tabs, textStyle, Text
 } from '@aragon/ui'
 import styled from 'styled-components'
 import UsersPage from './components/UsersPage'
 import CoursesPage from './components/CoursesPage'
+import CoursesTakingPage from './components/CoursesTakingPage'
 
 window.id;
 window.name = '';
@@ -28,6 +29,17 @@ function App() {
   //Para seleccionar la Tab
   const [pageSelected, setPageSelected] = useState(0)
 
+  function renderSelectedPage() {
+    switch(pageSelected){
+      case 0:
+        return <UsersPage/>;
+      case 1:
+        return <CoursesPage/>;
+      case 2:
+        return <CoursesTakingPage/>;
+    }
+  }
+
   return (
     <Main>
       {isSyncing && <SyncIndicator />}
@@ -46,13 +58,12 @@ function App() {
 
       <Tabs
         //podemos usar estas tabs para cambiar de users a courses
-        items={['Users', 'Courses']}
+        items={['Users', 'All Courses', 'Courses Taking']}
         selected={pageSelected}
         onChange={setPageSelected}
       />
 
-      {/*pageSelected Users */}
-      {pageSelected == 0 ?  <UsersPage /> : <CoursesPage/>}
+      {renderSelectedPage()}
     </Main>
   )
 }

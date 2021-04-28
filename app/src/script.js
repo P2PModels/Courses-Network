@@ -87,6 +87,10 @@ async function getCoursesOffered(idUser, pos){
   return await app.call('coursesOffered',idUser,pos).toPromise()
 }//[  [user0[  [pos0, idcurso0][pos1, idcurso1]  ]]  [user1[  ...  ]]  ]
 
+async function getCoursesTaking(idUser, pos){
+  return await app.call('coursesTaking',idUser,pos).toPromise()
+}
+
 async function getAssessments(idCourse, pos){
   return await app.call('assessments',idCourse,pos).toPromise()
 }
@@ -111,19 +115,27 @@ async function getUsers() {
     user["reputation"] = u[4];
     user["coursesOfferedLength"] = u[5];
     user["coursesCompletedLength"] = u[6]; 
+    user["coursesTakingLength"] = u[7];
     //Para acceder a los mappings de mappings: prueba contiene los id de 
     //los cursos que ofrece el usuario
     //Esto hay que pensarlo bien porque creo que es mejor pasarle los cursos enteros
     //para poder mostrarlos bien de forma guay
     //por ejemplo pinchando en un usuario te salgan los cursos que ofrece
+
     let coursesO = []; 
-    
     for(let j = 0; j < u[5]; j++) {
-     let c = await getCoursesOffered(i, j);
-     console.log(c);
-     coursesO.push(c);
+      let c = await getCoursesOffered(i, j);
+      coursesO.push(c);
     }
-    user["prueba"] = coursesO;
+    user["coursesOffered"] = coursesO;
+
+    let coursesTaking = []; 
+    for(let j = 0; j < u[7]; j++) {
+      let c = await getCoursesTaking(i, j);
+      coursesTaking.push(c);
+    }
+    user["coursesTaking"] = coursesTaking;
+
     object.push(user);
   }
   return object;

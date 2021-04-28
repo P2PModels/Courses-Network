@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import {
-    Box, Button, IconAddUser, 
+    Box, Button, IconAddUser, IconPlus,
     Text, textStyle,
-    Card, IconUser, IconVote, IconSwap,
+    Card, IconUser, IconVote, IconSwap, IconStarFilled, ProgressBar,
     IconEdit, IconTrash, IconSquarePlus,IconGraph,
   } from '@aragon/ui'
 import { useAragonApi } from '@aragon/api-react'
@@ -108,7 +108,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
             <Button
               display="icon"
               icon={<IconEdit size="small" />}
-              label="Edit user"
+              label="Edit course"
               size="mini"
               onClick={() => {openEditCourse(); setNameUpdateCourse(obj.name);setDescUpdateCourse(obj.desc);setPriceUpdateCourse(obj.price);}}
               //onClick: abre el modal, actualiza variables globales, actualiza los campos del modal
@@ -120,6 +120,14 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
               label="Delete user"
               size="mini"
               onClick={() => api.updateCourseState(obj.id).toPromise()}
+            />
+            <Button
+              css={`margin-left: 10%;`}
+              display="icon"
+              icon={<IconPlus size="small" />}
+              label="Take course"
+              size="mini"
+              onClick={() => api.takeCourse(obj.id).toPromise()}
             />
           </div>
         </div>
@@ -133,6 +141,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
           <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Description: </Text>
           <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
         </div>
+        <ProgressBar value={0.3}/>
         <div css={`display:flex; flex-direction:row; margin-top:2%;`}>
         <Button
               display="icon"

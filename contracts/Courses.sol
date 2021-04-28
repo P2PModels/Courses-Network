@@ -29,6 +29,8 @@ contract Courses is AragonApp {
         uint price
     );
     event UpdateCourseState(address indexed entity, uint id);
+    event TakeCourse(address indexed entity, uint idCourse);
+    event StopTakingCourse(address indexed entity, uint idTakingCourse);
    // event GetCourse(address indexed entity, uint id);
     event SetCourseReputation(
         address indexed entity,
@@ -57,6 +59,7 @@ contract Courses is AragonApp {
         //uint[] coursesOffered; 
         uint coursesOfferedLength;
         uint coursesCompletedLength;
+        uint coursesTakingLength;
         
     }
     struct Assessment {
@@ -74,6 +77,8 @@ contract Courses is AragonApp {
 
     mapping( uint => mapping(uint => uint)) public coursesOffered; // [id usuario] [id cursos ofrecidos] id de los cursos que ofrece el usuario
        
+    mapping( uint => mapping(uint => uint)) public coursesTaking; // [id usuario] [id cursos activos] id de los cursos que esta recibiendo el usuario
+
     mapping( uint => mapping(uint => uint)) public coursesCompleted; // [id usuario] [id cursos completados] id de los cursos que ha recibido el usuario
 
     mapping(uint => Course) public courses;
@@ -104,9 +109,8 @@ contract Courses is AragonApp {
     //    keccak256("GETCOURSESCOMPLETED_ROLE");
     bytes32 public constant CREATEASSESSMENT_ROLE = keccak256("CREATEASSESSMENT_ROLE");
     function initialize() public onlyInit {
-
-        users[0] = User(0, msg.sender, "", "", 0, 0,0); //usuario en la pos 0, no existe en realidad
-        users[1] = User(1, 0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7, "Noelia", "ncalde01@ucm.es", 9, 0, 0);
+        users[0] = User(0, msg.sender, "", "", 0, 0,0,0); //usuario en la pos 0, no existe en realidad
+        users[1] = User(1, 0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7, "Noelia", "ncalde01@ucm.es", 9, 0, 0, 0);
         coursesOffered[1][0] = 0;
         coursesOffered[1][1] = 1;
         users[1].coursesOfferedLength = 2;
@@ -114,6 +118,10 @@ contract Courses is AragonApp {
         courses[0] = Course(0, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 0, true, 8, 75,0 );
         courses[1] = Course(1, "Solidity", "Learn to create Smart Contracts with Solidity. Estimated 5 hours.", 0, true, 8, 30, 0 );
         coursesLength = 2;
+        
+        coursesTaking[1][0] = 0;
+        users[1].coursesTakingLength = 1;
+
 
 
         initialized();
@@ -137,6 +145,7 @@ contract Courses is AragonApp {
             email,
             0,
             0,
+            0,
             0
         );
         usersLength++;
@@ -144,7 +153,7 @@ contract Courses is AragonApp {
         ownerToUser[msg.sender] = usersLength - 1;
         emit CreateUser(msg.sender, name, email);
     }
-
+    
     /**
      * @notice update name and email of an existing user
      * @param name user name
@@ -274,6 +283,38 @@ contract Courses is AragonApp {
         require(courses[id].idSpeaker == ownerToUser[msg.sender]);
         courses[id].isActive = courses[id].isActive ? false : true;
         emit UpdateCourseState(msg.sender, id);
+    }
+
+    /**
+     * @notice take a course 
+     * @param id course id to take
+     */
+    function takeCourse(uint id)
+        external
+    {
+        require(courses[id].isActive);
+        require(ownerToUser[msg.sender] != 0);
+        coursesTaking[ownerToUser[msg.sender]][users[ownerToUser[msg.sender]].coursesTakingLength] = id;
+        users[ownerToUser[msg.sender]].coursesTakingLength++;
+
+        emit TakeCourse(msg.sender, id);
+    }
+    
+    /**
+     * @notice stop taking a course
+     * @param takingCourseId id of the course you want to stop taking
+     */
+    function stopTakingCourse(uint takingCourseId)  {
+        require(ownerToUser[msg.sender] != 0);
+        require(users[ownerToUser[msg.sender]].coursesTakingLength > takingCourseId);
+
+        for (uint j = takingCourseId; j < users[ownerToUser[msg.sender]].coursesTakingLength - 1; j++) {
+            coursesTaking[ownerToUser[msg.sender]][j] = coursesTaking[ownerToUser[msg.sender]][j + 1];
+        }
+        delete coursesTaking[ownerToUser[msg.sender]][users[ownerToUser[msg.sender]].coursesTakingLength - 1];
+        users[ownerToUser[msg.sender]].coursesTakingLength--;
+
+        emit StopTakingCourse(msg.sender, takingCourseId);
     }
 
     /**

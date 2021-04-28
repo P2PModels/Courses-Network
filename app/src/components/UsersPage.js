@@ -10,8 +10,8 @@ import CreateUser from './modals/CreateUser'
 import UpdateUser from './modals/UpdateUser'
 
 function UsersPage() {
-    const { api, appState } = useAragonApi()
-    const { users , usersLength} = appState
+    const { api, appState, connectedAccount } = useAragonApi()
+    const { users , usersLength } = appState
 
     const [openedCreateUser, setOpenedCreateUser] = useState(false)
     const openCreateUser = () => setOpenedCreateUser(true)
@@ -53,7 +53,7 @@ function UsersPage() {
           display="icon"
           icon={<IconAddUser />}
           label="Create User"
-          onClick={openCreateUser/**/}
+          onClick={openCreateUser}
         />
       </div>
       <div css={`
@@ -80,7 +80,6 @@ function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdate
     //const zipped = users.map((t, i) => [t]);
   
     return users.map((user) => {
-      console.log(user);
       let s = JSON.stringify(user);
       let obj = JSON.parse(s);
       return (<Card width="250px" height="200px" css={`margin: 3%;`}>
