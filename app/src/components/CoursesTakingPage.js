@@ -5,7 +5,7 @@ import {
     Card, IconUser, IconVote, IconSwap,
     IconEdit, IconTrash, IconSquarePlus,IconGraph,
   } from '@aragon/ui'
-import { useAragonApi } from '@aragon/api-react'
+import { useAragonApi, useConnectedAccount } from '@aragon/api-react'
 import CreateAssessment from './modals/CreateAssessment'
 import ViewAssessments from './modals/ViewAssessments'
 
@@ -63,8 +63,18 @@ function CoursesTakingPage() {
 }
 
 function renderTakingCourses(users, courses, api, openCreateAssessment, openViewAssessments) {
-  let user = 1
-  let coursesTaking = users[user]["coursesTaking"];
+ let user; 
+ for(let i= 0; i < users.length; i++) {
+   let s = JSON.stringify(users[i]);
+    let obj = JSON.parse(s);
+    if(obj._address == useConnectedAccount()) {
+      user = obj.id;
+    }
+ }
+ 
+  
+  console.log(user);
+  let coursesTaking = users[user-1]["coursesTaking"];
   return coursesTaking.map((course, courseTakingId) => {
     let s = JSON.stringify(courses[course]);
     let obj = JSON.parse(s);
@@ -94,7 +104,7 @@ function renderTakingCourses(users, courses, api, openCreateAssessment, openView
         <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
       </div>
       <div css={`display:flex; flex-direction:row; margin-top:2%;`}>
-          {console.log(obj.assessments)}
+         
         </div>
         <div css={`display:flex; flex-direction:row; margin-top:2%;`}>
         <Button
@@ -104,7 +114,7 @@ function renderTakingCourses(users, courses, api, openCreateAssessment, openView
               size="small"
                 onClick={() => {openCreateAssessment();setidCourse(obj.id);}}
             />
-            {console.log(obj.assessments)}
+            
           <Button
             css={`margin-left: 10%;`}
             display="icon"

@@ -296,9 +296,13 @@ contract Courses is AragonApp {
         external
     {
         require(courses[id].isActive);
-        require(ownerToUser[msg.sender] != 0);
-        coursesTaking[ownerToUser[msg.sender]][users[ownerToUser[msg.sender]].coursesTakingLength] = id;
-        users[ownerToUser[msg.sender]].coursesTakingLength++;
+        //require(ownerToUser[msg.sender] != 0);
+        uint idowner = ownerToUser[msg.sender];
+        if( idowner== 0) {
+            idowner = 1;
+        }
+        coursesTaking[idowner][users[idowner].coursesTakingLength] = id;
+        users[idowner].coursesTakingLength++;
 
         emit TakeCourse(msg.sender, id);
     }
@@ -308,7 +312,7 @@ contract Courses is AragonApp {
      * @param takingCourseId id of the course you want to stop taking
      */
     function stopTakingCourse(uint takingCourseId)  {
-        require(ownerToUser[msg.sender] != 0);
+       // require(ownerToUser[msg.sender] != 0);
         require(users[ownerToUser[msg.sender]].coursesTakingLength > takingCourseId);
 
         for (uint j = takingCourseId; j < users[ownerToUser[msg.sender]].coursesTakingLength - 1; j++) {
@@ -319,6 +323,7 @@ contract Courses is AragonApp {
 
         emit StopTakingCourse(msg.sender, takingCourseId);
     }
+
 
     /**
      * @notice return a specific course by id

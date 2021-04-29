@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useAragonApi } from '@aragon/api-react'
+import { useAragonApi, useConnectedAccount } from '@aragon/api-react'
 import {
   Header, 
   Main, SyncIndicator, Tabs, textStyle, Text
@@ -51,7 +51,7 @@ function App() {
               ${textStyle('title2')}
             `}
           >
-            TFG
+            TFG 
           </span>
         }
       />
