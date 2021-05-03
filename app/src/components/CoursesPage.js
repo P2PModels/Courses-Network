@@ -117,7 +117,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
               css={`margin-left: 10%;`}
               display="icon"
               icon={<IconSwap size="small" />}
-              label="Delete user"
+              label="Change availability"
               size="mini"
               onClick={() => api.updateCourseState(obj.id).toPromise()}
             />

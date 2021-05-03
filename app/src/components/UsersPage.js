@@ -3,15 +3,16 @@ import {
     Box, Button, IconAddUser, 
     Text, textStyle,
     Card, IconUser,
-    IconEdit, IconTrash, 
+    IconEdit, IconTrash, IconFolder, 
   } from '@aragon/ui'
 import { useAragonApi } from '@aragon/api-react'
 import CreateUser from './modals/CreateUser'
 import UpdateUser from './modals/UpdateUser'
+import ViewUsersCourses from './modals/ViewUsersCourses'
 
 function UsersPage() {
     const { api, appState, connectedAccount } = useAragonApi()
-    const { users , usersLength } = appState
+    const { users , usersLength, courses } = appState
 
     const [openedCreateUser, setOpenedCreateUser] = useState(false)
     const openCreateUser = () => setOpenedCreateUser(true)
@@ -20,6 +21,10 @@ function UsersPage() {
     const [openedUpdateUser, setOpenedUpdateUser] = useState(false)
     const openUpdateUser = () => setOpenedUpdateUser(true)
     const closeUpdateUser = () => setOpenedUpdateUser(false)
+
+    const [openedViewUsersCourses, setOpenedUsersCourses] = useState(false)
+    const openViewUsersCourses = () => setOpenedUsersCourses(true)
+    const closeViewUsersCourses = () => setOpenedUsersCourses(false)
 
     const [nameUpdateUser, setNameUpdateUser] = useState("")
     const [emailUpdateUser, setEmailUpdateUser] = useState("")
@@ -63,20 +68,26 @@ function UsersPage() {
         width: 675px;
         `}>
         {console.log(users)}
-        {renderUsers(users, openUpdateUser, api, setNameUpdateUser, setEmailUpdateUser)}
+        {renderUsers(users, openUpdateUser, api, setNameUpdateUser, setEmailUpdateUser, openViewUsersCourses)}
       </div>
     </Box>
     <CreateUser openedCreateUser={openedCreateUser} closeCreateUser={closeCreateUser}/>
     <UpdateUser openedUpdateUser={openedUpdateUser} closeUpdateUser={closeUpdateUser} 
     nameUpdateUser={nameUpdateUser} setNameUpdateUser={setNameUpdateUser}
     emailUpdateUser={emailUpdateUser} setEmailUpdateUser={setEmailUpdateUser} id = {window.id}/>
+    <ViewUsersCourses openedViewUsersCourses={openedViewUsersCourses} closeViewUsersCourses={closeViewUsersCourses} coursesOffered = {window.coursesOf}/>
     </div>
     );
 }
 function setId(id) {
   window.id = id;
 }
-function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdateUser) {
+
+function setCoursesOffered(coursesOf) {
+  window.coursesOf = coursesOf;
+}
+
+function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdateUser, openViewUsersCourses) {
     //const zipped = users.map((t, i) => [t]);
   
     return users.map((user) => {
@@ -101,6 +112,15 @@ function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdate
             size="mini"
             onClick={() => api.deleteUser(obj.id).toPromise()}
           />
+          <Button
+            css={`margin-left: 10%;`}
+            display="icon"
+            icon={<IconFolder size="small" />}
+            label="View courses"
+            size="mini"
+            onClick={() => {setCoursesOffered(obj.coursesOffered); openViewUsersCourses();} }
+          />
+          
         </div>
         <div css={`display:flex; flex-direction:row; align-items:center; margin-bottom: 5%;`}>
           <IconUser size="large"></IconUser>
