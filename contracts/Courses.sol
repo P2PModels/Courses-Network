@@ -115,13 +115,22 @@ contract Courses is AragonApp {
     function initialize() public onlyInit {
         users[0] = User(0, msg.sender, "", "", 0, 0,0,0); //usuario en la pos 0, no existe en realidad
         users[1] = User(1, 0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7, "Noelia", "ncalde01@ucm.es", 9, 0, 0, 0);
+        userToOwner[1] = 0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7;
+        ownerToUser[0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7] = 1;
+        users[2] = User(2, 0x9766D2e7FFde358AD0A40BB87c4B88D9FAC3F4dd, "Marta", "mranz02@ucm.es", 5, 0, 0, 0);
+        userToOwner[2] = 0x9766D2e7FFde358AD0A40BB87c4B88D9FAC3F4dd;
+        ownerToUser[0x9766D2e7FFde358AD0A40BB87c4B88D9FAC3F4dd] = 2;
+
         coursesOffered[1][0] = 0;
         coursesOffered[1][1] = 1;
+        coursesOffered[2][0] = 2;
         users[1].coursesOfferedLength = 2;
-        usersLength = 2;
-        courses[0] = Course(0, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 0, true, 0, 75,0 , 0);
-        courses[1] = Course(1, "Solidity", "Learn to create Smart Contracts with Solidity. Estimated 5 hours.", 0, true, 0, 30, 0 , 0);
-        coursesLength = 2;
+        users[2].coursesOfferedLength = 1;
+        usersLength = 3;
+        courses[0] = Course(0, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 1, true, 0, 75,0 , 0);
+        courses[1] = Course(1, "Solidity", "Learn to create Smart Contracts with Solidity. Estimated 5 hours.", 1, true, 0, 30, 0 , 0);
+        courses[2] = Course(2, "Prueba", "In progres...", 2, true, 0, 5, 0 , 0);
+        coursesLength = 3;
         
         coursesTaking[1][0] = 0;
         users[1].coursesTakingLength = 1;
