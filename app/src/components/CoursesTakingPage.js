@@ -10,70 +10,67 @@ import CreateAssessment from './modals/CreateAssessment'
 import ViewAssessments from './modals/ViewAssessments'
 
 function CoursesTakingPage() {
-    const { api, appState ,connectedAccount} = useAragonApi()
-    const { courses , users} = appState
+  const { api, appState ,connectedAccount} = useAragonApi()
+  const { courses , users} = appState
 
-    const [openedCreateAssessment, setOpenedCreateAssessment] = useState(false)
-    const openCreateAssessment = () => setOpenedCreateAssessment(true)
-    const closeCreateAssessment = () => setOpenedCreateAssessment(false)
+  const [openedCreateAssessment, setOpenedCreateAssessment] = useState(false)
+  const openCreateAssessment = () => setOpenedCreateAssessment(true)
+  const closeCreateAssessment = () => setOpenedCreateAssessment(false)
 
-    const [openedViewAssessments, setOpenedViewAssessments] = useState(false)
-    const openViewAssessments = () => setOpenedViewAssessments(true)
-    const closeViewAssessments = () => setOpenedViewAssessments(false)
+  const [openedViewAssessments, setOpenedViewAssessments] = useState(false)
+  const openViewAssessments = () => setOpenedViewAssessments(true)
+  const closeViewAssessments = () => setOpenedViewAssessments(false)
 
-    return (
-        <div>
-            <Box
-            css={`
-            display: flex;
-            text-align: center;
-            
-            ${textStyle('title3')};
-            `}
-            >
-            <div
-                css={`
-                display: flex;
-                flex-direction:row;
-                align-items: center;
-                justify-content: space-between;
-                width: 675px;
-                `}>
-                <Text css={`
-                ${textStyle('label1')};
-                font-size: 15pt;
-                `}>
-                Courses Taking:{} 
-                </Text>
-            </div>
-            <div css={`
-                display:flex; 
-                flex-direction:row;
-                flex-wrap:wrap; 
-                width: 675px;
-                `}>
-                {console.log(connectedAccount)}
-                {renderTakingCourses(users, courses, api)}
-            </div>
-            </Box>
-            <CreateAssessment openedCreateAssessment={openedCreateAssessment} closeCreateAssessment={closeCreateAssessment} idCourse= {window.idCourse} />
-            <ViewAssessments openedViewAssessments={openedViewAssessments} closeViewAssessments={closeViewAssessments}assessments = {window.assessments}/>
-        </div>
-    )
+  return (
+    <div>
+      <Box
+      css={`
+      display: flex;
+      text-align: center;
+      
+      ${textStyle('title3')};
+      `}
+      >
+      <div
+        css={`
+        display: flex;
+        flex-direction:row;
+        align-items: center;
+        justify-content: space-between;
+        width: 675px;
+        `}>
+        <Text css={`
+        ${textStyle('label1')};
+        font-size: 15pt;
+        `}>
+        Courses Taking:{} 
+        </Text>
+      </div>
+      <div css={`
+        display:flex; 
+        flex-direction:row;
+        flex-wrap:wrap; 
+        width: 675px;
+        `}>
+        {renderTakingCourses(users, courses, api, openCreateAssessment, openViewAssessments)}
+      </div>
+      </Box>
+      <CreateAssessment openedCreateAssessment={openedCreateAssessment} closeCreateAssessment={closeCreateAssessment} idCourse= {window.idCourse} />
+      <ViewAssessments openedViewAssessments={openedViewAssessments} closeViewAssessments={closeViewAssessments} assessments = {window.assessments}/>
+    </div>
+  )
 }
 
 function renderTakingCourses(users, courses, api, openCreateAssessment, openViewAssessments) {
- let user; 
- for(let i= 0; i < users.length; i++) {
-   let s = JSON.stringify(users[i]);
+  let user; 
+  for(let i= 0; i < users.length; i++) {
+    let s = JSON.stringify(users[i]);
     let obj = JSON.parse(s);
     if(obj._address == useConnectedAccount()) {
       user = obj.id;
     }
- }
- 
-  
-  console.log(user);
+  }
+
   let coursesTaking = users[user-1]["coursesTaking"];
   return coursesTaking.map((course, courseTakingId) => {
     let s = JSON.stringify(courses[course]);
