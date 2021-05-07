@@ -16,10 +16,10 @@ function UpdateUser(props) {
             flex-direction: column;
             align-items:center;
             `}>
-            <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Update User</Text>
+            <Text css={`${textStyle('label1')};font-size: 17pt; #34495E`}>Update User</Text>
 
             <div css={`margin-top:5%;`}>
-            <Text css={`${textStyle('label1')}; color: #47444F`}>Name: </Text>
+            <Text css={`${textStyle('label1')}; `}>Name: </Text>
             <TextInput
                 autofocus
                 value={props.nameUpdateUser}
@@ -29,7 +29,7 @@ function UpdateUser(props) {
             />
             </div>
             <div css={`margin-top:2%;`}>
-            <Text css={`${textStyle('label1')}; color: #47444F`}>Email: </Text>
+            <Text css={`${textStyle('label1')}; `}>Email: </Text>
             <TextInput
                 value={props.emailUpdateUser}
                 onChange={event => {
@@ -41,7 +41,7 @@ function UpdateUser(props) {
             <Button
             css={`
                 margin-top:5%;
-                background-color:#210963;
+                background-color:#34495E;
                 color: white;
                 `}
             label="Update"

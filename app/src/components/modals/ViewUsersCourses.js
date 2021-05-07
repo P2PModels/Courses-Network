@@ -27,20 +27,19 @@ function renderUsersCourses(coursesOffered, courses) {
     let s = JSON.stringify(courses[userCourses]);
     let obj = JSON.parse(s);
 
-    return (<Card width="280px" height="200px" css={`margin: 3%;`}>
+    return (<Card width="300px" height="230px" css={`margin: 2%;`}>
       
-      <div css={`display:flex; flex-direction:row; align-items:center;margin-bottom: 5%;`}>
-        <IconUser size="large"></IconUser>
-        <Text css={`${textStyle('title4')};`}> Course: {obj.name}</Text>
+      <div css={`width:100%;position:absolute; top:0; display:flex; flex-direction:row;align-items:center;background: #EAECEE;`}>
+        <div css={`display:flex; flex-direction:column; align-items:center; margin-left: 4%;`}>
+            <Text css={`${textStyle('title4')};`}>{obj.name}, {obj.price}$</Text>
+          
+        </div>
       </div>
       <div css={`display:flex; flex-direction:column; align-items:center;`}>
         <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Description: </Text>
         <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
       </div>
-      <div css={`display:flex; flex-direction:column; align-items:center;`}>
-        <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Price: </Text>
-        <Text css={`${textStyle('body3')};`}> {obj.price}</Text>
-      </div>
+      
       
     </Card>
     )

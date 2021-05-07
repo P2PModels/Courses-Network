@@ -19,10 +19,11 @@ function CreateCourse(props) {
             flex-direction: column;
             align-items:center;
           `}>
-          <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Add a new course</Text>
+          <Text css={`${textStyle('label1')};font-size: 17pt; color: #34495E`}>Add a new course</Text>
 
-          <div css={`margin-top:5%;`}>
-            <Text css={`${textStyle('label1')}; color: #47444F`}>Name: </Text>
+          <div css = {`display:flex; flex-direction:column; `}>
+          <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
+            <Text css={`${textStyle('label1')}; `}>Name: </Text>
             <TextInput
               autofocus
               value={nameNewCourse}
@@ -31,8 +32,8 @@ function CreateCourse(props) {
               }}
             />
           </div>
-          <div css={`margin-top:2%;`}>
-            <Text css={`${textStyle('label1')}; color: #47444F`}>Description: </Text>
+          <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
+            <Text css={`${textStyle('label1')}; `}>Description: </Text>
             <TextInput
               multiline="true"
               value={descNewCourse}
@@ -41,8 +42,8 @@ function CreateCourse(props) {
               }}
             />
           </div>
-          <div css={`margin-top:2%;`}>
-            <Text css={`${textStyle('label1')}; color: #47444F`}>Price: </Text>
+          <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
+            <Text css={`${textStyle('label1')}; `}>Price: </Text>
             <TextInput
               value={priceNewCourse}
               type="number"
@@ -51,10 +52,11 @@ function CreateCourse(props) {
               }}
             />
           </div>
+          </div>
           <Button
             css={`
                 margin-top:5%;
-                background-color:#210963;
+                background-color:#34495E;
                 color: white;
               `}
             label="Create"

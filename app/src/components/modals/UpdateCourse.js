@@ -15,10 +15,11 @@ function UpdateCourse (props) {
                 flex-direction: column;
                 align-items:center;
             `}>
-            <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Update Course</Text>
+            <Text css={`${textStyle('label1')};font-size: 17pt; color: #34495E`}>Update Course</Text>
 
-            <div css={`margin-top:5%;`}>
-                <Text css={`${textStyle('label1')}; color: #47444F`}>Name: </Text>
+            <div css = {`display:flex; flex-direction:column; `}>
+            <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
+                <Text css={`${textStyle('label1')}; `}>Name: </Text>
                 <TextInput
                 autofocus
                 value={props.nameUpdateCourse}
@@ -27,8 +28,8 @@ function UpdateCourse (props) {
                 }}
                 />
             </div>
-            <div css={`margin-top:2%;`}>
-                <Text css={`${textStyle('label1')}; color: #47444F`}>Description: </Text>
+            <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
+                <Text css={`${textStyle('label1')}; `}>Description: </Text>
                 <TextInput
                 multiline="true"
                 value={props.descUpdateCourse}
@@ -37,8 +38,8 @@ function UpdateCourse (props) {
                 }}
                 />
             </div>
-            <div css={`margin-top:2%;`}>
-                <Text css={`${textStyle('label1')}; color: #47444F`}>Price: </Text>
+            <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
+                <Text css={`${textStyle('label1')}; `}>Price: </Text>
                 <TextInput
                 type="Number"
                 value={props.priceUpdateCourse}
@@ -47,11 +48,12 @@ function UpdateCourse (props) {
                 }}
                 />
             </div>
+            </div>
                 {console.log(window.idCourse)}
             <Button
                 css={`
                     margin-top:5%;
-                    background-color:#210963;
+                    background-color:#34495E;
                     color: white;
                 `}
                 label="Update"

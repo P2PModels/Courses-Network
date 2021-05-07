@@ -19,10 +19,11 @@ function CreateAssessment(props){
             flex-direction: column;
             align-items:center;
           `}>
-          <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Rate the course </Text>
+          <Text css={`${textStyle('label1')};font-size: 17pt; color: ##34495E`}>Rate the course </Text>
 
-          <div css={`margin-top:5%;`}>
-            <Text css={`${textStyle('label1')}; color: #47444F`}>Tittle: </Text>
+          <div css = {`display:flex; flex-direction:column; `}>
+          <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
+            <Text css={`${textStyle('label1')}; `}>Tittle: </Text>
             <TextInput
               autofocus
               value={titleNewAssessment}
@@ -31,8 +32,8 @@ function CreateAssessment(props){
               }}
             />
           </div>
-          <div css={`margin-top:2%;`}>
-            <Text css={`${textStyle('label1')}; color: #47444F`}>Commentary: </Text>
+          <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
+            <Text css={`${textStyle('label1')}; `}>Commentary: </Text>
             <TextInput
               value={commentaryNewAssessment}
               onChange={event => {
@@ -40,8 +41,8 @@ function CreateAssessment(props){
               }}
             />
           </div>
-          <div css={`margin-top:2%;`}>
-            <Text css={`${textStyle('label1')}; color: #47444F`}>Assessment (1-5): </Text>
+          <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
+            <Text css={`${textStyle('label1')}; `}>Assessment (1-5): </Text>
             <TextInput
               value={numericAssessment}
               type="Number"
@@ -50,11 +51,12 @@ function CreateAssessment(props){
               }}
             />
           </div>
-          {props.idCourse}{titleNewAssessment}{commentaryNewAssessment}{numericAssessment}
+          </div>
+          
           <Button
             css={`
                 margin-top:5%;
-                background-color:#210963;
+                background-color:#34495E;
                 color: white;
               `}
             label="Assess"

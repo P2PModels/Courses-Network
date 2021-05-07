@@ -19,10 +19,10 @@ function CreateUser(props){
           flex-direction: column;
           align-items:center;
         `}>
-        <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Create a new user</Text>
+        <Text css={`${textStyle('label1')};font-size: 17pt; color: #34495E`}>Create a new user</Text>
 
         <div css={`margin-top:5%;`}>
-          <Text css={`${textStyle('label1')}; color: #47444F`}>Name: </Text>
+          <Text css={`${textStyle('label1')}; `}>Name: </Text>
           <TextInput
             autofocus
             value={nameNewUser}
@@ -32,7 +32,7 @@ function CreateUser(props){
           />
         </div>
         <div css={`margin-top:2%;`}>
-          <Text css={`${textStyle('label1')}; color: #47444F`}>Email: </Text>
+          <Text css={`${textStyle('label1')}; `}>Email: </Text>
           <TextInput
             value={emailNewUser}
             onChange={event => {
@@ -43,7 +43,7 @@ function CreateUser(props){
         <Button
           css={`
               margin-top:5%;
-              background-color:#210963;
+              background-color:#34495E;
               color: white;
             `}
           label="Create"
