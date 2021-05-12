@@ -39,7 +39,7 @@ function UpdateCourse (props) {
                 />
             </div>
             <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
-                <Text css={`${textStyle('label1')}; `}>Price: </Text>
+                <Text css={`${textStyle('label1')}; `}>Price (in mEth): </Text>
                 <TextInput
                 type="Number"
                 value={props.priceUpdateCourse}
@@ -57,7 +57,7 @@ function UpdateCourse (props) {
                     color: white;
                 `}
                 label="Update"
-                onClick={() => api.updateCourse(window.idCourse, props.nameUpdateCourse, props.descUpdateCourse, props.priceUpdateCourse).toPromise()}
+                onClick={() => api.updateCourse(window.idCourse, props.nameUpdateCourse, props.descUpdateCourse, props.priceUpdateCourse*10**15).toPromise()}
             />
 
             </div>

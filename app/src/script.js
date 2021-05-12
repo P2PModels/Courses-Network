@@ -64,19 +64,10 @@ function initializeState() {
       users: await getUsers(),
       coursesLength: await getCoursesLength(),
       courses: await getCourses(),
-      /*
-      userId: await getUserId(),
-      */
     }
   }
 }
-/*
-async function getUserId() {
-  id = await app.accounts().pipe(first()).toPromise();
-  myId = id[0];
-  return myId;
-}
-*/
+
 
 async function getUsersLength() {
   return parseInt(await app.call('usersLength').toPromise(), 10)

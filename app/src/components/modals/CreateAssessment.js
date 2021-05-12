@@ -2,7 +2,7 @@ import React, { useState} from 'react'
 import { useAragonApi } from '@aragon/api-react'
 import {
     Button,Text, textStyle, TextInput,
-    Modal
+    Modal, DropDown
   } from '@aragon/ui'
 
 function CreateAssessment(props){
@@ -19,7 +19,7 @@ function CreateAssessment(props){
             flex-direction: column;
             align-items:center;
           `}>
-          <Text css={`${textStyle('label1')};font-size: 17pt; color: ##34495E`}>Rate the course </Text>
+          <Text css={`${textStyle('label1')};font-size: 17pt; color: ##34495E`}>Finish the course and leave a rating</Text>
 
           <div css = {`display:flex; flex-direction:column; `}>
           <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
@@ -42,7 +42,7 @@ function CreateAssessment(props){
             />
           </div>
           <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
-            <Text css={`${textStyle('label1')}; `}>Assessment (1-5): </Text>
+            <Text css={`${textStyle('label1')}; `}>Rating (1-5): </Text>
             <TextInput
               value={numericAssessment}
               type="Number"
@@ -60,7 +60,7 @@ function CreateAssessment(props){
                 color: white;
               `}
             label="Assess"
-            onClick={() => api.createAssessment(props.idCourse, titleNewAssessment, commentaryNewAssessment, numericAssessment).toPromise()}
+            onClick={() => api.finishCourse(props.idCourse, titleNewAssessment, commentaryNewAssessment, numericAssessment).toPromise()}
           />
 
         </div>

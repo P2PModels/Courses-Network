@@ -43,7 +43,7 @@ function CreateCourse(props) {
             />
           </div>
           <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
-            <Text css={`${textStyle('label1')}; `}>Price: </Text>
+            <Text css={`${textStyle('label1')}; `}>Price (in mini Eth): </Text>
             <TextInput
               value={priceNewCourse}
               type="number"
@@ -60,7 +60,7 @@ function CreateCourse(props) {
                 color: white;
               `}
             label="Create"
-            onClick={() => api.createCourse(nameNewCourse, descNewCourse, priceNewCourse).toPromise()}
+            onClick={() => api.createCourse(nameNewCourse, descNewCourse, priceNewCourse*10**15,  {value : priceNewCourse*10**15*10}).toPromise()}
           />
 
         </div>

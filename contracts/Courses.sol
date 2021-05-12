@@ -72,6 +72,9 @@ contract Courses is AragonApp {
         uint assessment; //valoración numérica
     }
 
+    //Constant
+    uint constant COURSE_DEPOSIT = 10;
+
 
     mapping( uint => mapping (uint => Assessment)) public assessments; // [id Curso] [[id valoracion1], [id valoracion2],...]  valoraciones de los usuarios 
 
@@ -246,7 +249,10 @@ contract Courses is AragonApp {
         string name,
         string desc,
         uint price
-    ) external auth(CREATECOURSE_ROLE) {
+    ) external 
+    auth(CREATECOURSE_ROLE) 
+    payable{
+        require(msg.value == (price * COURSE_DEPOSIT), "You are not giving enought eth.");
         courses[coursesLength] = Course(
             coursesLength,
             name,
@@ -269,19 +275,15 @@ contract Courses is AragonApp {
      * @param id course id to modify
      * @param name new name
      * @param desc  new description
-     * @param price  new price
      */
     function updateCourse(
         uint id,
         string name,
-        string desc,
-        uint price
+        string desc
     ) external auth(UPDATECOURSE_ROLE) {
         require(courses[id].idSpeaker == ownerToUser[msg.sender]);
         courses[id].name = name;
         courses[id].desc = desc;
-        courses[id].price = price;
-        emit UpdateCourse(msg.sender, id, name, desc, price);
     }
 
     /**
@@ -298,41 +300,24 @@ contract Courses is AragonApp {
     }
 
     /**
-     * @notice take a course 
+     * @notice Buy a course 
      * @param id course id to take
      */
     function takeCourse(uint id)
         external
+        payable
     {
         require(courses[id].isActive);
-        //require(ownerToUser[msg.sender] != 0);
-        uint idowner = ownerToUser[msg.sender];
-        if( idowner== 0) {
-            idowner = 1;
-        }
-        coursesTaking[idowner][users[idowner].coursesTakingLength] = id;
-        users[idowner].coursesTakingLength++;
+        require(msg.value == courses[id].price);
+        uint idOwner = ownerToUser[msg.sender];
+        require(idOwner != 0);
 
+        coursesTaking[idOwner][users[idOwner].coursesTakingLength] = id;
+        users[idOwner].coursesTakingLength++;
+
+        userToOwner[courses[id].idSpeaker].transfer(courses[id].price);
         emit TakeCourse(msg.sender, id);
     }
-    
-    /**
-     * @notice stop taking a course
-     * @param takingCourseId id of the course you want to stop taking
-     */
-    function stopTakingCourse(uint takingCourseId)  {
-       // require(ownerToUser[msg.sender] != 0);
-        require(users[ownerToUser[msg.sender]].coursesTakingLength > takingCourseId);
-
-        for (uint j = takingCourseId; j < users[ownerToUser[msg.sender]].coursesTakingLength - 1; j++) {
-            coursesTaking[ownerToUser[msg.sender]][j] = coursesTaking[ownerToUser[msg.sender]][j + 1];
-        }
-        delete coursesTaking[ownerToUser[msg.sender]][users[ownerToUser[msg.sender]].coursesTakingLength - 1];
-        users[ownerToUser[msg.sender]].coursesTakingLength--;
-
-        emit StopTakingCourse(msg.sender, takingCourseId);
-    }
-
 
     /**
      * @notice return a specific course by id
@@ -347,18 +332,27 @@ contract Courses is AragonApp {
     }*/
 
     /**
-     * @notice create an assessment for a course
-     * @param idCourse course id to assesst
+     * @notice Finish a course and create an assesment
+     * @param takingCourseId course id to assesst
      * @param title Title of the assessment 
      * @param commentary Commentary of the assessment 
      * @param assessment Numerical value (1-5) of the assessment 
      */
-    function createAssessment(
-        uint idCourse, 
+    function finishCourse(
+        uint takingCourseId, 
         string title,
         string commentary,
         uint assessment
     ) external auth(CREATEASSESSMENT_ROLE) {
+        require(users[ownerToUser[msg.sender]].coursesTakingLength > takingCourseId);
+
+        uint idCourse = coursesTaking[ownerToUser[msg.sender]][takingCourseId];
+        for (uint j = takingCourseId; j < users[ownerToUser[msg.sender]].coursesTakingLength - 1; j++) {
+            coursesTaking[ownerToUser[msg.sender]][j] = coursesTaking[ownerToUser[msg.sender]][j + 1];
+        }
+        delete coursesTaking[ownerToUser[msg.sender]][users[ownerToUser[msg.sender]].coursesTakingLength - 1];
+        users[ownerToUser[msg.sender]].coursesTakingLength--;
+
         assessments[idCourse][courses[idCourse].assessmentsLength] = Assessment(
             courses[idCourse].assessmentsLength,
             ownerToUser[msg.sender], 
@@ -366,9 +360,12 @@ contract Courses is AragonApp {
             commentary,
             assessment
         );
+        if(courses[idCourse].assessmentsLength < COURSE_DEPOSIT){
+            userToOwner[courses[idCourse].idSpeaker].transfer(courses[idCourse].price);
+        }
+
         courses[idCourse].assessmentsSum += assessment;
         courses[idCourse].assessmentsLength++;
         courses[idCourse].reputation = courses[idCourse].assessmentsSum / courses[idCourse].assessmentsLength;
-        emit CreateAssessment(msg.sender, idCourse, title, commentary, assessment);
     }
 }

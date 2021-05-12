@@ -21,6 +21,8 @@ function CoursesTakingPage() {
   const openViewAssessments = () => setOpenedViewAssessments(true)
   const closeViewAssessments = () => setOpenedViewAssessments(false)
 
+  const [finishCourseId, setFinishCourseId] = useState(-1)
+
   return (
     <div>
       <Box
@@ -31,38 +33,23 @@ function CoursesTakingPage() {
       ${textStyle('title3')};
       `}
       >
-        {/*<div
-          css={`
-        display: flex;
-        flex-direction:row;
-        align-items: center;
-        justify-content: space-between;
-        width: 135%;
-        `}>
-          <Text css={`
-        ${textStyle('label1')};
-        font-size: 15pt;
-        `}>
-            Courses Taking:{ }
-          </Text>
-        </div>*/}
         <div css={`
         display:flex; 
         flex-direction:row;
         flex-wrap:wrap; 
         width: 135%;
         `}>
-          {renderTakingCourses(users, courses, api, openCreateAssessment, openViewAssessments)}
+          {renderTakingCourses(users, courses, setFinishCourseId, openCreateAssessment, openViewAssessments)}
         </div>
       </Box>
-      <CreateAssessment openedCreateAssessment={openedCreateAssessment} closeCreateAssessment={closeCreateAssessment} idCourse={window.idCourse} />
+      <CreateAssessment openedCreateAssessment={openedCreateAssessment} closeCreateAssessment={closeCreateAssessment} idCourse={finishCourseId} />
       <ViewAssessments openedViewAssessments={openedViewAssessments} closeViewAssessments={closeViewAssessments} assessments={window.assessments} users={users} />
     </div>
   )
 }
 
-function renderTakingCourses(users, courses, api, openCreateAssessment, openViewAssessments) {
-  let user;
+function renderTakingCourses(users, courses, setFinishCourseId, openCreateAssessment, openViewAssessments) {
+  let user = 0;
   if (useConnectedAccount()) {
     for (let i = 0; i < users.length; i++) {
       let s = JSON.stringify(users[i]);
@@ -71,67 +58,7 @@ function renderTakingCourses(users, courses, api, openCreateAssessment, openView
         user = obj.id;
       }
     }
-
-
-    let coursesTaking = users[user - 1]["coursesTaking"];
-    if (coursesTaking.length != 0) {
-      return coursesTaking.map((course, courseTakingId) => {
-        let s = JSON.stringify(courses[course]);
-        let obj = JSON.parse(s);
-        let act = obj.isActive ? "Available" : "Unavailable";
-        let color = obj.isActive ? "green" : "red";
-
-        return (<Card width="280px" height="200px" css={`margin: 2%;`}>
-          <div css={`width:100%;position:absolute; top:0; display:flex; flex-direction:row;align-items:center;background: #EAECEE;`}>
-            <div css={`display:flex; flex-direction:column; align-items:center; margin-left: 4%;`}>
-                <Text css={`${textStyle('title4')};`}>{obj.name}, {obj.price}$</Text>
-                <Text css={`${textStyle('body4')}; color: ${color}; margin-right: auto;`}> {act}</Text>
-              
-            </div>
-              <div css={`display:flex; flex-direction:row; position:absolute; right:0; margin-right:3%;`}>
-                  <Button
-                    css={`margin-left: 10%;`}
-                    display="icon"
-                    icon={<IconMinus size="small" />}
-                    label="Stop taking course"
-                    size="mini"
-                    onClick={() => api.stopTakingCourse(courseTakingId).toPromise()}
-                  />
-              </div>
-          </div>
-          
-          <div css={`display:flex; flex-direction:column; align-items:center;`}>
-            <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Description: </Text>
-            <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
-          </div>
-          <div css={`display:flex; flex-direction:row; margin-top:2%;`}>
-
-          </div>
-          <div css={`display:flex; flex-direction:row; margin:4%; position: absolute; bottom: 0; right: 0; `}>
-            <Button
-              display="icon"
-              icon={<IconVote />}
-              label="Rate the course"
-              size="small"
-              onClick={() => { openCreateAssessment(); setidCourse(obj.id); }}
-            />
-
-            <Button
-              css={`margin-left: 10%;`}
-              display="icon"
-              icon={<IconGraph />}
-              label="View assessments"
-              size="small"
-              onClick={() => { openViewAssessments(); setAssessments(obj.assessments) }}
-            />
-
-          </div>
-          
-        </Card>
-
-        )
-      })
-    } else {
+    if (user == 0) {
       return (
         <Box
           css={`
@@ -146,12 +73,82 @@ function renderTakingCourses(users, courses, api, openCreateAssessment, openView
                   ${textStyle('label1')};
                   font-size: 15pt;
                   `}>
-            You are not taking a course! Enroll in one.</Text>
+            You are not registered. Go to users' tab to register now!</Text>
         </Box>
       )
+    } else {
+      let coursesTaking = users[user - 1]["coursesTaking"];
+      if (coursesTaking.length != 0) {
+        return coursesTaking.map((course, courseTakingId) => {
+          let s = JSON.stringify(courses[course]);
+          let obj = JSON.parse(s);
+          let act = obj.isActive ? "Available" : "Unavailable";
+          let color = obj.isActive ? "green" : "red";
+  
+          return (<Card width="280px" height="200px" css={`margin: 2%;`}>
+            <div css={`width:100%;position:absolute; top:0; display:flex; flex-direction:row;align-items:center;background: #EAECEE;`}>
+              <div css={`display:flex; flex-direction:column; align-items:center; margin-left: 4%;`}>
+                  <Text css={`${textStyle('title4')};`}>{obj.name} </Text>
+                  <Text css={`${textStyle('body4')}; color: ${color}; margin-right: auto;`}> {act}</Text>
+                  <Text css={`${textStyle('body4')}; margin-right: auto;`}> {obj.price/10**15}mEther</Text>
+                
+              </div>
+                <div css={`display:flex; flex-direction:row; position:absolute; right:0; margin-right:3%;`}>
+                    <Button
+                      css={`margin-left: 10%;`}
+                      display="icon"
+                      icon={<IconMinus size="small" />}
+                      label="Stop taking course"
+                      size="mini"
+                      onClick={() => {setFinishCourseId(courseTakingId); openCreateAssessment();}}
+                    />
+                </div>
+            </div>
+            
+            <div css={`display:flex; flex-direction:column; align-items:center;`}>
+              <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Description: </Text>
+              <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
+            </div>
+            <div css={`display:flex; flex-direction:row; margin-top:2%;`}>
+  
+            </div>
+          <div css={`display:flex; flex-direction:row; margin:4%; position: absolute; bottom: 0; right: 0; `}>
+              <Button
+                css={`margin-left: 10%;`}
+                display="icon"
+                icon={<IconGraph />}
+                label="View assessments"
+                size="small"
+                onClick={() => { openViewAssessments(); setAssessments(obj.assessments) }}
+              />
+  
+            </div>
+            
+          </Card>
+  
+          )
+        })
+      } else {
+        return (
+          <Box
+            css={`
+          margin-top:2%;
+          display: flex;
+          text-align: center;
+          
+          ${textStyle('title3')};
+        `}
+          >
+            <Text css={`
+                    ${textStyle('label1')};
+                    font-size: 15pt;
+                    `}>
+              You are not taking a course! Enroll in one.</Text>
+          </Box>
+        )
+      }
     }
-  }
-  else {
+  } else {
     return (
       <Box
         css={`
