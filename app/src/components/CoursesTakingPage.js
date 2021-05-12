@@ -90,10 +90,9 @@ function renderTakingCourses(users, courses, setFinishCourseId, openCreateAssess
         let searched = [];
         if (search != "") {
           for (let i = 0; i < coursesTaking.length; i++) {
-            let s = JSON.stringify(coursesTaking[i]);
-            let a = JSON.parse(s);
-            if (a.name.toString().toLowerCase().includes(search.toString().toLowerCase())) {
-              searched.push(a);
+            let actualCourse = courses[coursesTaking[i]];
+            if (actualCourse.name.toString().toLowerCase().includes(search.toString().toLowerCase())) {
+              searched.push(coursesTaking[i]);
             }
           }
         } else {
