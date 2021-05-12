@@ -12,7 +12,7 @@ import CreateAssessment from './modals/CreateAssessment'
 import ViewAssessments from './modals/ViewAssessments'
 
 function CoursesPage() {
-  const { api, appState } = useAragonApi()
+  const { api, appState, connectedAccount } = useAragonApi()
   const { courses, coursesLength, users } = appState
 
   const [openedCreateCourse, setOpenedCreateCourse] = useState(false)
@@ -111,8 +111,9 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
 
       <div css={`width:100%;position:absolute; top:0; display:flex; flex-direction:row;align-items:center;background: #EAECEE;`}>
         <div css={`display:flex; flex-direction:column; align-items:center; margin-left: 4%;`}>
-            <Text css={`${textStyle('title4')};`}>{obj.name}, {obj.price}$</Text>
+            <Text css={`${textStyle('title4')};`}>{obj.name} </Text>
             <Text css={`${textStyle('body4')}; color: ${color}; margin-right: auto;`}> {act}</Text>
+            <Text css={`${textStyle('body4')}; margin-right: auto;`}> {obj.price/(10**15)}mEth</Text>
           
         </div>
         <div css={`display:flex; flex-direction:row; position:absolute; right:0; margin-right:3%;`}>
@@ -139,7 +140,8 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
             icon={<IconPlus size="small" />}
             label="Take course"
             size="mini"
-            onClick={() => api.takeCourse(obj.id).toPromise()}
+            onClick={() => api.takeCourse(obj.id, {value : obj.price}).toPromise()}
+
           />
         </div>
       </div>
@@ -154,14 +156,6 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
       <IconStarFilled css= {`color: #F7DC6F;`}></IconStarFilled><ProgressBar value={obj.reputation / 5} />
       </div>
       <div css={`display:flex; flex-direction:row; margin:4%; position: absolute; bottom: 0; right: 0; `}>
-        <Button
-          display="icon"
-          icon={<IconVote />}
-          label="Rate the course"
-          size="small"
-          onClick={() => { openCreateAssessment(); setidCourse(obj.id); }}
-        //onClick: abre el modal, actualiza variables globales, actualiza los campos del modal
-        />
         {console.log(obj.assessments)}
         <Button
           css={`margin-left: 10%;`}
