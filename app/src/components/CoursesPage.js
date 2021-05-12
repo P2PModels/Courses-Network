@@ -3,7 +3,7 @@ import {
   Box, Button, IconAddUser, IconPlus,
   Text, textStyle,
   Card, IconUser, IconVote, IconSwap, IconStarFilled, ProgressBar,
-  IconEdit, IconTrash, IconSquarePlus, IconGraph, 
+  IconEdit, IconTrash, IconSquarePlus, IconGraph, SearchInput,
 } from '@aragon/ui'
 import { useAragonApi } from '@aragon/api-react'
 import CreateCourse from './modals/CreateCourse'
@@ -34,6 +34,8 @@ function CoursesPage() {
   const [nameUpdateCourse, setNameUpdateCourse] = useState(window.nameCourse)
   const [descUpdateCourse, setDescUpdateCourse] = useState(window.desc)
   const [priceUpdateCourse, setPriceUpdateCourse] = useState(window.price)
+  
+  const [search, setValue] = useState('')
 
   return (
     <div>
@@ -60,6 +62,13 @@ function CoursesPage() {
                 `}>
             Added Courses : {coursesLength}</Text>
 
+          <SearchInput
+              icon={<SearchInput />}
+              placeholder= "Search..."
+              search={search} 
+              onChange={setValue}
+          />
+
           <Button
             css={`
                   background: #34495E  !important;
@@ -80,7 +89,7 @@ function CoursesPage() {
                 width: 135%;
                 `}>
           {console.log(courses)}
-          {renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment, openViewAssessments)}
+          {renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment, openViewAssessments, search)}
         </div>
       </Box>
       <CreateCourse openedCreateCourse={openedCreateCourse} closeCreateCourse={closeCreateCourse} />
@@ -100,8 +109,21 @@ function setAssessments(assessments) {
   console.log("aqui");
   console.log(window.assessments);
 }
-function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment, openViewAssessments) {
-  return courses.map((course) => {
+function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment, openViewAssessments, search) {
+  let searched = [];
+  if (search != "") {
+    for (let i = 0; i < courses.length; i++) {
+      let s = JSON.stringify(courses[i]);
+      let a = JSON.parse(s);
+      if (a.name.toString().toLowerCase().includes(search.toString().toLowerCase())) {
+        searched.push(a);
+      }
+    }
+  } else {
+    searched = courses;
+  }
+  
+  return searched.map((course) => {
     let s = JSON.stringify(course);
     let obj = JSON.parse(s);
     let act = obj.isActive ? "Available" : "Unavailable";

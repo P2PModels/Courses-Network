@@ -3,7 +3,7 @@ import {
   Box, Button, IconAddUser,
   Text, textStyle,
   Card, IconUser,
-  IconEdit, IconTrash, IconFolder,IconStarFilled
+  IconEdit, IconTrash, IconFolder,IconStarFilled, SearchInput
 } from '@aragon/ui'
 import { useAragonApi } from '@aragon/api-react'
 import CreateUser from './modals/CreateUser'
@@ -28,6 +28,8 @@ function UsersPage() {
 
   const [nameUpdateUser, setNameUpdateUser] = useState("")
   const [emailUpdateUser, setEmailUpdateUser] = useState("")
+
+  const [search, setValue] = useState('')
 
   return (
     <div>
@@ -54,6 +56,13 @@ function UsersPage() {
         `}>
             Registered Users : {usersLength - 1/*Restamos 1 por el User del constructor que no sirve*/}</Text>
 
+          <SearchInput
+            icon={<SearchInput />}
+            placeholder= "Search..."
+            search={search} 
+            onChange={setValue}
+          />
+
           <Button
             css={`
             background: #34495E !important;
@@ -75,7 +84,7 @@ function UsersPage() {
         width: 135%;
         `}>
           {console.log(users)}
-          {renderUsers(users, openUpdateUser, api, setNameUpdateUser, setEmailUpdateUser, openViewUsersCourses)}
+          {renderUsers(users, openUpdateUser, api, setNameUpdateUser, setEmailUpdateUser, openViewUsersCourses, search)}
         </div>
       </Box>
       <CreateUser openedCreateUser={openedCreateUser} closeCreateUser={closeCreateUser} />
@@ -94,10 +103,22 @@ function setCoursesOffered(coursesOf) {
   window.coursesOf = coursesOf;
 }
 
-function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdateUser, openViewUsersCourses) {
+function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdateUser, openViewUsersCourses, search) {
   //const zipped = users.map((t, i) => [t]);
+  let searched = [];
+  if (search != "") {
+    for (let i = 0; i < users.length; i++) {
+      let s = JSON.stringify(users[i]);
+      let a = JSON.parse(s);
+      if (a.name.toString().toLowerCase().includes(search.toString().toLowerCase())) {
+        searched.push(a);
+      }
+    }
+  } else {
+    searched = users;
+  }
 
-  return users.map((user) => {
+  return searched.map((user) => {
     let s = JSON.stringify(user);
     let obj = JSON.parse(s);
     return (<Card width="300px" height="230px" css={`margin: 2%;`}>

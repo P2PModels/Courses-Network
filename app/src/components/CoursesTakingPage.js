@@ -3,7 +3,7 @@ import {
   Box, Button, IconAddUser, IconMinus,
   Text, textStyle,
   Card, IconUser, IconVote, IconSwap,
-  IconEdit, IconTrash, IconSquarePlus, IconGraph,
+  IconEdit, IconTrash, IconSquarePlus, IconGraph, SearchInput,
 } from '@aragon/ui'
 import { useAragonApi, useConnectedAccount } from '@aragon/api-react'
 import CreateAssessment from './modals/CreateAssessment'
@@ -23,6 +23,8 @@ function CoursesTakingPage() {
 
   const [finishCourseId, setFinishCourseId] = useState(-1)
 
+  const [search, setValue] = useState('')
+
   return (
     <div>
       <Box
@@ -33,13 +35,19 @@ function CoursesTakingPage() {
       ${textStyle('title3')};
       `}
       >
+        <SearchInput
+              icon={<SearchInput />}
+              placeholder= "Search..."
+              search={search} 
+              onChange={setValue}
+        />
         <div css={`
         display:flex; 
         flex-direction:row;
         flex-wrap:wrap; 
         width: 135%;
         `}>
-          {renderTakingCourses(users, courses, setFinishCourseId, openCreateAssessment, openViewAssessments)}
+          {renderTakingCourses(users, courses, setFinishCourseId, openCreateAssessment, openViewAssessments, search)}
         </div>
       </Box>
       <CreateAssessment openedCreateAssessment={openedCreateAssessment} closeCreateAssessment={closeCreateAssessment} idCourse={finishCourseId} />
@@ -48,7 +56,7 @@ function CoursesTakingPage() {
   )
 }
 
-function renderTakingCourses(users, courses, setFinishCourseId, openCreateAssessment, openViewAssessments) {
+function renderTakingCourses(users, courses, setFinishCourseId, openCreateAssessment, openViewAssessments, search) {
   let user = 0;
   if (useConnectedAccount()) {
     for (let i = 0; i < users.length; i++) {
@@ -79,7 +87,20 @@ function renderTakingCourses(users, courses, setFinishCourseId, openCreateAssess
     } else {
       let coursesTaking = users[user - 1]["coursesTaking"];
       if (coursesTaking.length != 0) {
-        return coursesTaking.map((course, courseTakingId) => {
+        let searched = [];
+        if (search != "") {
+          for (let i = 0; i < coursesTaking.length; i++) {
+            let s = JSON.stringify(coursesTaking[i]);
+            let a = JSON.parse(s);
+            if (a.name.toString().toLowerCase().includes(search.toString().toLowerCase())) {
+              searched.push(a);
+            }
+          }
+        } else {
+          searched = coursesTaking;
+        }
+
+        return searched.map((course, courseTakingId) => {
           let s = JSON.stringify(courses[course]);
           let obj = JSON.parse(s);
           let act = obj.isActive ? "Available" : "Unavailable";
