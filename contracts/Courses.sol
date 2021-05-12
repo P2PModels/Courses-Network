@@ -360,6 +360,7 @@ contract Courses is AragonApp {
             commentary,
             assessment
         );
+        setCourseCompleted(idCourse);
         if(courses[idCourse].assessmentsLength < COURSE_DEPOSIT){
             userToOwner[courses[idCourse].idSpeaker].transfer(courses[idCourse].price);
         }
