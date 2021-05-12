@@ -14,7 +14,6 @@ contract Courses is AragonApp {
         uint reputation
     );
    // event GetUser(address indexed entity);
-    event SetCourseCompleted(address indexed entity, uint id);
     event CreateCourse(
         address indexed entity,
         string name,
@@ -231,12 +230,10 @@ contract Courses is AragonApp {
      * @param idCourse course id
      */
     function setCourseCompleted(uint idCourse)
-        external
         auth(SETCOURSECOMPLETED_ROLE)
     {
         coursesCompleted[ownerToUser[msg.sender]][users[ownerToUser[msg.sender]].coursesCompletedLength]=idCourse;
         users[ownerToUser[msg.sender]].coursesCompletedLength++;
-        emit SetCourseCompleted(msg.sender, idCourse);
     }
 
     /**
