@@ -35,7 +35,6 @@ function UsersPage() {
     <div>
       <Box
         css={`
-      display: flex;
       text-align: center;
       
       ${textStyle('title3')};
@@ -48,7 +47,6 @@ function UsersPage() {
           align-items: center;
           justify-content: space-between;
           margin-left:2%;
-          width: 106%;
         `}>
           <Text css={`
           ${textStyle('label1')};
@@ -80,8 +78,7 @@ function UsersPage() {
         <div css={`
         display:flex; 
         flex-direction:row;
-        flex-wrap:wrap; 
-        width: 135%;
+        flex-wrap:wrap;
         `}>
           {console.log(users)}
           {renderUsers(users, openUpdateUser, api, setNameUpdateUser, setEmailUpdateUser, openViewUsersCourses, search)}

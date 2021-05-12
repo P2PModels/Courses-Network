@@ -29,7 +29,6 @@ function CoursesTakingPage() {
     <div>
       <Box
         css={`
-      display: flex;
       text-align: center;
       
       ${textStyle('title3')};
@@ -44,8 +43,7 @@ function CoursesTakingPage() {
         <div css={`
         display:flex; 
         flex-direction:row;
-        flex-wrap:wrap; 
-        width: 135%;
+        flex-wrap:wrap;
         `}>
           {renderTakingCourses(users, courses, setFinishCourseId, openCreateAssessment, openViewAssessments, search)}
         </div>

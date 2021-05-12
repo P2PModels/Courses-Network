@@ -41,7 +41,6 @@ function CoursesPage() {
     <div>
       <Box
         css={`
-            display: flex;
             text-align: center;
             
             ${textStyle('title3')};
@@ -86,7 +85,6 @@ function CoursesPage() {
                 display:flex; 
                 flex-direction:row;
                 flex-wrap:wrap; 
-                width: 135%;
                 `}>
           {console.log(courses)}
           {renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment, openViewAssessments, search)}
