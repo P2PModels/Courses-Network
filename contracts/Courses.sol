@@ -60,6 +60,7 @@ contract Courses is AragonApp {
         uint coursesOfferedLength;
         uint coursesCompletedLength;
         uint coursesTakingLength;
+        uint reputationSum;
         
     }
     struct Assessment {
@@ -115,26 +116,46 @@ contract Courses is AragonApp {
 
 
     function initialize() public onlyInit {
-        users[0] = User(0, msg.sender, "", "", 0, 0,0,0); //usuario en la pos 0, no existe en realidad
-        users[1] = User(1, 0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7, "Noelia", "ncalde01@ucm.es", 9, 0, 0, 0);
+        users[0] = User(0, msg.sender, "", "", 0, 0,0,0,0); //usuario en la pos 0, no existe en realidad
+        
+        users[1] = User(1, 0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7, "Noelia", "ncalde01@ucm.es", 3, 2, 1, 0,7);
         userToOwner[1] = 0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7;
         ownerToUser[0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7] = 1;
-        users[2] = User(2, 0x9766D2e7FFde358AD0A40BB87c4B88D9FAC3F4dd, "Marta", "mranz02@ucm.es", 5, 0, 0, 0);
-        userToOwner[2] = 0x9766D2e7FFde358AD0A40BB87c4B88D9FAC3F4dd;
-        ownerToUser[0x9766D2e7FFde358AD0A40BB87c4B88D9FAC3F4dd] = 2;
-
         coursesOffered[1][0] = 0;
         coursesOffered[1][1] = 1;
-        coursesOffered[2][0] = 2;
-        users[1].coursesOfferedLength = 2;
-        users[2].coursesOfferedLength = 1;
-        usersLength = 3;
-        courses[0] = Course(0, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 1, true, 0, 7 finney,0 , 0);
-        courses[1] = Course(1, "Solidity", "Learn to create Smart Contracts with Solidity. Estimated 5 hours.", 1, true, 0, 3 finney, 0 , 0);
-        courses[2] = Course(2, "Prueba", "In progres...", 2, true, 0, 5 finney, 0 , 0);
-        coursesLength = 3;
         
-        coursesTaking[1][0] = 0;
+        users[2] = User(2, 0x9766D2e7FFde358AD0A40BB87c4B88D9FAC3F4dd, "Marta", "mranz02@ucm.es", 5, 1, 2, 0,5);
+        userToOwner[2] = 0x9766D2e7FFde358AD0A40BB87c4B88D9FAC3F4dd;
+        ownerToUser[0x9766D2e7FFde358AD0A40BB87c4B88D9FAC3F4dd] = 2;
+        coursesOffered[2][0] = 2;
+        
+
+        users[3] = User(3, 0xb4124cEB3451635DAcedd11767f004d8a28c6eE7, "Daniel", "davalver@ucm.es", 4, 1, 2, 0, 4);
+        userToOwner[3] = 0xb4124cEB3451635DAcedd11767f004d8a28c6eE7;
+        ownerToUser[0xb4124cEB3451635DAcedd11767f004d8a28c6eE7] = 3;
+        coursesOffered[3][0] = 3;
+        
+        //users[1].coursesOfferedLength = 2;
+        //users[2].coursesOfferedLength = 1;
+        usersLength = 4;
+
+        courses[0] = Course(0, "Learn ReactJS", "Improve your ReactJS skills with our course. Estimated 10 hours.", 1, true, 3, 7 finney,1 , 3);
+        courses[1] = Course(1, "Solidity", "Learn to create Smart Contracts with Solidity. Estimated 5 hours.", 1, true, 4, 3 finney, 2 , 8);
+        courses[2] = Course(2, "Java developer", "Earn experience programming in Java. Estimated 20 hours.", 2, true, 5, 9 finney, 1 , 5);
+        courses[3] = Course(3, "Ajax and Web Sockets", "Update dinamically the information on html5. Estimated 3 hours", 3, true, 4, 6 finney, 1 , 4);
+        coursesLength = 4;
+        
+
+        assessments[0][0] = Assessment(0, 2, "Achive my goals", "The course is as it's described. By the way I would like more practice cases.", 3);
+        assessments[1][0] = Assessment(0, 2, "Good!", "I'd liked it so much. I would recommend it!", 4);
+        assessments[1][1] = Assessment(1, 3, "Update your knowledge", "The teacher helped us to understand how to create smart contracts.", 4);
+
+        assessments[2][0] = Assessment(0, 3, "Complete course", "It has all needed contents to enter to Java world. ", 5);
+
+        assessments[3][0] = Assessment(0, 1, "A success", "In spite of the skills developers, there's not enough time to understand everything.", 4);
+
+
+        coursesTaking[1][0] = 2;
         users[1].coursesTakingLength = 1;
 
         initialized();
@@ -156,6 +177,7 @@ contract Courses is AragonApp {
             msg.sender,
             name,
             email,
+            0,
             0,
             0,
             0,
@@ -264,6 +286,8 @@ contract Courses is AragonApp {
         coursesOffered[ownerToUser[msg.sender]][users[ownerToUser[msg.sender]].coursesOfferedLength] = coursesLength;
         users[ownerToUser[msg.sender]].coursesOfferedLength++;
         coursesLength++;
+        users[ownerToUser[msg.sender]].reputationSum += 0;
+        users[ownerToUser[msg.sender]].reputation = users[ownerToUser[msg.sender]].reputationSum / users[ownerToUser[msg.sender]].coursesOfferedLength;
         emit CreateCourse(msg.sender, name, desc, price);
     }
 
@@ -365,5 +389,8 @@ contract Courses is AragonApp {
         courses[idCourse].assessmentsSum += assessment;
         courses[idCourse].assessmentsLength++;
         courses[idCourse].reputation = courses[idCourse].assessmentsSum / courses[idCourse].assessmentsLength;
-    }
+  
+        users[courses[idCourse].idSpeaker].reputationSum += courses[idCourse].reputation;
+        users[courses[idCourse].idSpeaker].reputation = users[courses[idCourse].idSpeaker].reputationSum / users[courses[idCourse].idSpeaker].coursesOfferedLength; 
+  }
 }
