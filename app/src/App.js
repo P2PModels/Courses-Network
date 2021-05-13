@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import UsersPage from './components/UsersPage'
 import CoursesPage from './components/CoursesPage'
 import CoursesTakingPage from './components/CoursesTakingPage'
-
+import logo from './logo.png';
 window.id;
 window.name = '';
 window.email = '';
@@ -43,18 +43,8 @@ function App() {
   return (
     <Main>
       {isSyncing && <SyncIndicator />}
-      <Header
-        primary="Courses Network"
-        secondary={
-          <span
-            css={`
-              ${textStyle('title2')}
-            `}
-          >
-            TFG 
-          </span>
-        }
-      />
+      <img src={logo} width="20%" css={`margin-left: 40%;
+    margin-right: 40%;`}></img>
 
       <Tabs
         //podemos usar estas tabs para cambiar de users a courses

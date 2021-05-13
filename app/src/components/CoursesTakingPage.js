@@ -3,7 +3,7 @@ import {
   Box, Button, IconAddUser, IconMinus,
   Text, textStyle,
   Card, IconUser, IconVote, IconSwap,
-  IconEdit, IconTrash, IconSquarePlus, IconGraph, SearchInput,
+  IconEdit, IconTrash, IconSquarePlus, IconGraph, SearchInput,Info
 } from '@aragon/ui'
 import { useAragonApi, useConnectedAccount } from '@aragon/api-react'
 import CreateAssessment from './modals/CreateAssessment'
@@ -39,6 +39,7 @@ function CoursesTakingPage() {
               placeholder= "Search..."
               search={search} 
               onChange={setValue}
+              css={`margin-left: 425px;`}
         />
         <div css={`
         display:flex; 
@@ -66,21 +67,9 @@ function renderTakingCourses(users, courses, setFinishCourseId, openCreateAssess
     }
     if (user == 0) {
       return (
-        <Box
-          css={`
-        margin-top:2%;
-        display: flex;
-        text-align: center;
         
-        ${textStyle('title3')};
-      `}
-        >
-          <Text css={`
-                  ${textStyle('label1')};
-                  font-size: 15pt;
-                  `}>
-            You are not registered. Go to users' tab to register now!</Text>
-        </Box>
+          <Info css={`margin:auto; margin-top: 3%;`} title="Warning">You are not registered. Go to users' tab to register now!</Info>
+       
       )
     } else {
       let coursesTaking = users[user - 1]["coursesTaking"];
@@ -103,7 +92,7 @@ function renderTakingCourses(users, courses, setFinishCourseId, openCreateAssess
           let act = obj.isActive ? "Available" : "Unavailable";
           let color = obj.isActive ? "green" : "red";
   
-          return (<Card width="280px" height="200px" css={`margin: 2%;`}>
+          return (<Card width="300px" height="230px" css={`margin: 2%;`}>
             <div css={`width:100%;position:absolute; top:0; display:flex; flex-direction:row;align-items:center;background: #EAECEE;`}>
               <div css={`display:flex; flex-direction:column; align-items:center; margin-left: 4%;`}>
                   <Text css={`${textStyle('title4')};`}>{obj.name} </Text>
@@ -127,9 +116,7 @@ function renderTakingCourses(users, courses, setFinishCourseId, openCreateAssess
               <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Description: </Text>
               <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
             </div>
-            <div css={`display:flex; flex-direction:row; margin-top:2%;`}>
-  
-            </div>
+   
           <div css={`display:flex; flex-direction:row; margin:4%; position: absolute; bottom: 0; right: 0; `}>
               <Button
                 css={`margin-left: 10%;`}
@@ -148,41 +135,13 @@ function renderTakingCourses(users, courses, setFinishCourseId, openCreateAssess
         })
       } else {
         return (
-          <Box
-            css={`
-          margin-top:2%;
-          display: flex;
-          text-align: center;
-          
-          ${textStyle('title3')};
-        `}
-          >
-            <Text css={`
-                    ${textStyle('label1')};
-                    font-size: 15pt;
-                    `}>
-              You are not taking a course! Enroll in one.</Text>
-          </Box>
+            <Info css={`margin:auto; margin-top: 3%;`} title="Warning">You are not taking a course! Enroll in one.</Info>
         )
       }
     }
   } else {
     return (
-      <Box
-        css={`
-      margin-top:2%;
-      display: flex;
-      text-align: center;
-      
-      ${textStyle('title3')};
-    `}
-      >
-        <Text css={`
-                ${textStyle('label1')};
-                font-size: 15pt;
-                `}>
-          Connect your account to see the courses you are taking!</Text>
-      </Box>
+        <Info css={`margin:auto; margin-top: 3%;`} title="Warning">Connect your account to see the courses you are taking!</Info>
     )
   }
 }

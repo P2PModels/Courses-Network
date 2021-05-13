@@ -168,7 +168,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
       {console.log(obj.isActive)}
       {console.log(obj.idSpeaker)}
 
-      <div css={`display:flex; flex-direction:column; align-items:center;`}>
+      <div css={`display:flex; flex-direction:column; align-items:center; margin-top:8%`}>
         <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Description: </Text>
         <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
       </div>
