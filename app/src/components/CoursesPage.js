@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {
-  Box, Button, IconAddUser, IconPlus,
+  Box, Button, IconAddUser, IconCoin,
   Text, textStyle,
   Card, IconUser, IconVote, IconSwap, IconStarFilled, ProgressBar,
   IconEdit, IconTrash, IconSquarePlus, IconGraph, SearchInput,
@@ -34,7 +34,7 @@ function CoursesPage() {
   const [nameUpdateCourse, setNameUpdateCourse] = useState(window.nameCourse)
   const [descUpdateCourse, setDescUpdateCourse] = useState(window.desc)
   const [priceUpdateCourse, setPriceUpdateCourse] = useState(window.price)
-  
+
   const [search, setValue] = useState('')
 
   return (
@@ -53,7 +53,7 @@ function CoursesPage() {
                 align-items: center;
                 justify-content: space-between;
                 margin-left:2%;
-                margin-right:2%;
+                margin-right:4.5%;
                 `}>
           <Text css={`
                 ${textStyle('label1')};
@@ -62,22 +62,23 @@ function CoursesPage() {
             Added Courses : {coursesLength}</Text>
 
           <SearchInput
-              icon={<SearchInput />}
-              placeholder= "Search..."
-              search={search} 
-              onChange={setValue}
+            icon={<SearchInput />}
+            placeholder="Search..."
+            search={search}
+            onChange={setValue}
           />
 
           <Button
             css={`
                   background: #34495E  !important;
+                  color: white;
                 `
             }
-            display="icon"
+            display="all"
             icon={<IconSquarePlus css={`
                 color: white !important;`
             } />}
-            label="Create Course"
+            label="Add Course"
             onClick={openCreateCourse}
           />
         </div>
@@ -94,7 +95,7 @@ function CoursesPage() {
       <UpdateCourse openedEditCourse={openedEditCourse} closeEditCourse={closeEditCourse} nameUpdateCourse={nameUpdateCourse} setNameUpdateCourse={setNameUpdateCourse}
         descUpdateCourse={descUpdateCourse} setDescUpdateCourse={setDescUpdateCourse} priceUpdateCourse={priceUpdateCourse} setPriceUpdateCourse={setPriceUpdateCourse} />
       <CreateAssessment openedCreateAssessment={openedCreateAssessment} closeCreateAssessment={closeCreateAssessment} idCourse={window.idCourse} />
-      <ViewAssessments openedViewAssessments={openedViewAssessments} closeViewAssessments={closeViewAssessments} assessments={window.assessments} users = {users} />
+      <ViewAssessments openedViewAssessments={openedViewAssessments} closeViewAssessments={closeViewAssessments} assessments={window.assessments} users={users} />
     </div>
   )
 }
@@ -120,7 +121,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
   } else {
     searched = courses;
   }
-  
+
   return searched.map((course) => {
     let s = JSON.stringify(course);
     let obj = JSON.parse(s);
@@ -130,13 +131,22 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
     return (<Card width="300px" height="230px" css={`margin: 2%;`}>
 
       <div css={`width:100%;position:absolute; top:0; display:flex; flex-direction:row;align-items:center;background: #EAECEE;`}>
-        <div css={`display:flex; flex-direction:column; align-items:center; margin-left: 4%;`}>
-            <Text css={`${textStyle('title4')};`}>{obj.name} </Text>
-            <Text css={`${textStyle('body4')}; color: ${color}; margin-right: auto;`}> {act}</Text>
-            <Text css={`${textStyle('body4')}; margin-right: auto;`}> {obj.price/(10**15)}mEth</Text>
-          
+        <div css={`display:flex; flex-direction:column; align-items:center; margin-left: 2%;`}>
+          <Text css={`${textStyle('title4')};`}>{obj.name} </Text>
+          <div css={`display:flex; flex-direction:row; align-items:center; margin-right:auto;`}>
+            <Text css={`${textStyle('body4')}; color: ${color}; margin-right: auto;`}> {act} </Text>
+            <Button
+              css={`margin-left: 10%; height:15px;`}
+              display="icon"
+              icon={<IconSwap size="tiny" />}
+              label="Change availability"
+              size="mini"
+              onClick={() => api.updateCourseState(obj.id).toPromise()}
+            /></div>
+          <Text css={`${textStyle('body4')}; margin-right: auto;`}> {obj.price / (10 ** 15)}mEth</Text>
+
         </div>
-        <div css={`display:flex; flex-direction:row; position:absolute; right:0; margin-right:3%;`}>
+        <div css={`display:flex; flex-direction:row; position:absolute; top:0; margin-top:1%; right:0; margin-right:2%;`}>
           <Button
             //<div css={`display:flex; flex-direction:row;align-items:center;justify-content: space-between; position:absolute; top:5px; padding-left: 5%; padding-right: 2%;width: 100%;`}>
             display="icon"
@@ -146,21 +156,14 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
             onClick={() => { openEditCourse(); setNameUpdateCourse(obj.name); setDescUpdateCourse(obj.desc); setPriceUpdateCourse(obj.price); }}
           //onClick: abre el modal, actualiza variables globales, actualiza los campos del modal
           />
+
           <Button
-            css={`margin-left: 10%;`}
-            display="icon"
-            icon={<IconSwap size="small" />}
-            label="Change availability"
+            css={`margin-left: 10%;color:#8FA4B5;min-width:10%;`}
+            display="all"
+            icon={<IconCoin size="small" />}
+            label="BUY"
             size="mini"
-            onClick={() => api.updateCourseState(obj.id).toPromise()}
-          />
-          <Button
-            css={`margin-left: 10%;`}
-            display="icon"
-            icon={<IconPlus size="small" />}
-            label="Take course"
-            size="mini"
-            onClick={() => api.takeCourse(obj.id, {value : obj.price}).toPromise()}
+            onClick={() => api.takeCourse(obj.id, { value: obj.price }).toPromise()}
 
           />
         </div>
@@ -173,7 +176,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
         <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
       </div>
       <div css={`display:flex; flex-direction:row; align-items:center;width:100%; margin-top: 5%;`}>
-      <IconStarFilled css= {`color: #F7DC6F;`}></IconStarFilled><ProgressBar value={obj.reputation / 5} />
+        <IconStarFilled css={`color: #F7DC6F;`}></IconStarFilled><ProgressBar value={obj.reputation / 5} />
       </div>
       <div css={`display:flex; flex-direction:row; margin:4%; position: absolute; bottom: 0; right: 0; `}>
         {console.log(obj.assessments)}

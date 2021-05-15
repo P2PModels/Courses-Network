@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {
-  Box, Button, IconAddUser, IconMinus,
+  Box, Button, IconAddUser, IconCircleCheck,
   Text, textStyle,
   Card, IconUser, IconVote, IconSwap,
   IconEdit, IconTrash, IconSquarePlus, IconGraph, SearchInput,Info
@@ -94,18 +94,18 @@ function renderTakingCourses(users, courses, setFinishCourseId, openCreateAssess
   
           return (<Card width="300px" height="230px" css={`margin: 2%;`}>
             <div css={`width:100%;position:absolute; top:0; display:flex; flex-direction:row;align-items:center;background: #EAECEE;`}>
-              <div css={`display:flex; flex-direction:column; align-items:center; margin-left: 4%;`}>
+              <div css={`display:flex; flex-direction:column; align-items:center; margin-left: 2%;`}>
                   <Text css={`${textStyle('title4')};`}>{obj.name} </Text>
                   <Text css={`${textStyle('body4')}; color: ${color}; margin-right: auto;`}> {act}</Text>
                   <Text css={`${textStyle('body4')}; margin-right: auto;`}> {obj.price/10**15}mEther</Text>
                 
               </div>
-                <div css={`display:flex; flex-direction:row; position:absolute; right:0; margin-right:3%;`}>
+                <div css={`display:flex; flex-direction:row; position:absolute; top:0; margin-top:1%; right:0; margin-right:2%;`}>
                     <Button
-                      css={`margin-left: 10%;`}
-                      display="icon"
-                      icon={<IconMinus size="small" />}
-                      label="Stop taking course"
+                      css={`margin-left: 10%; color:#8FA4B5`}
+                      display="all"
+                      icon={<IconCircleCheck size="small" />}
+                      label="FINISH COURSE"
                       size="mini"
                       onClick={() => {setFinishCourseId(courseTakingId); openCreateAssessment();}}
                     />

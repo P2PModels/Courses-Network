@@ -47,6 +47,7 @@ function UsersPage() {
           align-items: center;
           justify-content: space-between;
           margin-left:2%;
+          margin-right:4.5%;
         `}>
           <Text css={`
           ${textStyle('label1')};
@@ -64,14 +65,14 @@ function UsersPage() {
           <Button
             css={`
             background: #34495E !important;
-            
+            color: white;
           `
             }
-            display="icon"
+            display="all"
             icon={<IconAddUser css={`
           color: white !important;`
             } />}
-            label="Create User"
+            label="New user"
             onClick={openCreateUser}
           />
         </div>
@@ -146,7 +147,7 @@ function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdate
             css={`margin-left: 10%;`}
             display="icon"
             icon={<IconFolder size="small" />}
-            label="View courses"
+            label="My offered courses"
             size="mini"
             onClick={() => { setCoursesOffered(obj.coursesOffered); openViewUsersCourses(); }}
           />
