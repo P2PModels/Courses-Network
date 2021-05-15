@@ -92,8 +92,8 @@ function CoursesPage() {
         </div>
       </Box>
       <CreateCourse openedCreateCourse={openedCreateCourse} closeCreateCourse={closeCreateCourse} />
-      <UpdateCourse openedEditCourse={openedEditCourse} closeEditCourse={closeEditCourse} nameUpdateCourse={nameUpdateCourse} setNameUpdateCourse={setNameUpdateCourse}
-        descUpdateCourse={descUpdateCourse} setDescUpdateCourse={setDescUpdateCourse} priceUpdateCourse={priceUpdateCourse} setPriceUpdateCourse={setPriceUpdateCourse} />
+      <UpdateCourse openedEditCourse={openedEditCourse} closeEditCourse={closeEditCourse} 
+        descUpdateCourse={descUpdateCourse} setDescUpdateCourse={setDescUpdateCourse} />
       <CreateAssessment openedCreateAssessment={openedCreateAssessment} closeCreateAssessment={closeCreateAssessment} idCourse={window.idCourse} />
       <ViewAssessments openedViewAssessments={openedViewAssessments} closeViewAssessments={closeViewAssessments} assessments={window.assessments} users={users} />
     </div>
@@ -153,7 +153,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
             icon={<IconEdit size="small" />}
             label="Edit course"
             size="mini"
-            onClick={() => { openEditCourse(); setNameUpdateCourse(obj.name); setDescUpdateCourse(obj.desc); setPriceUpdateCourse(obj.price); }}
+            onClick={() => { openEditCourse(); setidCourse(obj.id); setDescUpdateCourse(obj.desc); }}
           //onClick: abre el modal, actualiza variables globales, actualiza los campos del modal
           />
 

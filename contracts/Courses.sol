@@ -23,9 +23,7 @@ contract Courses is AragonApp {
     event UpdateCourse(
         address indexed entity,
         uint id,
-        string name,
-        string desc,
-        uint price
+        string desc
     );
     event UpdateCourseState(address indexed entity, uint id);
     event TakeCourse(address indexed entity, uint idCourse);
@@ -294,17 +292,17 @@ contract Courses is AragonApp {
     /**
      * @notice update an existing course
      * @param id course id to modify
-     * @param name new name
      * @param desc  new description
      */
     function updateCourse(
         uint id,
-        string name,
         string desc
     ) external auth(UPDATECOURSE_ROLE) {
         require(courses[id].idSpeaker == ownerToUser[msg.sender]);
-        courses[id].name = name;
+        
         courses[id].desc = desc;
+    
+        emit UpdateCourse(msg.sender, id, desc);
     }
 
     /**
