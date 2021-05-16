@@ -45,7 +45,7 @@ function CreateCourse(props) {
             />
           </div>
           <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
-            <Text css={`${textStyle('label1')}; `}>Price (in mini Eth): </Text>
+            <Text css={`${textStyle('label1')}; `}>Price (finney): </Text>
             <TextInput
               value={priceNewCourse}
               type="number"
