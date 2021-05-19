@@ -143,7 +143,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
               size="mini"
               onClick={() => api.updateCourseState(obj.id).toPromise()}
             /></div>
-          <Text css={`${textStyle('body4')}; margin-right: auto;`}> {obj.price / (10 ** 15)}mEth</Text>
+          <Text css={`${textStyle('body4')}; margin-right: auto;`}> PRICE: {obj.price / (10 ** 15)}mEth</Text>
 
         </div>
         <div css={`display:flex; flex-direction:row; position:absolute; top:0; margin-top:1%; right:0; margin-right:2%;`}>

@@ -37,7 +37,6 @@ function UpdateUser(props) {
                 }}
             />
             </div>
-            {window.id}
             <Button
             css={`
                 margin-top:5%;

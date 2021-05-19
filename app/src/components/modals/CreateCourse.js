@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useAragonApi } from '@aragon/api-react'
 import {
     Button,Text, textStyle, TextInput,
-    Modal
+    Modal, Info
   } from '@aragon/ui'
 
 function CreateCourse(props) {
@@ -20,7 +20,9 @@ function CreateCourse(props) {
             align-items:center;
           `}>
           <Text css={`${textStyle('label1')};font-size: 17pt; color: #34495E`}>Add a new course</Text>
-
+          <Info css={`margin:auto; margin-top: 3%;`} title="Warning"> To ensure the validity of 
+          your course and to trust your teaching commitment, you must pay a deposit of 10 times 
+          the value of the course to create it. This deposit will be refunded each time a user enrolls.</Info>
           <div css = {`display:flex; flex-direction:column; `}>
           <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
             <Text css={`${textStyle('label1')}; `}>Name: </Text>
