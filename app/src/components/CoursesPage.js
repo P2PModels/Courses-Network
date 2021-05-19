@@ -63,7 +63,7 @@ function CoursesPage() {
 
           <SearchInput
             icon={<SearchInput />}
-            placeholder="Search..."
+            placeholder="Search courses..."
             search={search}
             onChange={setValue}
           />
