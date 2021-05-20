@@ -131,11 +131,20 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
     return (<Card width="300px" height="230px" css={`margin: 2%;`}>
 
       <div css={`width:100%;position:absolute; top:0; display:flex; flex-direction:row;align-items:center;background: #EAECEE;`}>
-        <div css={`display:flex; flex-direction:column; align-items:center; margin-left: 4%;`}>
-            <Text css={`${textStyle('title4')};`}>{obj.name} </Text>
-            <Text css={`${textStyle('body4')}; color: ${color}; margin-right: auto;`}> {act}</Text>
-            <Text css={`${textStyle('body4')}; margin-right: auto;`}> {obj.price/(10**15)} finney</Text>
-          
+        <div css={`display:flex; flex-direction:column; align-items:center; margin-left: 2%;`}>
+          <Text css={`${textStyle('title4')};`}>{obj.name} </Text>
+          <div css={`display:flex; flex-direction:row; align-items:center; margin-right:auto;`}>
+            <Text css={`${textStyle('body4')}; color: ${color}; margin-right: auto;`}> {act} </Text>
+            <Button
+              css={`margin-left: 10%; height:15px;`}
+              display="icon"
+              icon={<IconSwap size="tiny" />}
+              label="Change availability"
+              size="mini"
+              onClick={() => api.updateCourseState(obj.id).toPromise()}
+            /></div>
+          <Text css={`${textStyle('body4')}; margin-right: auto;`}> PRICE: {obj.price / (10 ** 15)}mEth</Text>
+
         </div>
         <div css={`display:flex; flex-direction:row; position:absolute; top:0; margin-top:1%; right:0; margin-right:2%;`}>
           <Button

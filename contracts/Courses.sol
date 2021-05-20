@@ -4,14 +4,6 @@ import "@aragon/os/contracts/apps/AragonApp.sol";
 import "@aragon/os/contracts/lib/math/SafeMath.sol";
 
 contract Courses is AragonApp {
-    //ERRORS
-    string private constant ERROR_USER_NOT_REGISTERED = "El usuario no está registrado.";
-    string private constant ERROR_INVALID_ETHER_AMOUNT = "La cantidad de ether enviada no es la esperada.";
-    string private constant ERROR_USER_ALREADY_REGISTERED = "El usuario ya está registrado.";
-    string private constant ERROR_INACTIVE_COURSE = "El curso no está activo.";
-    string private constant ERROR_NOT_COURSE_PROPIETARY = "No eres el propietario del curso.";
-    string private constant ERROR_INDEX_OUT_OF_BOUND = "El array accedido no contiene esta posición.";
-
     //EVENTS
     event CreateUser(address indexed entity, string name, string email);
     event DeleteUser(address indexed entity, uint id);
@@ -82,23 +74,23 @@ contract Courses is AragonApp {
     uint constant COURSE_DEPOSIT = 10;
 
 
-    mapping( uint => mapping (uint => Assessment)) private assessments; // [id Curso] [[id valoracion1], [id valoracion2],...]  valoraciones de los usuarios 
+    mapping( uint => mapping (uint => Assessment)) public assessments; // [id Curso] [[id valoracion1], [id valoracion2],...]  valoraciones de los usuarios 
 
 
-    mapping( uint => mapping(uint => uint)) private coursesOffered; // [id usuario] [id cursos ofrecidos] id de los cursos que ofrece el usuario
+    mapping( uint => mapping(uint => uint)) public coursesOffered; // [id usuario] [id cursos ofrecidos] id de los cursos que ofrece el usuario
        
-    mapping( uint => mapping(uint => uint)) private coursesTaking; // [id usuario] [id cursos activos] id de los cursos que esta recibiendo el usuario
+    mapping( uint => mapping(uint => uint)) public coursesTaking; // [id usuario] [id cursos activos] id de los cursos que esta recibiendo el usuario
 
-    mapping( uint => mapping(uint => uint)) private coursesCompleted; // [id usuario] [id cursos completados] id de los cursos que ha recibido el usuario
+    mapping( uint => mapping(uint => uint)) public coursesCompleted; // [id usuario] [id cursos completados] id de los cursos que ha recibido el usuario
 
-    mapping(uint => Course) private courses;
-    uint private coursesLength;
+    mapping(uint => Course) public courses;
+    uint public coursesLength;
 
-    mapping(uint => User) private users;
-    uint private usersLength;
+    mapping(uint => User) public users;
+    uint public usersLength;
 
-    mapping(uint => address) private userToOwner;
-    mapping(address => uint) private ownerToUser;
+    mapping(uint => address) public userToOwner;
+    mapping(address => uint) public ownerToUser;
 
     bytes32 public constant CREATEUSER_ROLE = keccak256("CREATEUSER_ROLE");
     bytes32 public constant DELETEUSER_ROLE = keccak256("DELETEUSER_ROLE");
@@ -176,7 +168,7 @@ contract Courses is AragonApp {
         external
         auth(CREATEUSER_ROLE)
     {
-        require(ownerToUser[msg.sender] == 0, ERROR_USER_ALREADY_REGISTERED);
+        require(ownerToUser[msg.sender] == 0);
        
         users[usersLength] = User(
             usersLength,
@@ -205,7 +197,7 @@ contract Courses is AragonApp {
         auth(UPDATEUSER_ROLE)
     {
         //require(ownerToUser[msg.sender] != 0);
-        require(msg.sender == users[id]._address, ERROR_USER_NOT_REGISTERED);
+        require(msg.sender == users[id]._address);
 
 
         users[id].name = name;
@@ -245,9 +237,10 @@ contract Courses is AragonApp {
      * @param reputation  new reputation
      */
     function setUserReputation(uint id, uint reputation)
+        external
         auth(SETUSERREPUTATION_ROLE)
     {
-        require(id != ownerToUser[msg.sender], ERROR_USER_NOT_REGISTERED);
+        require(id != ownerToUser[msg.sender]);
         users[id].reputation = reputation;
         emit SetUserReputation(msg.sender, id, reputation);
     }
@@ -266,22 +259,21 @@ contract Courses is AragonApp {
     /**
      * @notice add a new course
      * @param name course name
-     * @param description  course description
+     * @param desc  course description
      * @param price  course price
      */
     function createCourse(
         string name,
-        string description,
+        string desc,
         uint price
     ) external 
     auth(CREATECOURSE_ROLE) 
     payable{
-        require(ownerToUser[msg.sender] != 0, ERROR_USER_NOT_REGISTERED);
-        require(msg.value == (price * COURSE_DEPOSIT),ERROR_INVALID_ETHER_AMOUNT);
+        require(msg.value == (price * COURSE_DEPOSIT), "You are not giving enought eth.");
         courses[coursesLength] = Course(
             coursesLength,
             name,
-            description,
+            desc,
             ownerToUser[msg.sender],
             true,
             0,
@@ -321,7 +313,7 @@ contract Courses is AragonApp {
         external
         auth(UPDATECOURSESTATE_ROLE)
     {
-        require(courses[id].idSpeaker == ownerToUser[msg.sender], ERROR_NOT_COURSE_PROPIETARY);
+        require(courses[id].idSpeaker == ownerToUser[msg.sender]);
         courses[id].isActive = courses[id].isActive ? false : true;
         emit UpdateCourseState(msg.sender, id);
     }
@@ -334,10 +326,10 @@ contract Courses is AragonApp {
         external
         payable
     {
-        require(courses[id].isActive, ERROR_INACTIVE_COURSE);
-        require(msg.value == courses[id].price, ERROR_INVALID_ETHER_AMOUNT);
+        require(courses[id].isActive);
+        require(msg.value == courses[id].price);
         uint idOwner = ownerToUser[msg.sender];
-        require(idOwner != 0, ERROR_USER_NOT_REGISTERED);
+        require(idOwner != 0);
 
         coursesTaking[idOwner][users[idOwner].coursesTakingLength] = id;
         users[idOwner].coursesTakingLength++;
@@ -371,7 +363,7 @@ contract Courses is AragonApp {
         string commentary,
         uint assessment
     ) external auth(CREATEASSESSMENT_ROLE) {
-        require(users[ownerToUser[msg.sender]].coursesTakingLength > takingCourseId, ERROR_INDEX_OUT_OF_BOUND);
+        require(users[ownerToUser[msg.sender]].coursesTakingLength > takingCourseId);
 
         uint idCourse = coursesTaking[ownerToUser[msg.sender]][takingCourseId];
         for (uint j = takingCourseId; j < users[ownerToUser[msg.sender]].coursesTakingLength - 1; j++) {
