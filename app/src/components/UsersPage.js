@@ -57,7 +57,7 @@ function UsersPage() {
 
           <SearchInput
             icon={<SearchInput />}
-            placeholder= "Search users..."
+            placeholder= "Search..."
             search={search} 
             onChange={setValue}
           />

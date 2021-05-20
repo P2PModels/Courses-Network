@@ -36,7 +36,7 @@ function CoursesTakingPage() {
       >
         <SearchInput
               icon={<SearchInput />}
-              placeholder= "Search courses..."
+              placeholder= "Search..."
               search={search} 
               onChange={setValue}
               css={`margin-left: 425px;`}
