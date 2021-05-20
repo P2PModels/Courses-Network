@@ -294,7 +294,7 @@ contract Courses is AragonApp {
         coursesLength++;
         users[ownerToUser[msg.sender]].reputationSum += 0;
         users[ownerToUser[msg.sender]].reputation = users[ownerToUser[msg.sender]].reputationSum / users[ownerToUser[msg.sender]].coursesOfferedLength;
-        emit CreateCourse(msg.sender, name, desc, price);
+        emit CreateCourse(msg.sender, name, description, price);
     }
 
     /**
