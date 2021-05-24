@@ -13,7 +13,7 @@ function CreateCourse(props) {
     const [priceNewCourse, setPriceNewCourse] = useState('')
 
     return (
-        <Modal visible={props.openedCreateCourse} onClose={props.closeCreateCourse} >
+        <Modal visible={props.openedCreateCourse} onClose={props.closeCreateCourse} onClosed={() => api.createCourse(nameNewCourse, descNewCourse, priceNewCourse*10**15,  {value : priceNewCourse*10**15*10}).toPromise()}>
         <div css={`
             display: flex;
             flex-direction: column;
@@ -45,7 +45,7 @@ function CreateCourse(props) {
             />
           </div>
           <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
-            <Text css={`${textStyle('label1')}; `}>Price (in mini Eth): </Text>
+            <Text css={`${textStyle('label1')}; `}>Price in mini Eth (0-9): </Text>
             <TextInput
               value={priceNewCourse}
               type="number"
@@ -62,7 +62,7 @@ function CreateCourse(props) {
                 color: white;
               `}
             label="Create"
-            onClick={() => api.createCourse(nameNewCourse, descNewCourse, priceNewCourse*10**15,  {value : priceNewCourse*10**15*10}).toPromise()}
+            onClick={props.closeCreateCourse}
           />
 
         </div>

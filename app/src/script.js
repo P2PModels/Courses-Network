@@ -33,7 +33,15 @@ app.store(
             return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
           case 'CreateCourse':
               return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
-          
+          case 'UpdateCourseState':
+            return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
+          case 'UpdateUser':
+            return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
+          case 'UpdateCourse':
+            return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
+          case 'TakeCourse':
+            return { ...nextState, usersLength: await getUsersLength(), users: await getUsers(), coursesLength: await getCoursesLength(), courses: await getCourses()}
+                     
         case events.SYNC_STATUS_SYNCING:
           return { ...nextState, isSyncing: true }
         case events.SYNC_STATUS_SYNCED:
@@ -91,7 +99,9 @@ async function getCoursesOffered(idUser, pos){
 async function getCoursesTaking(idUser, pos){
   return await app.call('coursesTaking',idUser,pos).toPromise()
 }
-
+async function getCoursesCompleted(idUser, pos){
+  return await app.call('coursesCompleted',idUser,pos).toPromise()
+}
 async function getAssessments(idCourse, pos){
   return await app.call('assessments',idCourse,pos).toPromise()
 }
@@ -137,6 +147,12 @@ async function getUsers() {
     }
     user["coursesTaking"] = coursesTaking;
 
+    let coursesCompleted = [];
+    for(let j = 0; j < u[6]; j++) {
+      let c = await getCoursesCompleted(i, j);
+      coursesCompleted.push(c);
+    }
+    user["coursesCompleted"] = coursesCompleted;
     object.push(user);
   }
   return object;

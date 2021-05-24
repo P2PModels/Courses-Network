@@ -13,7 +13,7 @@ function CreateUser(props){
   const [emailNewUser, setEmailNewUser] = useState('')
 
     return (
-      <Modal visible={props.openedCreateUser} onClose={props.closeCreateUser} >
+      <Modal visible={props.openedCreateUser} onClose={props.closeCreateUser} onClosed = {() =>  api.createUser(nameNewUser, emailNewUser).toPromise()}>
       <div css={`
           display: flex;
           flex-direction: column;
@@ -47,7 +47,7 @@ function CreateUser(props){
               color: white;
             `}
           label="Create"
-          onClick={() => api.createUser(nameNewUser, emailNewUser).toPromise()}
+          onClick={ props.closeCreateUser}
         />
 
       </div>

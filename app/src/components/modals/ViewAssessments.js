@@ -15,6 +15,8 @@ function ViewAssessments(props){
             display: flex;
             flex-direction: column;
             align-items:center;
+            max-height: 300px;
+            overflow: scroll;
           `}>
           <Text css={`${textStyle('label1')};font-size: 17pt; color: #210963`}>Assessments </Text>
            {console.log(props.assessments)}
@@ -32,8 +34,8 @@ function renderAssessments(assessments, users) {
       let a = JSON.stringify(assessment);
       let obj = JSON.parse(a);
   
-      return (<Card width="280px" height="200px" css={`margin: 3%;`}>
-        <div css={`display:flex; flex-direction:row; align-items:center; position: absolute; top: 0;width:100%;background: #EAECEE;`}>
+      return (<Card width="500px" height="100px" css={`margin: 3%;`}>
+        <div css={`display:flex; flex-direction:row; align-items:center; margin-bottom:auto;width:100%;background: #EAECEE;`}>
           <IconUser size="large"></IconUser>
           <Text css={`${textStyle('label1')};`}>{users[obj.idUser - 1].name}</Text>
         </div> 
@@ -43,7 +45,7 @@ function renderAssessments(assessments, users) {
           <Text css={`${textStyle('body3')};font-weight: bold;`}>{obj.title}</Text>
         </div>
         
-          <Text css={`${textStyle('body3')};`}> {obj.commentary}</Text>
+          <Text css={`${textStyle('body3')};word-wrap: break-word;max-height: 41px; overflow: scroll;margin-right:auto;margin-left:1%`}> {obj.commentary}</Text>
        
        
        

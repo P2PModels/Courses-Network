@@ -3,7 +3,7 @@ import {
   Box, Button, IconAddUser, IconCoin,
   Text, textStyle,
   Card, IconUser, IconVote, IconSwap, IconStarFilled, ProgressBar,
-  IconEdit, IconTrash, IconSquarePlus, IconGraph, SearchInput,
+  IconEdit, IconTrash, IconSquarePlus, IconChat, SearchInput,
 } from '@aragon/ui'
 import { useAragonApi } from '@aragon/api-react'
 import CreateCourse from './modals/CreateCourse'
@@ -130,7 +130,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
 
     return (<Card width="300px" height="230px" css={`margin: 2%;`}>
 
-      <div css={`width:100%;position:absolute; top:0; display:flex; flex-direction:row;align-items:center;background: #EAECEE;`}>
+      <div css={`width:100%;margin-bottom:auto; display:flex; flex-direction:row;align-items:center;background: #EAECEE;`}>
         <div css={`display:flex; flex-direction:column; align-items:center; margin-left: 2%;`}>
           <Text css={`${textStyle('title4')};`}>{obj.name} </Text>
           <div css={`display:flex; flex-direction:row; align-items:center; margin-right:auto;`}>
@@ -171,20 +171,20 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
       {console.log(obj.isActive)}
       {console.log(obj.idSpeaker)}
 
-      <div css={`display:flex; flex-direction:column; align-items:center; margin-top:8%`}>
+      <div css={`display:flex; flex-direction:column; align-items:center;`}>
         <Text css={`${textStyle('label2')}; font-weight:bold;margin-right:2%;`}>Description: </Text>
-        <Text css={`${textStyle('body3')};`}> {obj.desc}</Text>
+        <Text css={`${textStyle('body3')};word-wrap: break-word;max-height: 42px; overflow: scroll;`}> {obj.desc}</Text>
       </div>
-      <div css={`display:flex; flex-direction:row; align-items:center;width:100%; margin-top: 5%;`}>
+      <div css={`display:flex; flex-direction:row; align-items:center;width:100%; margin-top: 2%; margin-bottom: 20%;`}>
         <IconStarFilled css={`color: #F7DC6F;`}></IconStarFilled><ProgressBar value={obj.reputation / 5} />
       </div>
       <div css={`display:flex; flex-direction:row; margin:4%; position: absolute; bottom: 0; right: 0; `}>
         {console.log(obj.assessments)}
         <Button
           css={`margin-left: 10%;`}
-          display="icon"
-          icon={<IconGraph />}
-          label="View assessments"
+          display="all"
+          icon={<IconChat />}
+          label={obj.assessmentsLength}
           size="small"
           onClick={() => { openViewAssessments(); setAssessments(obj.assessments) }}
         //onClick: abre el modal, actualiza variables globales, actualiza los campos del modal

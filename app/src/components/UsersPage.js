@@ -10,6 +10,7 @@ import CreateUser from './modals/CreateUser'
 import UpdateUser from './modals/UpdateUser'
 import ViewUsersCourses from './modals/ViewUsersCourses'
 
+
 function UsersPage() {
   const { api, appState, connectedAccount } = useAragonApi()
   const { users, usersLength, courses } = appState
@@ -25,6 +26,7 @@ function UsersPage() {
   const [openedViewUsersCourses, setOpenedUsersCourses] = useState(false)
   const openViewUsersCourses = () => setOpenedUsersCourses(true)
   const closeViewUsersCourses = () => setOpenedUsersCourses(false)
+
 
   const [nameUpdateUser, setNameUpdateUser] = useState("")
   const [emailUpdateUser, setEmailUpdateUser] = useState("")
@@ -89,7 +91,7 @@ function UsersPage() {
       <UpdateUser openedUpdateUser={openedUpdateUser} closeUpdateUser={closeUpdateUser}
         nameUpdateUser={nameUpdateUser} setNameUpdateUser={setNameUpdateUser}
         emailUpdateUser={emailUpdateUser} setEmailUpdateUser={setEmailUpdateUser} id={window.id} />
-      <ViewUsersCourses openedViewUsersCourses={openedViewUsersCourses} closeViewUsersCourses={closeViewUsersCourses} coursesOffered={window.coursesOf} />
+      <ViewUsersCourses openedViewUsersCourses={openedViewUsersCourses} closeViewUsersCourses={closeViewUsersCourses} coursesU={window.coursesU} statec = {window.statec}/>
     </div>
   );
 }
@@ -97,8 +99,9 @@ function setId(id) {
   window.id = id;
 }
 
-function setCoursesOffered(coursesOf) {
-  window.coursesOf = coursesOf;
+function setCoursesU(coursesU,s) {
+  window.coursesU = coursesU;
+  window.statec = s;
 }
 
 function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdateUser, openViewUsersCourses, search) {
@@ -143,14 +146,14 @@ function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdate
             size="mini"
             onClick={() => api.deleteUser(obj.id).toPromise()}
           />
-          <Button
+          {/*<Button
             css={`margin-left: 10%;`}
             display="icon"
             icon={<IconFolder size="small" />}
             label="My offered courses"
             size="mini"
-            onClick={() => { setCoursesOffered(obj.coursesOffered); openViewUsersCourses(); }}
-          />
+            onClick={() => { setCoursesU(obj.coursesOffered); openViewUsersCourses(); }}
+          />*/}
 
         </div>
       </div>
@@ -167,17 +170,35 @@ function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdate
       </div>
       <div css={`display:flex; flex-direction:row; align-items:center; position:absolute; bottom:0; margin-bottom:5%;  width:100%;  `}>
       <div css={`display:flex; flex-direction:row; align-items:center; margin-left: 8%;`}>
-        <div css={`display:flex; flex-direction:column; align-items:center;margin-right:3%;`}>
+        <div css={`display:flex; flex-direction:column; align-items:center;position:absolute; left:0; margin-left:1%;`}>
           <Text css={`${textStyle('body3')};`}> {obj.coursesOfferedLength}</Text>
-          <Text css={`${textStyle('label2')}; font-weight:bold;`}>Offered</Text>
+          <Button
+            css={`font-size:14px; margin-left: 10%; height: 20px; width: 65px; min-width:60px;border:none;box-shadow:none;`}
+            display="label"
+            label="Offered"
+            size="mini"
+            onClick={() => { setCoursesU(obj.coursesOffered, "Offered"); openViewUsersCourses(); }}
+          />
         </div>
-        <div css={`display:flex; flex-direction:column; align-items:center;margin-right:3%;`}>
+        <div css={`display:flex; flex-direction:column; align-items:center;position:absolute; left:0; margin-left:25%;`}>
           <Text css={`${textStyle('body3')}; `}> {obj.coursesTakingLength}</Text>
-          <Text css={`${textStyle('label2')}; font-weight:bold;`}>Taking</Text>
+          <Button
+            css={`font-size:14px; margin-left: 10%; height: 20px; width: 65px; min-width:60px;border:none;box-shadow:none;`}
+            display="label"
+            label="Taking"
+            size="mini"
+            onClick={() => { setCoursesU(obj.coursesTaking, "Enrolled"); openViewUsersCourses(); }}
+          />
         </div>
-        <div css={`display:flex; flex-direction:column; align-items:center;margin-right:%;`}>
+        <div css={`display:flex; flex-direction:column; align-items:center;position:absolute; left:0; margin-left:49%;`}>
           <Text css={`${textStyle('body3')}; `}> {obj.coursesCompletedLength}</Text>
-          <Text css={`${textStyle('label2')}; font-weight:bold;`}>Completed</Text>
+          <Button
+            css={`font-size:14px; margin-left: 10%;height: 20px; width: 65px; min-width:60px;border:none;box-shadow:none;`}
+            display="label"
+            label="Completed"
+            size="mini"
+            onClick={() => { setCoursesU(obj.coursesCompleted, "Completed"); openViewUsersCourses(); }}
+          />
         </div>
 
       </div>

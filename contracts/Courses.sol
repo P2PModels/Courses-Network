@@ -27,7 +27,8 @@ contract Courses is AragonApp {
     );
     event UpdateCourseState(address indexed entity, uint id);
     event TakeCourse(address indexed entity, uint idCourse);
-    event StopTakingCourse(address indexed entity, uint idTakingCourse);
+    event FinishCourse(address indexed entity, uint takingCourseId, string title, string commentary, uint assessment );
+
    // event GetCourse(address indexed entity, uint id);
     event SetCourseReputation(
         address indexed entity,
@@ -95,20 +96,11 @@ contract Courses is AragonApp {
     bytes32 public constant CREATEUSER_ROLE = keccak256("CREATEUSER_ROLE");
     bytes32 public constant DELETEUSER_ROLE = keccak256("DELETEUSER_ROLE");
     bytes32 public constant UPDATEUSER_ROLE = keccak256("UPDATEUSER_ROLE");
-    bytes32 public constant SETUSERREPUTATION_ROLE =
-        keccak256("SETUSERREPUTATION_ROLE");
-    //bytes32 public constant GETUSER_ROLE = keccak256("GETUSER_ROLE");
-    bytes32 public constant SETCOURSECOMPLETED_ROLE =
-        keccak256("SETCOURSECOMPLETED_ROLE");
+    bytes32 public constant SETUSERREPUTATION_ROLE = keccak256("SETUSERREPUTATION_ROLE");
     bytes32 public constant CREATECOURSE_ROLE = keccak256("CREATECOURSE_ROLE");
-    bytes32 public constant UPDATECOURSESTATE_ROLE =
-        keccak256("UPDATECOURSESTATE_ROLE");
+    bytes32 public constant UPDATECOURSESTATE_ROLE = keccak256("UPDATECOURSESTATE_ROLE");
     bytes32 public constant UPDATECOURSE_ROLE = keccak256("UPDATECOURSE_ROLE");
-    //bytes32 public constant GETCOURSE_ROLE = keccak256("GETCOURSE_ROLE");
-    bytes32 public constant SETCOURSEREPUTATION_ROLE =
-        keccak256("SETCOURSEREPUTATION_ROLE");
-    //bytes32 public constant GETCOURSESCOMPLETED_ROLE =
-    //    keccak256("GETCOURSESCOMPLETED_ROLE");
+    bytes32 public constant SETCOURSEREPUTATION_ROLE = keccak256("SETCOURSEREPUTATION_ROLE");
     bytes32 public constant CREATEASSESSMENT_ROLE = keccak256("CREATEASSESSMENT_ROLE");
 
 
@@ -121,17 +113,25 @@ contract Courses is AragonApp {
         ownerToUser[0xd873F6DC68e3057e4B7da74c6b304d0eF0B484C7] = 1;
         coursesOffered[1][0] = 0;
         coursesOffered[1][1] = 1;
+
+        coursesCompleted[1][0] = 3;
         
         users[2] = User(2, 0x9766D2e7FFde358AD0A40BB87c4B88D9FAC3F4dd, "Marta", "mranz02@ucm.es", 5, 1, 2, 0,5);
         userToOwner[2] = 0x9766D2e7FFde358AD0A40BB87c4B88D9FAC3F4dd;
         ownerToUser[0x9766D2e7FFde358AD0A40BB87c4B88D9FAC3F4dd] = 2;
         coursesOffered[2][0] = 2;
+
+        coursesCompleted[2][0] = 0;
+        coursesCompleted[2][1] = 1;
         
 
         users[3] = User(3, 0xb4124cEB3451635DAcedd11767f004d8a28c6eE7, "Daniel", "davalver@ucm.es", 4, 1, 2, 0, 4);
         userToOwner[3] = 0xb4124cEB3451635DAcedd11767f004d8a28c6eE7;
         ownerToUser[0xb4124cEB3451635DAcedd11767f004d8a28c6eE7] = 3;
         coursesOffered[3][0] = 3;
+
+        coursesCompleted[3][0] = 1;
+        coursesCompleted[3][1] = 2;
         
         //users[1].coursesOfferedLength = 2;
         //users[2].coursesOfferedLength = 1;
@@ -196,10 +196,7 @@ contract Courses is AragonApp {
         external
         auth(UPDATEUSER_ROLE)
     {
-        //require(ownerToUser[msg.sender] != 0);
         require(msg.sender == users[id]._address);
-
-
         users[id].name = name;
         users[id].email = email;
         emit UpdateUser(msg.sender,id, name, email);
@@ -216,20 +213,11 @@ contract Courses is AragonApp {
         }
         delete users[usersLength - 1];
         usersLength--;
+        ownerToUser[msg.sender] = 0;
+        userToOwner[id] = 0;
         emit DeleteUser(msg.sender, id);
     }
 
-    /**
-     * @notice return a specific user by _address
-     * @param _address user address
-     
-    function getUser(address _address)
-        external
-        auth(GETEUSER_ROLE)
-        returns (User memory)
-    {
-        return users[ownerToUser[_address]];
-    }*/
 
     /**
      * @notice update user reputation
@@ -250,7 +238,6 @@ contract Courses is AragonApp {
      * @param idCourse course id
      */
     function setCourseCompleted(uint idCourse)
-        auth(SETCOURSECOMPLETED_ROLE)
     {
         coursesCompleted[ownerToUser[msg.sender]][users[ownerToUser[msg.sender]].coursesCompletedLength]=idCourse;
         users[ownerToUser[msg.sender]].coursesCompletedLength++;
@@ -286,6 +273,7 @@ contract Courses is AragonApp {
         coursesLength++;
         users[ownerToUser[msg.sender]].reputationSum += 0;
         users[ownerToUser[msg.sender]].reputation = users[ownerToUser[msg.sender]].reputationSum / users[ownerToUser[msg.sender]].coursesOfferedLength;
+       
         emit CreateCourse(msg.sender, name, desc, price);
     }
 
@@ -298,8 +286,7 @@ contract Courses is AragonApp {
         uint id,
         string desc
     ) external auth(UPDATECOURSE_ROLE) {
-        require(courses[id].idSpeaker == ownerToUser[msg.sender]);
-        
+        require(courses[id].idSpeaker == ownerToUser[msg.sender]);  
         courses[id].desc = desc;
     
         emit UpdateCourse(msg.sender, id, desc);
@@ -315,6 +302,7 @@ contract Courses is AragonApp {
     {
         require(courses[id].idSpeaker == ownerToUser[msg.sender]);
         courses[id].isActive = courses[id].isActive ? false : true;
+        
         emit UpdateCourseState(msg.sender, id);
     }
 
@@ -330,25 +318,14 @@ contract Courses is AragonApp {
         require(msg.value == courses[id].price);
         uint idOwner = ownerToUser[msg.sender];
         require(idOwner != 0);
-
+        require(idOwner != courses[id].idSpeaker, "You can not enroll in your own course.");
         coursesTaking[idOwner][users[idOwner].coursesTakingLength] = id;
         users[idOwner].coursesTakingLength++;
-
         userToOwner[courses[id].idSpeaker].transfer(courses[id].price);
+       
         emit TakeCourse(msg.sender, id);
     }
 
-    /**
-     * @notice return a specific course by id
-     * @param id course id 
-     
-    function getCourse(uint id)
-        external
-        auth(GETCOURSE_ROLE)
-        returns (Course memory)
-    {
-        return courses[id];
-    }*/
 
     /**
      * @notice Finish a course and create an assesment
@@ -390,5 +367,7 @@ contract Courses is AragonApp {
   
         users[courses[idCourse].idSpeaker].reputationSum += courses[idCourse].reputation;
         users[courses[idCourse].idSpeaker].reputation = users[courses[idCourse].idSpeaker].reputationSum / users[courses[idCourse].idSpeaker].coursesOfferedLength; 
+
+        emit FinishCourse(msg.sender, takingCourseId, title, commentary, assessment );
   }
 }

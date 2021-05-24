@@ -9,7 +9,7 @@ function UpdateCourse (props) {
     const { api } = useAragonApi()
 
     return (
-        <Modal visible={props.openedEditCourse} onClose={props.closeEditCourse} >
+        <Modal visible={props.openedEditCourse} onClose={props.closeEditCourse} onClosed={() => api.updateCourse(window.idCourse, props.descUpdateCourse).toPromise()}>
             <div css={`
                 display: flex;
                 flex-direction: column;
@@ -38,7 +38,7 @@ function UpdateCourse (props) {
                     color: white;
                 `}
                 label="Update"
-                onClick={() => api.updateCourse(window.idCourse, props.descUpdateCourse).toPromise()}
+                onClick={props.closeEditCourse}
             />
 
             </div>

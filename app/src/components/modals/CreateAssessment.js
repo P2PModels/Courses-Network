@@ -2,7 +2,7 @@ import React, { useState} from 'react'
 import { useAragonApi } from '@aragon/api-react'
 import {
     Button,Text, textStyle, TextInput,
-    Modal, DropDown
+    Modal, Info
   } from '@aragon/ui'
 
 function CreateAssessment(props){
@@ -13,14 +13,14 @@ function CreateAssessment(props){
   const [numericAssessment, setNumericAssessment] = useState('')
 
   return (
-    <Modal visible={props.openedCreateAssessment} onClose={props.closeCreateAssessment} >
+    <Modal visible={props.openedCreateAssessment} onClose={props.closeCreateAssessment} onClosed={() => api.finishCourse(props.idCourse, titleNewAssessment, commentaryNewAssessment, numericAssessment).toPromise()}>
         <div css={`
             display: flex;
             flex-direction: column;
             align-items:center;
           `}>
           <Text css={`${textStyle('label1')};font-size: 17pt; color: ##34495E`}>Finish the course and leave a rating</Text>
-
+          <Info css={`margin:auto; margin-top: 3%;`} title="Congratulations!"> You have completed the course! Leave a comment before you go.</Info>
           <div css = {`display:flex; flex-direction:column; `}>
           <div css={`display:flex; flex-direction: row; justify-content: space-between; align-items:center; margin-top:5%;`}>
             <Text css={`${textStyle('label1')}; `}>Tittle: </Text>
@@ -52,7 +52,6 @@ function CreateAssessment(props){
             />
           </div>
           </div>
-          
           <Button
             css={`
                 margin-top:5%;
@@ -60,7 +59,7 @@ function CreateAssessment(props){
                 color: white;
               `}
             label="Assess"
-            onClick={() => api.finishCourse(props.idCourse, titleNewAssessment, commentaryNewAssessment, numericAssessment).toPromise()}
+            onClick={props.closeCreateAssessment}
           />
 
         </div>

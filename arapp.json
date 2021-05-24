@@ -21,11 +21,6 @@
       "params": []
     },
     {
-      "name": "Add a new completed course",
-      "id": "SETCOURSECOMPLETED_ROLE",
-      "params": []
-    },
-    {
       "name": "Create a new course",
       "id": "CREATECOURSE_ROLE",
       "params": []

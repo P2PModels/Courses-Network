@@ -10,7 +10,7 @@ function UpdateUser(props) {
 
     return (
       /* Modal update User */
-      <Modal visible={props.openedUpdateUser} onClose={props.closeUpdateUser} >
+      <Modal visible={props.openedUpdateUser} onClose={props.closeUpdateUser} onClosed ={() => api.updateUser(window.id, props.nameUpdateUser, props.emailUpdateUser).toPromise()}>
         <div css={`
             display: flex;
             flex-direction: column;
@@ -44,7 +44,7 @@ function UpdateUser(props) {
                 color: white;
                 `}
             label="Update"
-            onClick={() => api.updateUser(window.id, props.nameUpdateUser, props.emailUpdateUser).toPromise()}
+            onClick={props.closeUpdateUser}
             />
 
         </div>

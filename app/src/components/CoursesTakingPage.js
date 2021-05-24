@@ -3,7 +3,7 @@ import {
   Box, Button, IconAddUser, IconCircleCheck,
   Text, textStyle,
   Card, IconUser, IconVote, IconSwap,
-  IconEdit, IconTrash, IconSquarePlus, IconGraph, SearchInput,Info
+  IconEdit, IconTrash, IconSquarePlus, IconChat, SearchInput,Info
 } from '@aragon/ui'
 import { useAragonApi, useConnectedAccount } from '@aragon/api-react'
 import CreateAssessment from './modals/CreateAssessment'
@@ -120,9 +120,9 @@ function renderTakingCourses(users, courses, setFinishCourseId, openCreateAssess
           <div css={`display:flex; flex-direction:row; margin:4%; position: absolute; bottom: 0; right: 0; `}>
               <Button
                 css={`margin-left: 10%;`}
-                display="icon"
-                icon={<IconGraph />}
-                label="View assessments"
+                display="all"
+                icon={<IconChat />}
+                label={obj.assessmentsLength}
                 size="small"
                 onClick={() => { openViewAssessments(); setAssessments(obj.assessments) }}
               />
