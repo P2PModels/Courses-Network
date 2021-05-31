@@ -5,7 +5,7 @@ import {
   Card, IconUser,
   IconEdit, IconTrash, IconFolder,IconStarFilled, SearchInput
 } from '@aragon/ui'
-import { useAragonApi } from '@aragon/api-react'
+import { useAragonApi, useConnectedAccount } from '@aragon/api-react'
 import CreateUser from './modals/CreateUser'
 import UpdateUser from './modals/UpdateUser'
 import ViewUsersCourses from './modals/ViewUsersCourses'
@@ -118,10 +118,16 @@ function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdate
   } else {
     searched = users;
   }
-
+  
   return searched.map((user) => {
     let s = JSON.stringify(user);
     let obj = JSON.parse(s);
+    let dis = true;
+    if(useConnectedAccount()){
+      if (obj._address == useConnectedAccount()) {
+        dis = false;
+      }
+    }
     return (<Card width="300px" height="230px" css={`margin: 2%;`}>
       <div css={`width:100%;position:absolute; top:0; display:flex; flex-direction:row;align-items:center;background: #EAECEE;`}>
         <div css={`display:flex; flex-direction:row;align-items:center;`} >
@@ -131,6 +137,7 @@ function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdate
         </div>
         <div css={` display:flex; flex-direction:row;align-items:center;position:absolute;right:0; margin-right:2%;`}>
           <Button
+            disabled = {dis}
             display="icon"
             icon={<IconEdit size="small" />}
             label="Edit user"
@@ -140,6 +147,7 @@ function renderUsers(users, openEditUser, api, setNameUpdateUser, setEmailUpdate
           />
           <Button
             css={`margin-left: 10%;`}
+            disabled = {dis}
             display="icon"
             icon={<IconTrash size="small" />}
             label="Delete user"

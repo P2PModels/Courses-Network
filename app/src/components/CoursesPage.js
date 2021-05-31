@@ -5,7 +5,7 @@ import {
   Card, IconUser, IconVote, IconSwap, IconStarFilled, ProgressBar,
   IconEdit, IconTrash, IconSquarePlus, IconChat, SearchInput,
 } from '@aragon/ui'
-import { useAragonApi } from '@aragon/api-react'
+import { useAragonApi , useConnectedAccount} from '@aragon/api-react'
 import CreateCourse from './modals/CreateCourse'
 import UpdateCourse from './modals/UpdateCourse'
 import CreateAssessment from './modals/CreateAssessment'
@@ -88,7 +88,7 @@ function CoursesPage() {
                 flex-wrap:wrap; 
                 `}>
           {console.log(courses)}
-          {renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment, openViewAssessments, search)}
+          {renderCourses(users, courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment, openViewAssessments, search)}
         </div>
       </Box>
       <CreateCourse openedCreateCourse={openedCreateCourse} closeCreateCourse={closeCreateCourse} />
@@ -108,7 +108,7 @@ function setAssessments(assessments) {
   console.log("aqui");
   console.log(window.assessments);
 }
-function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment, openViewAssessments, search) {
+function renderCourses(users, courses, openEditCourse, api, setNameUpdateCourse, setDescUpdateCourse, setPriceUpdateCourse, openCreateAssessment, openViewAssessments, search) {
   let searched = [];
   if (search != "") {
     for (let i = 0; i < courses.length; i++) {
@@ -121,13 +121,26 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
   } else {
     searched = courses;
   }
-
+  
   return searched.map((course) => {
     let s = JSON.stringify(course);
     let obj = JSON.parse(s);
     let act = obj.isActive ? "Available" : "Unavailable";
     let color = obj.isActive ? "green" : "red";
-
+    let dis = true;
+    let ac;
+    if(useConnectedAccount()){
+      for(let i = 0; i < users.length; i++) {
+        let s = JSON.stringify(users[i]);
+          let a = JSON.parse(s);
+          if(obj.idSpeaker == a.id) {
+             if (a._address == useConnectedAccount()) {
+              dis = false;
+            }
+          }
+      }
+      
+    }
     return (<Card width="300px" height="230px" css={`margin: 2%;`}>
 
       <div css={`width:100%;margin-bottom:auto; display:flex; flex-direction:row;align-items:center;background: #EAECEE;`}>
@@ -137,6 +150,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
             <Text css={`${textStyle('body4')}; color: ${color}; margin-right: auto;`}> {act} </Text>
             <Button
               css={`margin-left: 10%; height:15px;`}
+              disabled={dis}
               display="icon"
               icon={<IconSwap size="tiny" />}
               label="Change availability"
@@ -150,6 +164,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
           <Button
             //<div css={`display:flex; flex-direction:row;align-items:center;justify-content: space-between; position:absolute; top:5px; padding-left: 5%; padding-right: 2%;width: 100%;`}>
             display="icon"
+            disabled={dis}
             icon={<IconEdit size="small" />}
             label="Edit course"
             size="mini"
@@ -159,6 +174,7 @@ function renderCourses(courses, openEditCourse, api, setNameUpdateCourse, setDes
 
           <Button
             css={`margin-left: 10%;color:#8FA4B5;min-width:10%;`}
+            disabled={!dis}
             display="all"
             icon={<IconCoin size="small" />}
             label="BUY"
